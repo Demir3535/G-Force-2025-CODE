@@ -18,8 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotConstants.ElevatorConstants;
-import frc.robot.RobotConstants.MotorConstans;
-import frc.robot.RobotConstants.MotorConstans;
+import frc.robot.RobotConstants.ShooterConstans;
 import frc.robot.RobotConstants.PortConstants.CAN;
 
 import frc.robot.subsystems.ElevatorWristSim;
@@ -28,14 +27,14 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 
 
 
-public class MotorSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
     SparkMax shooterMotor1;
     SparkMax shooterMotor2;
     SparkMaxConfig shooterMotor1Config;
     SparkMaxConfig shooterMotor2Config;
     static SparkClosedLoopController shooterMotor1Controller;
 
-     public MotorSubsystem() {
+     public ShooterSubsystem() {
 
         // if (RobotBase.isReal()) {
             shooterMotor1 = new SparkMax(CAN.SHOOTER_MOTOR_1, MotorType.kBrushless);
@@ -48,8 +47,8 @@ public class MotorSubsystem extends SubsystemBase {
         shooterMotor2Config = new SparkMaxConfig();
 
         shooterMotor1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        shooterMotor1Config.closedLoop.maxMotion.maxVelocity(MotorConstans.MAX_MOTOR_RPM);
-        shooterMotor1Config.closedLoop.maxMotion.maxAcceleration(MotorConstans.MAX_MOTOR_ACCELERATION);
+        shooterMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstans.MAX_MOTOR_RPM);
+        shooterMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstans.MAX_MOTOR_ACCELERATION);
         
 
         shooterMotor1Config.closedLoop.pid(.5, 0.0, 0.0);

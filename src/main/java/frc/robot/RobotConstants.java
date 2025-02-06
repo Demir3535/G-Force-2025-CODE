@@ -20,6 +20,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public final class RobotConstants {
         
+
+        public static final String LLName = "limelight";
+
+
          public static final class ScoringConstants {
                 public static final class BlueAlliance {
                         public static final List<Pose2d> REEF_SIDE_POSES = List.of(
@@ -58,11 +62,13 @@ public final class RobotConstants {
 
         }
 
-        public static final class MotorConstans {
+        public static final class ShooterConstans {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
-
+                public static final double ApTagHeight = 51.875; //height of the BOTTOM of the apriltags from the ground (speaker tags) in inches
+                public static final double CamHeight = 21.00; //in inches
+                public static final double CamAngle = 35.00; //in degrees
 
         }
         

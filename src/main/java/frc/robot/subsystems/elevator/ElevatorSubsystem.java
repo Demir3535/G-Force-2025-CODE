@@ -84,7 +84,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             double setpoint;
             if (RobotBase.isReal()) {
                 if (level == 1) {
-                    setpoint = ElevatorConstants.HeightSetpoints.L1;
+                    setpoint = ElevatorConstants.HeightSetpoints.L3;
                 } else if (level == 2) {
                     setpoint = ElevatorConstants.HeightSetpoints.L2;
                 } else if (level == 3) {

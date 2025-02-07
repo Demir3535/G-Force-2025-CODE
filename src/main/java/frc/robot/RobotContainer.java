@@ -11,7 +11,6 @@ import edu.wpi.first.epilogue.EpilogueConfiguration;
 import edu.wpi.first.epilogue.logging.EpilogueBackend;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -22,13 +21,13 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RobotSystemsCheckCommand;
+import frc.robot.commands.claw.SetClawSpeed;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.commands.elevator.MoveElevatorManual;
 import frc.robot.commands.wrist.MoveWristManual;
 import frc.robot.subsystems.claw.ClawSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
@@ -42,7 +41,6 @@ public class RobotContainer {
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final ClawSubsystem clawSubsystem = new ClawSubsystem();
-    public final ShooterSubsystem motorSubsystem = new ShooterSubsystem();
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
     private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
@@ -58,7 +56,7 @@ public class RobotContainer {
     public RobotContainer() {
         driveSubsystem.setDefaultCommand(new TeleopDriveCommand(driveSubsystem, driveJoystick));
 
-        //elevatorSubsystem.setDefaultCommand(new MoveElevatorManual(elevatorSubsystem, operatorJoystick));
+        elevatorSubsystem.setDefaultCommand(new MoveElevatorManual(elevatorSubsystem, operatorJoystick));
         wristSubsystem.setDefaultCommand(new MoveWristManual(wristSubsystem, operatorJoystick));
 
         createNamedCommands();
@@ -90,42 +88,41 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        new JoystickButton(driveJoystick, 1).onTrue(RobotConstants.RobotState.setCanRotate(true))
-        .onFalse(RobotConstants.RobotState.setCanRotate(false));
         
-        new JoystickButton(operatorJoystick, 3).onChange(driveSubsystem.xCommand()); // Needs to be while true so the
+
+        new JoystickButton(driveJoystick, 3).onChange(driveSubsystem.xCommand()); // Needs to be while true so the
                                                                                   // command ends
-        new JoystickButton(operatorJoystick, 1).whileTrue(driveSubsystem.gyroReset());
+        new JoystickButton(driveJoystick, 4).whileTrue(driveSubsystem.gyroReset());
 
-        new JoystickButton(operatorJoystick, 2).whileTrue(
-                new InstantCommand(() -> {
-                    // Create a new command instance at the time of button press,
-                    // ensuring that the latest values are used.
-                    Command cmd = AutomatedScoring.fullScore(
-                            automationSelector.getReefSide(),
-                            automationSelector.getPosition(),
-                            automationSelector.getHeight(),
-                            driveSubsystem, elevatorSubsystem, wristSubsystem, clawSubsystem);
-                    cmd.schedule();
-                }));
+        // new JoystickButton(driveJoystick, 2).whileTrue(
+        //         new InstantCommand(() -> {
+        //             // Create a new command instance at the time of button press,
+        //             // ensuring that the latest values are used.
+        //             Command cmd = AutomatedScoring.fullScore(
+        //                     automationSelector.getReefSide(),
+        //                     automationSelector.getPosition(),
+        //                     automationSelector.getHeight(),
+        //                     driveSubsystem, elevatorSubsystem, wristSubsystem, clawSubsystem);
+        //             cmd.schedule();
+        //         }));
 
-        new JoystickButton(driveJoystick, 6).whileTrue(
-                new InstantCommand(() -> {
-                    // Create a new command instance at the time of button press,
-                    // ensuring that the latest values are used.
-                    Command cmd = AutomatedScoring.humanPlayerPickup(automationSelector.getHumanPlayerStation(),
-                            driveSubsystem, elevatorSubsystem, wristSubsystem, clawSubsystem);
-                    cmd.schedule();
-                }));
+        // new JoystickButton(driveJoystick, 6).whileTrue(
+        //         new InstantCommand(() -> {
+        //             // Create a new command instance at the time of button press,
+        //             // ensuring that the latest values are used.
+        //             Command cmd = AutomatedScoring.humanPlayerPickup(automationSelector.getHumanPlayerStation(),
+        //                     driveSubsystem, elevatorSubsystem, wristSubsystem, clawSubsystem);
+        //             cmd.schedule();
+        //         }));
 
         // Above = DriveJoystick, Below = OperatorJoystick
-        
-        new JoystickButton(driveJoystick, 4).whileTrue(new RunCommand(() -> motorSubsystem.moveAtSpeed(6.0), motorSubsystem))
-        .onFalse(new InstantCommand(() -> motorSubsystem.stopShooter(), motorSubsystem));
-        //whiletrue çünkü tuşu basıp motoru çalıştırıyor false ise tuştan eli kaldırınca motorun durması
-        new JoystickButton(driveJoystick, 0).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
-        new JoystickButton(driveJoystick, 5).whileTrue(wristSubsystem.goToScoreSetpoint(1));
-        new JoystickButton(driveJoystick, 5).whileTrue(elevatorSubsystem.goToScoreSetpoint(0));
+
+
+        new JoystickButton(operatorJoystick, 4).whileTrue(new SetClawSpeed(clawSubsystem, 0.75));
+        new JoystickButton(operatorJoystick, 2).whileTrue(new SetClawSpeed(clawSubsystem, -.75));
+
+        new JoystickButton(operatorJoystick, 1).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
+        new JoystickButton(operatorJoystick, 6).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
         
     }
 

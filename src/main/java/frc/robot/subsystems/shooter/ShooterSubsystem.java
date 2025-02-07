@@ -38,7 +38,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // if (RobotBase.isReal()) {
             shooterMotor1 = new SparkMax(CAN.SHOOTER_MOTOR_1, MotorType.kBrushless);
-            shooterMotor2 = new SparkMax(CAN.SHOOTER_MOTOR_2, MotorType.kBrushless);
+            
 
         shooterMotor1Controller = shooterMotor1.getClosedLoopController();
         
@@ -54,13 +54,12 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor1Config.closedLoop.pid(.5, 0.0, 0.0);
         
 
-        shooterMotor2Config.follow(CAN.SHOOTER_MOTOR_1, true);
+        
 
         shooterMotor1.configure(shooterMotor1Config, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-        shooterMotor2.configure(shooterMotor2Config, ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters);
+       
        // } else {
 }
 // }

@@ -41,26 +41,26 @@ public final class RobotConstants {
                  }
 
 
-        public static final class ElevatorConstants {
-                public static final double ELEVATOR_MAX_HEIGHT = -71;
-                public static final double ELEVATOR_MIN_HEIGHT = 0.0;
-
-                public static final class HeightSetpoints {
-                        public static final double L1 = -50;
-                        public static final double L2 = 0;
-                        public static final double L3 = 0;
+                 public static final class ElevatorConstants {
+                        public static final double ELEVATOR_MAX_HEIGHT = -71;
+                        public static final double ELEVATOR_MIN_HEIGHT = 0.0;
+        
+                        public static final class HeightSetpoints {
+                                public static final double L1 = -68;
+                                public static final double L2 = 0;
+                                public static final double L3 = 0;
+                        }
+        
+                        public static final double MAX_MOTOR_RPM = 5000.0;
+                        public static final double MAX_MOTOR_ACCELERATION = 3000.0;
+        
+                        public static final class SimConstants {
+                                public static final double L1 = 0.2;
+                                public static final double L2 = 0.3;
+                                public static final double L3 = 0.55;
+                        }
+        
                 }
-
-                public static final double MAX_MOTOR_RPM = 5000.0;
-                public static final double MAX_MOTOR_ACCELERATION = 3000.0;
-
-                public static final class SimConstants {
-                        public static final double L1 = 0.2;
-                        public static final double L2 = 0.3;
-                        public static final double L3 = 0.55;
-                }
-
-        }
 
         public static final class ShooterConstans {
                 public static final double MAX_MOTOR_RPM = 500.0;
@@ -252,11 +252,12 @@ public final class RobotConstants {
                         public static final int ELEVATOR_MOTOR_1 = 21;
                         public static final int ELEVATOR_MOTOR_2 = 22;
 
-                        public static final int SHOOTER_MOTOR_1 = 59;
-                        public static final int SHOOTER_MOTOR_2 = 60;
-
-
-                        public static final int WRIST_MOTOR = 15;
+                        public static final int SHOOTER_MOTOR_1 = 15;
+                       
+                        public static final int CLAW_MOTOR_1 = 60;
+                        public static final int CLAW_MOTOR_2 = 59;
+                       
+                        public static final int WRIST_MOTOR = 17;
 
                         public static final int CLAW_MOTOR = 16;
                         public static final int PDH = 20;
@@ -267,13 +268,13 @@ public final class RobotConstants {
 
                 public static class Controller {
                         public static final double JOYSTICK_AXIS_THRESHOLD = 0.2;
-                        public static final int DRIVE_JOYSTICK = 0;
-                        public static final int OPERATOR_JOYSTICK = 1;
+                        public static final int DRIVE_JOYSTICK = 1;
+                        public static final int OPERATOR_JOYSTICK = 0;
 
                         // Joystick Axis
-                        public static final int DRIVE_COMMAND_X_AXIS = 0;
+                        public static final int DRIVE_COMMAND_X_AXIS = 3;
                         public static final int DRIVE_COMMAND_Y_AXIS = 1;
-                        public static final int DRIVE_COMMAND_ROT_AXIS = 2; // 2 for the flight controller, 4 for
+                        public static final int DRIVE_COMMAND_ROT_AXIS = 0; // 2 for the flight controller, 4 for
                                                                             // xbox/gamepad
 
                         // Manual control axis for operator

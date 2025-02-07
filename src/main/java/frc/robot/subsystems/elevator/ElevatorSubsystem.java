@@ -100,7 +100,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void moveAtSpeed(double speed) {
-        elevatorMotor1.set(speed * .5);
+        
+        elevatorMotor1.set(speed);
+        elevatorMotor2.set(speed);
     }
 
     // public Command homeElevator() {
@@ -119,8 +121,10 @@ public class ElevatorSubsystem extends SubsystemBase {
             //SmartDashboard.putNumber("elevator motor current draw", getCurrentDraw());
         } else {
         }
+        if (RobotBase.isReal()) {
+            
+        }
     }
 
-    
-
+   
 }

@@ -10,8 +10,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.epilogue.EpilogueConfiguration;
 import edu.wpi.first.epilogue.logging.EpilogueBackend;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.RobotSystemsCheckCommand;
 import frc.robot.commands.claw.SetClawSpeed;
 import frc.robot.commands.drive.TeleopDriveCommand;
@@ -35,6 +38,7 @@ import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.commands.elevator.SetElevatorSpeed;
 
 public class RobotContainer {
 
@@ -44,6 +48,7 @@ public class RobotContainer {
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final ClawSubsystem clawSubsystem = new ClawSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
     private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
@@ -120,13 +125,26 @@ public class RobotContainer {
 
         // Above = DriveJoystick, Below = OperatorJoystick
         
-    new JoystickButton(operatorJoystick, 2).whileTrue(new SetClawSpeed(clawSubsystem, 0.75));
+        new JoystickButton(operatorJoystick, 2).whileTrue(new SetClawSpeed(clawSubsystem, 0.75));
         new JoystickButton(operatorJoystick, 2).whileTrue(new SetClawSpeed(clawSubsystem, -.75));
+        
+        new JoystickButton(operatorJoystick, 2).whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.75));
+        new JoystickButton(operatorJoystick, 2).whileTrue(new SetElevatorSpeed(elevatorSubsystem, -.75));
+        
+        final Trigger setClawSpeedButton = new JoystickButton(operatorJoystick, PS4Controller.Button.kSquare.value);
+        setClawSpeedButton.whileTrue(new SetClawSpeed(clawSubsystem, .75));
+        setClawSpeedButton.whileFalse(new SetClawSpeed(clawSubsystem, 0));
+
 
         new JoystickButton(operatorJoystick, 1).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
         new JoystickButton(operatorJoystick, 6).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
         new JoystickButton(operatorJoystick, 4).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
         .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
+       
+       
+        final Trigger setElevatorSpeedButton = new JoystickButton(operatorJoystick, PS4Controller.Button.kCircle.value);
+        setElevatorSpeedButton.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.75));
+        setElevatorSpeedButton.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
     }
 
     public Command getAutonomousCommand() {

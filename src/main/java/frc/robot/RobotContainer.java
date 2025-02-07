@@ -28,11 +28,13 @@ import frc.robot.commands.wrist.MoveWristManual;
 import frc.robot.subsystems.claw.ClawSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class RobotContainer {
 
@@ -41,6 +43,7 @@ public class RobotContainer {
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final ClawSubsystem clawSubsystem = new ClawSubsystem();
+    public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
     private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
@@ -90,9 +93,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         
 
-        new JoystickButton(driveJoystick, 3).onChange(driveSubsystem.xCommand()); // Needs to be while true so the
+        new JoystickButton(driveJoystick, 9).onChange(driveSubsystem.xCommand()); // Needs to be while true so the
                                                                                   // command ends
-        new JoystickButton(driveJoystick, 4).whileTrue(driveSubsystem.gyroReset());
+        new JoystickButton(driveJoystick, 2).whileTrue(driveSubsystem.gyroReset());
 
         // new JoystickButton(driveJoystick, 2).whileTrue(
         //         new InstantCommand(() -> {
@@ -116,14 +119,14 @@ public class RobotContainer {
         //         }));
 
         // Above = DriveJoystick, Below = OperatorJoystick
-
-
-        new JoystickButton(operatorJoystick, 4).whileTrue(new SetClawSpeed(clawSubsystem, 0.75));
+        
+    new JoystickButton(operatorJoystick, 2).whileTrue(new SetClawSpeed(clawSubsystem, 0.75));
         new JoystickButton(operatorJoystick, 2).whileTrue(new SetClawSpeed(clawSubsystem, -.75));
 
         new JoystickButton(operatorJoystick, 1).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
         new JoystickButton(operatorJoystick, 6).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
-        
+        new JoystickButton(operatorJoystick, 4).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
+        .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
     }
 
     public Command getAutonomousCommand() {

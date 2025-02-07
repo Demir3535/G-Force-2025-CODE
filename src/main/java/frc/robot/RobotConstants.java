@@ -69,6 +69,9 @@ public final class RobotConstants {
                 public static final double ApTagHeight = 6.69291339; //height of the BOTTOM of the apriltags from the ground (speaker tags) in inches
                 public static final double CamHeight = 7; //in inches
                 public static final double CamAngle = 35.00; //in degrees
+               
+                        public static final double SHOOTER_SPEED = 0.5; // İstediğiniz hızı ayarlayın
+                    
 
         }
         
@@ -249,10 +252,10 @@ public final class RobotConstants {
                         public static final int REAR_RIGHT_CANCODERID = 4;
 
 
-                        public static final int ELEVATOR_MOTOR_1 = 21;
-                        public static final int ELEVATOR_MOTOR_2 = 22;
+                        public static final int ELEVATOR_MOTOR_1 = 22;
+                        public static final int ELEVATOR_MOTOR_2 = 15;
 
-                        public static final int SHOOTER_MOTOR_1 = 15;
+                        public static final int SHOOTER_MOTOR_1 = 21;
                        
                         public static final int CLAW_MOTOR_1 = 60;
                         public static final int CLAW_MOTOR_2 = 59;

@@ -59,26 +59,16 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor1.configure(shooterMotor1Config, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-       
+               
        // } else {
+
+ }
+
+ public void moveAtSpeed(double speed) {
+    shooterMotor1.set(speed * .5);
 }
-// }
-        public void moveAtSpeed(double speed) {
-            shooterMotor1.set(speed * .5);
-        }
-        
-        @Override
-        public void periodic() {
-            if (RobotBase.isReal()) {
-                // Periodic tasks for real robot
-            }
-        }
-        
-        public void stopShooter() {
-            shooterMotor1.set(0);
-        }
 
-    }
-
-
-
+public void stopShooter() {
+    shooterMotor1.set(0);
+     }
+}

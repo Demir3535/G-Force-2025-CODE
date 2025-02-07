@@ -21,24 +21,24 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 public final class RobotConstants {
         
 
-        public static final String LLName = "limelight";
+ public static final String LLName = "limelight";
 
 
-         public static final class ScoringConstants {
-                public static final class BlueAlliance {
-                        public static final List<Pose2d> REEF_SIDE_POSES = List.of(
+                public static final class ScoringConstants {
+                          public static final class BlueAlliance {
+                                public static final List<Pose2d> REEF_SIDE_POSES = List.of(
                                         new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))),
                                         new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))),
                                         new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))),
                                         new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))),
                                         new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))),
                                         new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
-                        public static final List<Pose2d> HP_POSES = List.of(
+                                 public static final List<Pose2d> HP_POSES = List.of(
                                         new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))),
                                         new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125))));
-                }
+                          }
 
-        }
+                 }
 
 
         public static final class ElevatorConstants {
@@ -66,8 +66,8 @@ public final class RobotConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
-                public static final double ApTagHeight = 51.875; //height of the BOTTOM of the apriltags from the ground (speaker tags) in inches
-                public static final double CamHeight = 21.00; //in inches
+                public static final double ApTagHeight = 6.69291339; //height of the BOTTOM of the apriltags from the ground (speaker tags) in inches
+                public static final double CamHeight = 7; //in inches
                 public static final double CamAngle = 35.00; //in degrees
 
         }
@@ -249,11 +249,11 @@ public final class RobotConstants {
                         public static final int REAR_RIGHT_CANCODERID = 4;
 
 
-                        public static final int ELEVATOR_MOTOR_1 = 13;
-                        public static final int ELEVATOR_MOTOR_2 = 14;
+                        public static final int ELEVATOR_MOTOR_1 = 21;
+                        public static final int ELEVATOR_MOTOR_2 = 22;
 
-                        public static final int SHOOTER_MOTOR_1 = 21;
-                        public static final int SHOOTER_MOTOR_2 = 22;
+                        public static final int SHOOTER_MOTOR_1 = 59;
+                        public static final int SHOOTER_MOTOR_2 = 60;
 
 
                         public static final int WRIST_MOTOR = 15;

@@ -5,6 +5,8 @@ import frc.robot.RobotConstants.ShooterConstans;
 import frc.robot.RobotConstants;
 import frc.robot.LimelightHelpers;
 import static java.lang.Math.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,7 +41,21 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("GetDistance", getDistance());
         SmartDashboard.putBoolean("cansee?", canSee);
 
-        
+        // Writing new AprilTag ids
+       // SmartDashboard.putNumber("AprilTag ID", getTagID());
+    
+       // var poseEstimate = getPoseEstimate();
+        //if (poseEstimate != null) {
+          //  SmartDashboard.putNumber("Tag Count", poseEstimate.tagCount);
+           // SmartDashboard.putNumber("Avg Tag Distance", poseEstimate.avgTagDist);
+           // SmartDashboard.putNumber("Pose Latency", poseEstimate.latency);
+            
+            // Robot position
+            //Pose2d pose = poseEstimate.pose;
+            //SmartDashboard.putNumber("Robot X", pose.getX());
+            //  SmartDashboard.putNumber("Robot Y", pose.getY());
+            //SmartDashboard.putNumber("Robot Rotation", pose.getRotation().getDegrees());
+            // }
 
     }
     

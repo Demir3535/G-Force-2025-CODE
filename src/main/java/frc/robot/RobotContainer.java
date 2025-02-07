@@ -93,11 +93,11 @@ public class RobotContainer {
         new JoystickButton(driveJoystick, 1).onTrue(RobotConstants.RobotState.setCanRotate(true))
         .onFalse(RobotConstants.RobotState.setCanRotate(false));
         
-        new JoystickButton(driveJoystick, 3).onChange(driveSubsystem.xCommand()); // Needs to be while true so the
+        new JoystickButton(operatorJoystick, 3).onChange(driveSubsystem.xCommand()); // Needs to be while true so the
                                                                                   // command ends
-        new JoystickButton(driveJoystick, 4).whileTrue(driveSubsystem.gyroReset());
+        new JoystickButton(operatorJoystick, 1).whileTrue(driveSubsystem.gyroReset());
 
-        new JoystickButton(driveJoystick, 2).whileTrue(
+        new JoystickButton(operatorJoystick, 2).whileTrue(
                 new InstantCommand(() -> {
                     // Create a new command instance at the time of button press,
                     // ensuring that the latest values are used.
@@ -120,12 +120,12 @@ public class RobotContainer {
 
         // Above = DriveJoystick, Below = OperatorJoystick
         
-        new JoystickButton(operatorJoystick, 7).whileTrue(new RunCommand(() -> motorSubsystem.moveAtSpeed(1.0), motorSubsystem))
+        new JoystickButton(driveJoystick, 4).whileTrue(new RunCommand(() -> motorSubsystem.moveAtSpeed(6.0), motorSubsystem))
         .onFalse(new InstantCommand(() -> motorSubsystem.stopShooter(), motorSubsystem));
         //whiletrue çünkü tuşu basıp motoru çalıştırıyor false ise tuştan eli kaldırınca motorun durması
-        new JoystickButton(operatorJoystick, 6).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
-        new JoystickButton(operatorJoystick, 5).whileTrue(wristSubsystem.goToScoreSetpoint(1));
-        new JoystickButton(operatorJoystick, 5).whileTrue(elevatorSubsystem.goToScoreSetpoint(0));
+        new JoystickButton(driveJoystick, 0).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
+        new JoystickButton(driveJoystick, 5).whileTrue(wristSubsystem.goToScoreSetpoint(1));
+        new JoystickButton(driveJoystick, 5).whileTrue(elevatorSubsystem.goToScoreSetpoint(0));
         
     }
 

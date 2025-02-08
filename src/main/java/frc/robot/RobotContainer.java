@@ -163,19 +163,15 @@ public class RobotContainer {
         // A butonu ile tüm tag'lere otomatik konumlanma
         new JoystickButton(driveJoystick, 1) // 1 numaralı buton, gerekirse değiştirebilirsiniz
         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags()));
-        // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
-
-
+         // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
          // B butonu ile spesifik tag 3'e konumlanma
         new JoystickButton(driveJoystick, 2) // 2 numaralı buton, gerekirse değiştirebilirsiniz
         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
-        // Spesifik olarak tag 3'e konumlandırma komutunu tetikler
-
+  // Spesifik olarak tag 3'e konumlandırma komutunu tetikler
         // X butonu ile spesifik tag 4'e konumlanma
         new JoystickButton(driveJoystick, 3) // 3 numaralı buton, gerekirse değiştirebilirsiniz
         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
-        // Spesifik olarak tag 4'e konumlandırma komutunu tetikler
-
+ // Spesifik olarak tag 4'e konumlandırma komutunu tetikler
     }
 
     public Command getAutonomousCommand() {

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.claw.ClawSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.utils.CowboyUtils;
 import frc.robot.RobotConstants.ScoringConstants;
@@ -82,7 +83,7 @@ public class AutomatedScoring {
     }
 
     public static Command scoreNoPathing(int height, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem,
-            ClawSubsystem clawSubsystem) {
+            ClawSubsystem clawSubsystem, ShooterSubsystem shooterSubsystem) {
         return new SequentialCommandGroup(elevatorSubsystem.goToScoreSetpoint(height),
                 wristSubsystem.goToScoreSetpoint(height));
     }

@@ -1,6 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import java.util.function.Supplier;
+
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -11,19 +11,16 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.subsystems.ElevatorWristSim;
-import frc.robot.Robot;
 import frc.robot.RobotConstants.ElevatorConstants;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
 
 public class ElevatorSubsystem extends SubsystemBase {
     SparkMax elevatorMotor1;
@@ -31,7 +28,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig elevatorMotor1Config;
     SparkMaxConfig elevatorMotor2Config;
     static SparkClosedLoopController elevatorMotor1Controller;
-
+    private double lastTargetPosition = 0; // Buraya ekleyin
+   
     public ElevatorSubsystem() {
 
         // if (RobotBase.isReal()) {
@@ -63,6 +61,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         // }
 
     }
+    
 
     public static void goToSetpoint(double setpoint) {
         // Add code here to move the elevator to the scoring height
@@ -113,6 +112,29 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double getCurrentDraw() {
         return elevatorMotor1.getOutputCurrent();
     }
+
+    
+    public void setPosition(double position) {
+        if (RobotBase.isReal()) {
+            lastTargetPosition = position;
+            elevatorMotor1Controller.setReference(position, ControlType.kMAXMotionPositionControl);
+        }
+    }
+
+    public boolean atPosition() {
+        if (RobotBase.isReal()) {
+            double currentPosition = elevatorMotor1.getEncoder().getPosition();
+            double tolerance = 0.1;
+            return Math.abs(currentPosition - lastTargetPosition) < tolerance;
+        }
+        return false;
+    }
+
+    public void stop() {
+        moveAtSpeed(0);
+    }
+
+   
 
     @Override
     public void periodic() {

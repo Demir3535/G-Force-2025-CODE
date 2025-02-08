@@ -90,11 +90,11 @@ public class RobotContainer {
             System.out.println("Running...");
         }));
         NamedCommands.registerCommand("Score L1",
-                AutomatedScoring.scoreNoPathing(1, elevatorSubsystem, wristSubsystem, clawSubsystem));
+                AutomatedScoring.scoreNoPathing(1, elevatorSubsystem, wristSubsystem, clawSubsystem, shooterSubsystem));
         NamedCommands.registerCommand("Score L2",
-                AutomatedScoring.scoreNoPathing(2, elevatorSubsystem, wristSubsystem, clawSubsystem));
+                AutomatedScoring.scoreNoPathing(2, elevatorSubsystem, wristSubsystem, clawSubsystem, shooterSubsystem));
         NamedCommands.registerCommand("Score L3",
-                AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, clawSubsystem));
+                AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, clawSubsystem, shooterSubsystem));
     }
 
     private void configureButtonBindings() {
@@ -138,18 +138,25 @@ public class RobotContainer {
         setClawSpeedButton.whileFalse(new SetClawSpeed(clawSubsystem, 0));
 
 
-        new JoystickButton(operatorJoystick, 1).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
-        new JoystickButton(operatorJoystick, 6).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
-        new JoystickButton(operatorJoystick, 4).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kR1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(1));
+
+        // Buton 2: L2 seviyesine git
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kR2.value).onTrue(elevatorSubsystem.goToScoreSetpoint(2));
+
+        // Buton 3: L3 seviyesine git
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kL1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(3));
+
+
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kTriangle.value).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
         .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
        
-        new JoystickButton(operatorJoystick, 4).whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kSquare.value).whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
+        .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
+
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kCross.value)  .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
         .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
        
        
-        final Trigger setElevatorSpeedButton = new JoystickButton(operatorJoystick, PS4Controller.Button.kCircle.value);
-        setElevatorSpeedButton.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.75));
-        setElevatorSpeedButton.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
     }
 
     public Command getAutonomousCommand() {

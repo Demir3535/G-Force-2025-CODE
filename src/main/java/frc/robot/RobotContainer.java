@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Newton;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -32,6 +34,7 @@ import frc.robot.subsystems.claw.ClawSubsystem;
 import frc.robot.subsystems.climb.ClimbSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.limelight.LimelightSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.wrist.WristSubsystem;
@@ -50,7 +53,8 @@ public class RobotContainer {
     public final ClawSubsystem clawSubsystem = new ClawSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
-
+   
+    private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem(driveSubsystem);
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
     private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
@@ -156,15 +160,34 @@ public class RobotContainer {
         new JoystickButton(operatorJoystick, PS4Controller.Button.kCross.value)  .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
         .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
        
-       
+        // A butonu ile tüm tag'lere otomatik konumlanma
+        new JoystickButton(driveJoystick, 1) // 1 numaralı buton, gerekirse değiştirebilirsiniz
+        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags()));
+        // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
+
+
+         // B butonu ile spesifik tag 3'e konumlanma
+        new JoystickButton(driveJoystick, 2) // 2 numaralı buton, gerekirse değiştirebilirsiniz
+        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
+        // Spesifik olarak tag 3'e konumlandırma komutunu tetikler
+
+        // X butonu ile spesifik tag 4'e konumlanma
+        new JoystickButton(driveJoystick, 3) // 3 numaralı buton, gerekirse değiştirebilirsiniz
+        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
+        // Spesifik olarak tag 4'e konumlandırma komutunu tetikler
+
     }
 
     public Command getAutonomousCommand() {
         if (m_autoPositionChooser.getSelected() != null) {
             return m_autoPositionChooser.getSelected();
         } else {
-            return driveSubsystem.gyroReset();
+            return new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags());
+   // Eğer seçili otonom komut yoksa, tüm AprilTag'lere otomatik konumlandırma yapar
+   
+            
         }
+        
     }
 
     public Command getTestingCommand() {

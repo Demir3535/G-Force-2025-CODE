@@ -105,11 +105,7 @@ public final class RobotConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
-                // public static final class SimConstants {
-                // public static final double L1 = 85;
-                // public static final double L2 = 87.5;
-                // public static final double L3 = 120;
-                // }
+                
 
         }
         

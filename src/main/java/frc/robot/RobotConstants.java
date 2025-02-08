@@ -74,6 +74,16 @@ public final class RobotConstants {
                     
 
         }
+
+        public static final class ClimbConstans {
+                public static final double MAX_MOTOR_RPM = 500.0;
+                public static final double MAX_MOTOR_ACCELERATION = 500.0;
+
+                
+                        public static final double CLIMB_SPEED = 0.5; // İstediğiniz hızı ayarlayın
+                    
+
+        }
         
         public static final class ClawConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
@@ -261,6 +271,8 @@ public final class RobotConstants {
                         public static final int CLAW_MOTOR_2 = 59;
                        
                         public static final int WRIST_MOTOR = 17;
+
+                        public static final int CLIMB_MOTOR = 18;
 
                         public static final int CLAW_MOTOR = 16;
                         public static final int PDH = 20;

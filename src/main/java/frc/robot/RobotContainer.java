@@ -29,6 +29,7 @@ import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.commands.elevator.MoveElevatorManual;
 import frc.robot.commands.wrist.MoveWristManual;
 import frc.robot.subsystems.claw.ClawSubsystem;
+import frc.robot.subsystems.climb.ClimbSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -39,7 +40,7 @@ import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.commands.elevator.SetElevatorSpeed;
-
+import frc.robot.RobotConstants.ClimbConstans;
 public class RobotContainer {
 
     public final DriveSubsystem driveSubsystem = new DriveSubsystem();
@@ -48,6 +49,7 @@ public class RobotContainer {
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final ClawSubsystem clawSubsystem = new ClawSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
@@ -140,6 +142,9 @@ public class RobotContainer {
         new JoystickButton(operatorJoystick, 6).whileTrue(elevatorSubsystem.goToScoreSetpoint(1));
         new JoystickButton(operatorJoystick, 4).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
         .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
+       
+        new JoystickButton(operatorJoystick, 4).whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
+        .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
        
        
         final Trigger setElevatorSpeedButton = new JoystickButton(operatorJoystick, PS4Controller.Button.kCircle.value);

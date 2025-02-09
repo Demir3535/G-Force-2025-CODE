@@ -132,37 +132,27 @@ public class RobotContainer {
 
         // Above = DriveJoystick, Below = OperatorJoystick
         
-        new JoystickButton(operatorJoystick, 2).whileTrue(new SetClawSpeed(clawSubsystem, 0.75));
-        new JoystickButton(operatorJoystick, 2).whileTrue(new SetClawSpeed(clawSubsystem, -.75));
-        
-        new JoystickButton(operatorJoystick, 2).whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.75));
-        new JoystickButton(operatorJoystick, 2).whileTrue(new SetElevatorSpeed(elevatorSubsystem, -.75));
-        
-        final Trigger setClawSpeedButton = new JoystickButton(operatorJoystick, PS4Controller.Button.kSquare.value);
-        setClawSpeedButton.whileTrue(new SetClawSpeed(clawSubsystem, .75));
-        setClawSpeedButton.whileFalse(new SetClawSpeed(clawSubsystem, 0));
 
-
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kR1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(1));
+        new JoystickButton(operatorJoystick, PS5Controller.Button.kR1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(1));
 
         // Buton 2: L2 seviyesine git
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kR2.value).onTrue(elevatorSubsystem.goToScoreSetpoint(2));
+        new JoystickButton(operatorJoystick, PS5Controller.Button.kR2.value).onTrue(elevatorSubsystem.goToScoreSetpoint(2));
 
         // Buton 3: L3 seviyesine git
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kL1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(3));
+        new JoystickButton(operatorJoystick, PS5Controller.Button.kL1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(3));
 
 
-        new JoystickButton(operatorJoystick, 3).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
+        new JoystickButton(operatorJoystick, PS5Controller.Button.kTriangle.value).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
         .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
        
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kSquare.value).whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
+        new JoystickButton(operatorJoystick, PS5Controller.Button.kSquare.value).whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
         .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kCross.value)  .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
+        new JoystickButton(operatorJoystick, PS5Controller.Button.kCross.value)  .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
         .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
        
         // A butonu ile tüm tag'lere otomatik konumlanma
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kTouchpad.value) // 1 numaralı buton, gerekirse değiştirebilirsiniz
+        new JoystickButton(operatorJoystick, PS5Controller.Button.kTouchpad.value) // 1 numaralı buton, gerekirse değiştirebilirsiniz
         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags()));
          // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
          // B butonu ile spesifik tag 3'e konumlanma

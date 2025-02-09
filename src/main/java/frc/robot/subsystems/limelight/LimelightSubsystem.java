@@ -123,7 +123,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
    // Tüm tag'lere sırayla konumlanmayı dener
    public void autoPositionToAllTags() {
-       int[] priorityTags = {1, 2, 3, 4, 5, 6, 7, 8}; // Olası tüm tag'ler
+       int[] priorityTags = {1, 2, 3, 4, 5, 6, 7, 8, 9}; // Olası tüm tag'ler
        
        for (int tagId : priorityTags) {
            if (isValidTagForPositioning(tagId)) {

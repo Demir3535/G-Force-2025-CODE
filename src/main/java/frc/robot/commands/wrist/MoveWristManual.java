@@ -4,13 +4,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotConstants.PortConstants.Controller;
 import frc.robot.subsystems.wrist.WristSubsystem;
+import edu.wpi.first.wpilibj.PS5Controller;
 
 public class MoveWristManual extends Command {
-    Joystick joystick;
+     private PS5Controller operatorJoystick;
     WristSubsystem wristSubsystem;
 
-    public MoveWristManual(WristSubsystem wristSubsystem, Joystick joystick) {
-        this.joystick = joystick;
+    public MoveWristManual(WristSubsystem wristSubsystem,  PS5Controller operatorJoystick) {
+        this.operatorJoystick = operatorJoystick;
         this.wristSubsystem = wristSubsystem;
         addRequirements(wristSubsystem);
     }
@@ -22,7 +23,7 @@ public class MoveWristManual extends Command {
 
     @Override
     public void execute() {
-        wristSubsystem.moveAtSpeed(joystick.getRawAxis(Controller.WRIST_MANUAL_CONTROL));
+        double speed = operatorJoystick.getRightX();    
     }
 
     @Override

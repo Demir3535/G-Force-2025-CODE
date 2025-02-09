@@ -277,6 +277,12 @@ public final class RobotConstants {
 
                 }
 
+                public static class DIO {
+                        // Distance sensor için DIO port numarası
+                        // Bu numarayı robotunuzdaki gerçek bağlantı portuna göre ayarlayın (0-9 arası)
+                        public static final int SHOOTER_DISTANCE_SENSOR = 0; // Örnek port numarası
+                }
+
                 public static class Controller {
                         public static final double JOYSTICK_AXIS_THRESHOLD = 0.2;
                         public static final int DRIVE_JOYSTICK = 1;

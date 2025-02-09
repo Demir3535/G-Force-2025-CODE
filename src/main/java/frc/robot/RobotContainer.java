@@ -44,6 +44,8 @@ import frc.robot.automation.AutomatedScoring;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.commands.elevator.SetElevatorSpeed;
 import frc.robot.RobotConstants.ClimbConstans;
+import edu.wpi.first.wpilibj.PS5Controller;
+
 public class RobotContainer {
 
     public final DriveSubsystem driveSubsystem = new DriveSubsystem();
@@ -57,8 +59,7 @@ public class RobotContainer {
     private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem(driveSubsystem);
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
-    private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
-
+    private final PS5Controller operatorJoystick = new PS5Controller(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
     public final AutomationSelector automationSelector = new AutomationSelector();
 
     SendableChooser<Command> m_autoPositionChooser = new SendableChooser<>();
@@ -151,7 +152,7 @@ public class RobotContainer {
         new JoystickButton(operatorJoystick, PS4Controller.Button.kL1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(3));
 
 
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kTriangle.value).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
+        new JoystickButton(operatorJoystick, 3).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
         .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
        
         new JoystickButton(operatorJoystick, PS4Controller.Button.kSquare.value).whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
@@ -161,7 +162,7 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
        
         // A butonu ile tüm tag'lere otomatik konumlanma
-        new JoystickButton(driveJoystick, 1) // 1 numaralı buton, gerekirse değiştirebilirsiniz
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kTouchpad.value) // 1 numaralı buton, gerekirse değiştirebilirsiniz
         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags()));
          // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
          // B butonu ile spesifik tag 3'e konumlanma

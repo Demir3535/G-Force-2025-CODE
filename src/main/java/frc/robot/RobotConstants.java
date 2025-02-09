@@ -283,6 +283,10 @@ public final class RobotConstants {
                         public static final int SHOOTER_DISTANCE_SENSOR = 0; // Örnek port numarası
                 }
 
+                public static final class PWM {
+                        public static final int LED_CONTROLLER = 0; // LED'in bağlı olduğu PWM portu
+                    }
+
                 public static class Controller {
                         public static final double JOYSTICK_AXIS_THRESHOLD = 0.2;
                         public static final int DRIVE_JOYSTICK = 1;

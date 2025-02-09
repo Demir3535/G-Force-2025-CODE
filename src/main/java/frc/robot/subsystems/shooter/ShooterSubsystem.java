@@ -22,10 +22,14 @@ import frc.robot.RobotConstants.ElevatorConstants;
 import frc.robot.RobotConstants.ShooterConstans;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.RobotConstants.PortConstants.DIO; // DIO (Digital Input/Output) portları için ekledim
+import frc.robot.RobotConstants.PortConstants.PWM;
 
 import frc.robot.subsystems.ElevatorWristSim;
 import frc.robot.Robot;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
+
 
 public class ShooterSubsystem extends SubsystemBase {
     SparkMax shooterMotor1;
@@ -36,6 +40,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private DigitalInput distanceSensor; // Rev 2m Distance Sensor için DigitalInput tanımladım
     private boolean isShooterRunning = false; // Shooter'ın çalışıp çalışmadığını takip etmek için boolean değişken
+
+    private PWMMotorController ledController;
+    
+    // Rev Blinkin LED Driver için renk değerleri
+    private static final double RED = 0.61;    // Solid red
+    private static final double GREEN = 0.77;  // Solid green
+    
+    
 
     public ShooterSubsystem() {
         // Rev 2m Distance Sensor'ı DIO portuna bağladım
@@ -64,11 +76,26 @@ public class ShooterSubsystem extends SubsystemBase {
             isShooterRunning = false; // Shooter'ın durduğunu işaretle
         }
 
+        updateLEDStatus();
+
         // Sensör durumunu SmartDashboard'a yazdır (debug için)
         SmartDashboard.putBoolean("Shooter Distance Sensor", distanceSensor.get());
         SmartDashboard.putBoolean("Is Shooter Running", isShooterRunning);
+
+        SmartDashboard.putBoolean("Coral Detected", !distanceSensor.get());
+
     }
 
+    // added led status 
+    private void updateLEDStatus() {
+        if (distanceSensor.get()) {
+            // No Coral - Red
+            ledController.set(RED);
+        } else {
+            // Have Coral - Green
+            ledController.set(GREEN);
+        }
+    }
     public void moveAtSpeed(double speed) {
         if (!distanceSensor.get()) { // Sensör bir nesne algılamıyorsa (false)
             shooterMotor1.set(speed * .5);

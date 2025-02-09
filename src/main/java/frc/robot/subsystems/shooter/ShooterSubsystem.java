@@ -20,10 +20,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotConstants.ElevatorConstants;
 import frc.robot.RobotConstants.ShooterConstans;
+import frc.robot.RobotConstants.WristConstants;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.RobotConstants.PortConstants.DIO; // DIO (Digital Input/Output) portları için ekledim
 import frc.robot.RobotConstants.PortConstants.PWM;
-
 import frc.robot.subsystems.ElevatorWristSim;
 import frc.robot.Robot;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -106,6 +106,32 @@ public class ShooterSubsystem extends SubsystemBase {
     public void stopShooter() {
         shooterMotor1.set(0);
         isShooterRunning = false; // Shooter'ın durduğunu işaretle
+        
+    }
+     public Command goToScoreSetpoint(int level) {
+        return new InstantCommand(() -> {
+            double setpoint;
+            if (RobotBase.isReal()) {
+                if (level == 1) {
+                    setpoint = ShooterConstans.AngleSetpoints.L1;
+                } else if (level == 2) {
+                    setpoint = ShooterConstans.AngleSetpoints.L2;
+                } else if (level == 3) {
+                    setpoint = ShooterConstans.AngleSetpoints.L3;
+                } else {
+                    setpoint = ShooterConstans.AngleSetpoints.L1;
+                }
+                goToSetpoint(setpoint);
+            }
+
+        }, this);
+    }
+
+    public static void goToSetpoint(double setpoint) {
+        if (RobotBase.isReal()) {
+            shooterMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl);
+        }
+
     }
 
     public boolean isShooterRunning() {

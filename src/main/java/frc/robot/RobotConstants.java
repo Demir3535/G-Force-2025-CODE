@@ -24,21 +24,21 @@ public final class RobotConstants {
  public static final String LLName = "limelight";
 
 
-                public static final class ScoringConstants {
-                          public static final class BlueAlliance {
-                                public static final List<Pose2d> REEF_SIDE_POSES = List.of(
-                                        new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))),
-                                        new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))),
-                                        new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))),
-                                        new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))),
-                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))),
-                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
-                                 public static final List<Pose2d> HP_POSES = List.of(
-                                        new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))),
-                                        new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125))));
-                          }
-
-                 }
+                public static final class ScoringConstants {  // Skor pozisyonları için sabit değerleri içeren sınıf
+                        public static final class BlueAlliance {  // Mavi takım için özel pozisyonlar
+                            public static final List<Pose2d> REEF_SIDE_POSES = List.of(  // Reef (saha kenarı) pozisyonlarının listesi
+                                new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))),     // 1. Pozisyon: X:2.961m, Y:4m, Açı:0°
+                                new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))), // 2. Pozisyon: X:3.712m, Y:2.723m, Açı:30°
+                                new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))), // 3. Pozisyon: X:5.253m, Y:2.656m, Açı:60°
+                                new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))),        // 4. Pozisyon: X:6m, Y:4m, Açı:90°
+                                new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))),       // 5. Pozisyon: X:0m, Y:0m, Açı:120°
+                                new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));        // 6. Pozisyon: X:0m, Y:0m, Açı:0°
+                     
+                            public static final List<Pose2d> HP_POSES = List.of(  // Human Player (insan oyuncu) istasyonu pozisyonları
+                                new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))),   // Üst HP pozisyonu: X:1.2m, Y:7m, Açı:125°
+                                new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125)))); // Alt HP pozisyonu: X:1.2m, Y:1m, Açı:-125°
+                        }
+                     }
 
 
                  public static final class ElevatorConstants {
@@ -74,6 +74,12 @@ public final class RobotConstants {
 
                  public static final double DESIRED_TAG_DISTANCE = 1.0;  // 100 cm
                  public static final double MIN_TAG_DISTANCE = 0.99;     // 99 cm
+
+                 public static final class AngleSetpoints {
+                        public static final double L1 = 0;
+                        public static final double L2 = 0;
+                        public static final double L3 = 0;
+                }
                     
 
         }

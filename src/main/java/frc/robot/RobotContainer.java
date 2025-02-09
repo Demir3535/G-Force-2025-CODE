@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RobotSystemsCheckCommand;
+import frc.robot.commands.apriltag.AutoPositionToTagCommand;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.commands.elevator.MoveElevatorManual;
 import frc.robot.commands.wrist.MoveWristManual;
@@ -88,6 +89,16 @@ public class RobotContainer {
                 AutomatedScoring.scoreNoPathing(2, elevatorSubsystem, wristSubsystem, shooterSubsystem));
         NamedCommands.registerCommand("Score L3",
                 AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, shooterSubsystem));
+
+                 NamedCommands.registerCommand("AlignToSpeaker", 
+        new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4));  // Speaker AprilTag ID'si
+        
+    NamedCommands.registerCommand("AlignToAmp", 
+        new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5));  // Amp AprilTag ID'si
+        
+    NamedCommands.registerCommand("AlignToReef", 
+        new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11));  // Stage AprilTag ID'si
+
     }
 
     private void configureButtonBindings() {
@@ -97,28 +108,6 @@ public class RobotContainer {
                                                                                   // command ends
         new JoystickButton(driveJoystick, 2).whileTrue(driveSubsystem.gyroReset());
 
-        // new JoystickButton(driveJoystick, 2).whileTrue(
-        //         new InstantCommand(() -> {
-        //             // Create a new command instance at the time of button press,
-        //             // ensuring that the latest values are used.
-        //             Command cmd = AutomatedScoring.fullScore(
-        //                     automationSelector.getReefSide(),
-        //                     automationSelector.getPosition(),
-        //                     automationSelector.getHeight(),
-        //                     driveSubsystem, elevatorSubsystem, wristSubsystem, clawSubsystem);
-        //             cmd.schedule();
-        //         }));
-
-        // new JoystickButton(driveJoystick, 6).whileTrue(
-        //         new InstantCommand(() -> {
-        //             // Create a new command instance at the time of button press,
-        //             // ensuring that the latest values are used.
-        //             Command cmd = AutomatedScoring.humanPlayerPickup(automationSelector.getHumanPlayerStation(),
-        //                     driveSubsystem, elevatorSubsystem, wristSubsystem, clawSubsystem);
-        //             cmd.schedule();
-        //         }));
-
-        // Above = DriveJoystick, Below = OperatorJoystick
         
 
         new JoystickButton(operatorJoystick, PS5Controller.Button.kR1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(1));
@@ -143,14 +132,17 @@ public class RobotContainer {
         new JoystickButton(operatorJoystick, PS5Controller.Button.kTouchpad.value) // 1 numaralı buton, gerekirse değiştirebilirsiniz
         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags()));
          // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
+
          // B butonu ile spesifik tag 3'e konumlanma
         new JoystickButton(driveJoystick, 2) // 2 numaralı buton, gerekirse değiştirebilirsiniz
         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
-  // Spesifik olarak tag 3'e konumlandırma komutunu tetikler
+        // Spesifik olarak tag 3'e konumlandırma komutunu tetikler
+
         // X butonu ile spesifik tag 4'e konumlanma
         new JoystickButton(driveJoystick, 3) // 3 numaralı buton, gerekirse değiştirebilirsiniz
         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
  // Spesifik olarak tag 4'e konumlandırma komutunu tetikler
+
     }
 
     public Command getAutonomousCommand() {
@@ -158,7 +150,7 @@ public class RobotContainer {
             return m_autoPositionChooser.getSelected();
         } else {
             return new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags());
-   // Eğer seçili otonom komut yoksa, tüm AprilTag'lere otomatik konumlandırma yapar
+        // Eğer seçili otonom komut yoksa, tüm AprilTag'lere otomatik konumlandırma yapar
    
             
         }

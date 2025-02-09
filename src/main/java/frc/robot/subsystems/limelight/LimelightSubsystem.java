@@ -19,6 +19,14 @@ public class LimelightSubsystem extends SubsystemBase {
    static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight"); // LimeLight network tablosunu oluşturur
    private final DriveSubsystem driveSubsystem; // Sürüş alt sistemini tanımlar
 
+     // Bu iki değerden birini kullanın (aynı anda ikisi değil):
+     private static final double DESIRED_TAG_DISTANCE = 1.2;  // 120 cm için
+     // VEYA
+     // private static final double DESIRED_TAG_DISTANCE = 1.5;  // 150 cm için
+     
+     private static final double MIN_TAG_DISTANCE = 0.99;     // minimum güvenli mesafe
+     
+
    public LimelightSubsystem(DriveSubsystem driveSubsystem) {
        this.driveSubsystem = driveSubsystem; // Sürüş alt sistemini başlatır
    }
@@ -46,24 +54,41 @@ public class LimelightSubsystem extends SubsystemBase {
 
    // Belirli bir tag'e robotu konumlandırır
    public void autoPositionToTag(int targetTagId) {
-       double currentTagId = getTagID();
-       if (currentTagId == targetTagId) {
-           // Hedef tag görüş alanında ise konumlandırma yapar
-           double tx = LimelightHelpers.getTX(RobotConstants.LLName); // Yatay açıyı alır
-           double ty = LimelightHelpers.getTY(RobotConstants.LLName); // Dikey açıyı alır
+    double currentTagId = getTagID();
+    if (currentTagId == targetTagId) {
+        // Hedef tag görüş alanında ise konumlandırma yapar
+        double tx = LimelightHelpers.getTX(RobotConstants.LLName);
+        double currentDistance = getDistance();
+        
+        // Güvenli mesafe kontrolü
+        if (currentDistance < MIN_TAG_DISTANCE) {
+            // Çok yakınsa geri git
+            ChassisSpeeds speeds = new ChassisSpeeds(-0.2, 0, 0);
+            driveSubsystem.runChassisSpeeds(speeds, true);
+            return;
+        }
+        
+        // Mesafe bazlı hız hesaplama
+        double distanceError = currentDistance - DESIRED_TAG_DISTANCE;
+        double forwardSpeed = distanceError * 0.05; // Mesafeye göre hız
+        double rotationSpeed = tx * 0.05; // Dönüş hızını hesaplar
+        
+        // Hız sınırlaması
+        forwardSpeed = Math.min(Math.max(forwardSpeed, -0.3), 0.3);
+        rotationSpeed = Math.min(Math.max(rotationSpeed, -0.3), 0.3);
 
-           // Robot hareketini hesaplar
-           double rotationSpeed = tx * 0.05; // Dönüş hızını hesaplar
-           double forwardSpeed = ty * 0.05; // İleri/geri hızını hesaplar
-
-           // Robotun hareketini kontrol eder
-           ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, 0, rotationSpeed);
-           driveSubsystem.runChassisSpeeds(speeds, true); // Alan bazlı hareket
-       } else {
-           // Hedef tag görüş alanında değilse konsola mesaj yazdırır
-           System.out.println("Hedef AprilTag görüş alanında değil: " + targetTagId);
-       }
-   }
+        // Robotun hareketini kontrol eder
+        ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, 0, rotationSpeed);
+        driveSubsystem.runChassisSpeeds(speeds, true);
+        
+        // SmartDashboard'a mesafe bilgilerini gönder
+        SmartDashboard.putNumber("Target Distance", DESIRED_TAG_DISTANCE);
+        SmartDashboard.putNumber("Current Distance", currentDistance);
+        SmartDashboard.putNumber("Distance Error", distanceError);
+    } else {
+        System.out.println("Hedef AprilTag görüş alanında değil: " + targetTagId);
+    }
+}
 
    @Override
    public void periodic() {

@@ -70,7 +70,10 @@ public final class RobotConstants {
                 public static final double CamHeight = 7; //in inches
                 public static final double CamAngle = 35.00; //in degrees
                
-                        public static final double SHOOTER_SPEED = 0.5; // İstediğiniz hızı ayarlayın
+                 public static final double SHOOTER_SPEED = 0.5; // İstediğiniz hızı ayarlayın
+
+                 public static final double DESIRED_TAG_DISTANCE = 1.0;  // 100 cm
+                 public static final double MIN_TAG_DISTANCE = 0.99;     // 99 cm
                     
 
         }

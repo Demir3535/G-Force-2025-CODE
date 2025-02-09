@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.claw.ClawSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -71,8 +70,8 @@ public class AutomatedScoring {
 
     public static Command fullScore(int reefSide, int position,
             int height,
-            DriveSubsystem drivesubsystem, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem,
-            ClawSubsystem clawSubsystem) {
+            DriveSubsystem drivesubsystem, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem
+            ) {
 
         Pose2d pose = pathPlanToReef(reefSide, position);
 
@@ -83,14 +82,14 @@ public class AutomatedScoring {
     }
 
     public static Command scoreNoPathing(int height, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem,
-            ClawSubsystem clawSubsystem, ShooterSubsystem shooterSubsystem) {
+             ShooterSubsystem shooterSubsystem) {
         return new SequentialCommandGroup(elevatorSubsystem.goToScoreSetpoint(height),
                 wristSubsystem.goToScoreSetpoint(height));
     }
 
     public static Command humanPlayerPickup(int humanPlayerSide, DriveSubsystem drivesubsystem,
-            ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem,
-            ClawSubsystem clawSubsystem) {
+            ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem
+            ) {
 
         return new SequentialCommandGroup(
                 AlignWithPose.pathToPoseCommand(pathPlanToHP(humanPlayerSide), drivesubsystem));

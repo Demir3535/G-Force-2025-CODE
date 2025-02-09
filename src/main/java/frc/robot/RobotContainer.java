@@ -26,11 +26,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.RobotSystemsCheckCommand;
-import frc.robot.commands.claw.SetClawSpeed;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.commands.elevator.MoveElevatorManual;
 import frc.robot.commands.wrist.MoveWristManual;
-import frc.robot.subsystems.claw.ClawSubsystem;
 import frc.robot.subsystems.climb.ClimbSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
@@ -52,7 +50,7 @@ public class RobotContainer {
     public final VisionSubsystem visionSubsystem = new VisionSubsystem();
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
-    public final ClawSubsystem clawSubsystem = new ClawSubsystem();
+    
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
    
@@ -95,11 +93,11 @@ public class RobotContainer {
             System.out.println("Running...");
         }));
         NamedCommands.registerCommand("Score L1",
-                AutomatedScoring.scoreNoPathing(1, elevatorSubsystem, wristSubsystem, clawSubsystem, shooterSubsystem));
+                AutomatedScoring.scoreNoPathing(1, elevatorSubsystem, wristSubsystem,shooterSubsystem));
         NamedCommands.registerCommand("Score L2",
-                AutomatedScoring.scoreNoPathing(2, elevatorSubsystem, wristSubsystem, clawSubsystem, shooterSubsystem));
+                AutomatedScoring.scoreNoPathing(2, elevatorSubsystem, wristSubsystem, shooterSubsystem));
         NamedCommands.registerCommand("Score L3",
-                AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, clawSubsystem, shooterSubsystem));
+                AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, shooterSubsystem));
     }
 
     private void configureButtonBindings() {

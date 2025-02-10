@@ -33,7 +33,7 @@ import frc.robot.RobotConstants.SubsystemEnabledConstants;
 import frc.robot.RobotContainer.UserPolicy;
 import frc.robot.subsystems.drive.swerve.SwerveModule;
 import frc.robot.subsystems.drive.swerve.SwerveModuleSim;
-import frc.robot.subsystems.vision.VisionSubsystem;
+
 import frc.robot.RobotConstants.AutonomousConstants;
 import frc.robot.utils.SwerveUtils;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -262,29 +262,8 @@ public class DriveSubsystem extends SubsystemBase {
         RobotState.updatePose(m_odometry.getEstimatedPosition());
     }
 
-    private void updateVisionMeasurements() {
-        if (RobotBase.isReal()) {
-            for (int i = 0; i < VisionSubsystem.getLengthOfCameraList(); i++) {
-                Pose2d camPose = VisionSubsystem.getVisionPoses()[i];
-                if (camPose != null){
-                    m_odometry.addVisionMeasurement(camPose, Timer.getFPGATimestamp());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void periodic() {
-        if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
-            updateOdometry();
-            putSmartDashboardData();
-        }
-        // Vision pose estimates are added into the main odometry filter if vision
-        // subsystem is enabled.
-        if (SubsystemEnabledConstants.VISION_SUBSYSTEM_ENABLED) {
-            updateVisionMeasurements();
-        }
-    }
+    
+   
 
     public static Pose2d getPose() {
         return SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED ? m_odometry.getEstimatedPosition() : new Pose2d();

@@ -20,7 +20,7 @@ public class LimelightSubsystem extends SubsystemBase {
    private final DriveSubsystem driveSubsystem; // Sürüş alt sistemini tanımlar
 
      // Bu iki değerden birini kullanın (aynı anda ikisi değil):
-     private static final double DESIRED_TAG_DISTANCE = 1.2;  // 120 cm için
+     private static final double DESIRED_TAG_DISTANCE = 1;  // 120 cm için
      // VEYA
      // private static final double DESIRED_TAG_DISTANCE = 1.5;  // 150 cm için
      
@@ -70,12 +70,12 @@ public class LimelightSubsystem extends SubsystemBase {
         
         // Mesafe bazlı hız hesaplama
         double distanceError = currentDistance - DESIRED_TAG_DISTANCE;
-        double forwardSpeed = distanceError * 0.05; // Mesafeye göre hız
-        double rotationSpeed = tx * 0.05; // Dönüş hızını hesaplar
+        double forwardSpeed = distanceError * 0.5; // Mesafeye göre hız
+        double rotationSpeed = tx * 0.5; // Dönüş hızını hesaplar
         
         // Hız sınırlaması
-        forwardSpeed = Math.min(Math.max(forwardSpeed, -0.3), 0.3);
-        rotationSpeed = Math.min(Math.max(rotationSpeed, -0.3), 0.3);
+        forwardSpeed = Math.min(Math.max(forwardSpeed, -0.5), 0.5);
+        rotationSpeed = Math.min(Math.max(rotationSpeed, -0.5), 0.5);
 
         // Robotun hareketini kontrol eder
         ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, 0, rotationSpeed);

@@ -27,7 +27,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.limelight.LimelightSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.vision.VisionSubsystem;
+
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 public class RobotContainer {
 
     public final DriveSubsystem driveSubsystem = new DriveSubsystem();
-    public final VisionSubsystem visionSubsystem = new VisionSubsystem();
+   
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
 
@@ -49,7 +49,7 @@ public class RobotContainer {
     private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem(driveSubsystem);
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
-    private final PS4Controller operatorJoystick = new PS4Controller(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
+    private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
     public final AutomationSelector automationSelector = new AutomationSelector();
 
     SendableChooser<Command> m_autoPositionChooser = new SendableChooser<>();
@@ -112,27 +112,27 @@ public class RobotContainer {
                 .onTrue(elevatorSubsystem.goToScoreSetpoint(1));
 
         // Buton 2: L2 seviyesine git
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kR2.value)
+        new JoystickButton(operatorJoystick,8)
                 .onTrue(elevatorSubsystem.goToScoreSetpoint(2));
 
         // Buton 3: L3 seviyesine git
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kL1.value)
+        new JoystickButton(operatorJoystick, 5)
                 .onTrue(elevatorSubsystem.goToScoreSetpoint(3));
 
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kTriangle.value)
+        new JoystickButton(operatorJoystick,8)
                 .whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
                 .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
 
-        new JoystickButton(operatorJoystick, PS5Controller.Button.kSquare.value)
+        new JoystickButton(operatorJoystick, 1)
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kCross.value)
+        new JoystickButton(operatorJoystick, 2)
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
         // A butonu ile tüm tag'lere otomatik konumlanma
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kCircle.value) // 1 numaralı buton, gerekirse
+        new JoystickButton(operatorJoystick, 4) // 1 numaralı buton, gerekirse
                                                                                    // değiştirebilirsiniz
                 .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags()));
         // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler

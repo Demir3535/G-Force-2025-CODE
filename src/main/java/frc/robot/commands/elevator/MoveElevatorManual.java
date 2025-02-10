@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.PS5Controller;
 
 public class MoveElevatorManual extends Command {
     private ElevatorSubsystem elevatorSubsystem;
-    private PS5Controller operatorJoystick;
+    private PS4Controller operatorJoystick;
 
-    public MoveElevatorManual(ElevatorSubsystem elevatorSubsystem, PS5Controller operatorJoystick) {
+    public MoveElevatorManual(ElevatorSubsystem elevatorSubsystem, PS4Controller operatorJoystick) {
         this.operatorJoystick = operatorJoystick;
         this.elevatorSubsystem = elevatorSubsystem;
         addRequirements(elevatorSubsystem);

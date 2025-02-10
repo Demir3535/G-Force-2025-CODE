@@ -17,70 +17,87 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-
 public final class RobotConstants {
-        
 
- public static final String LLName = "limelight";
+        public static final String LLName = "limelight";
 
+        public static final class ScoringConstants { // Skor pozisyonları için sabit değerleri içeren sınıf
+                public static final class BlueAlliance { // Mavi takım için özel pozisyonlar
+                        public static final List<Pose2d> REEF_SIDE_POSES = List.of( // Reef (saha kenarı)
+                                                                                    // pozisyonlarının listesi
+                                        new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))), // 1. Pozisyon:
+                                                                                                 // X:2.961m, Y:4m,
+                                                                                                 // Açı:0°
+                                        new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))), // 2. Pozisyon:
+                                                                                                      // X:3.712m,
+                                                                                                      // Y:2.723m,
+                                                                                                      // Açı:30°
+                                        new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))), // 3. Pozisyon:
+                                                                                                      // X:5.253m,
+                                                                                                      // Y:2.656m,
+                                                                                                      // Açı:60°
+                                        new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))), // 4. Pozisyon: X:6m,
+                                                                                              // Y:4m, Açı:90°
+                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))), // 5. Pozisyon: X:0m,
+                                                                                               // Y:0m, Açı:120°
+                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))); // 6. Pozisyon: X:0m,
+                                                                                              // Y:0m, Açı:0°
 
-                public static final class ScoringConstants {  // Skor pozisyonları için sabit değerleri içeren sınıf
-                        public static final class BlueAlliance {  // Mavi takım için özel pozisyonlar
-                            public static final List<Pose2d> REEF_SIDE_POSES = List.of(  // Reef (saha kenarı) pozisyonlarının listesi
-                                new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))),     // 1. Pozisyon: X:2.961m, Y:4m, Açı:0°
-                                new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))), // 2. Pozisyon: X:3.712m, Y:2.723m, Açı:30°
-                                new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))), // 3. Pozisyon: X:5.253m, Y:2.656m, Açı:60°
-                                new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))),        // 4. Pozisyon: X:6m, Y:4m, Açı:90°
-                                new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))),       // 5. Pozisyon: X:0m, Y:0m, Açı:120°
-                                new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));        // 6. Pozisyon: X:0m, Y:0m, Açı:0°
-                     
-                            public static final List<Pose2d> HP_POSES = List.of(  // Human Player (insan oyuncu) istasyonu pozisyonları
-                                new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))),   // Üst HP pozisyonu: X:1.2m, Y:7m, Açı:125°
-                                new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125)))); // Alt HP pozisyonu: X:1.2m, Y:1m, Açı:-125°
-                        }
-                     }
-
-
-                 public static final class ElevatorConstants {
-                        public static final double ELEVATOR_MAX_HEIGHT = -71;
-                        public static final double ELEVATOR_MIN_HEIGHT = 0.0;
-        
-                        public static final class HeightSetpoints {
-                                public static final double L1 = -68;
-                                public static final double L2 = 0;
-                                public static final double L3 = 0;
-                        }
-        
-                        public static final double MAX_MOTOR_RPM = 5000.0;
-                        public static final double MAX_MOTOR_ACCELERATION = 3000.0;
-        
-                        public static final class SimConstants {
-                                public static final double L1 = 0.2;
-                                public static final double L2 = 0.3;
-                                public static final double L3 = 0.55;
-                        }
-        
+                        public static final List<Pose2d> HP_POSES = List.of( // Human Player (insan oyuncu) istasyonu
+                                                                             // pozisyonları
+                                        new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))), // Üst HP
+                                                                                                         // pozisyonu:
+                                                                                                         // X:1.2m,
+                                                                                                         // Y:7m,
+                                                                                                         // Açı:125°
+                                        new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125)))); // Alt HP
+                                                                                                           // pozisyonu:
+                                                                                                           // X:1.2m,
+                                                                                                           // Y:1m,
+                                                                                                           // Açı:-125°
                 }
+        }
+
+        public static final class ElevatorConstants {
+                public static final double ELEVATOR_MAX_HEIGHT = -71;
+                public static final double ELEVATOR_MIN_HEIGHT = 0.0;
+
+                public static final class HeightSetpoints {
+                        public static final double L1 = -68;
+                        public static final double L2 = 0;
+                        public static final double L3 = 0;
+                }
+
+                public static final double MAX_MOTOR_RPM = 5000.0;
+                public static final double MAX_MOTOR_ACCELERATION = 3000.0;
+
+                public static final class SimConstants {
+                        public static final double L1 = 0.2;
+                        public static final double L2 = 0.3;
+                        public static final double L3 = 0.55;
+                }
+
+        }
 
         public static final class ShooterConstans {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
-                public static final double ApTagHeight = 6.69291339; //height of the BOTTOM of the apriltags from the ground (speaker tags) in inches
-                public static final double CamHeight = 7; //in inches
-                public static final double CamAngle = 35.00; //in degrees
-               
-                 public static final double SHOOTER_SPEED = 0.5; // İstediğiniz hızı ayarlayın
+                public static final double ApTagHeight = 6.69291339; // height of the BOTTOM of the apriltags from the
+                                                                     // ground (speaker tags) in inches
+                public static final double CamHeight = 7; // in inches
+                public static final double CamAngle = 35.00; // in degrees
 
-                 public static final double DESIRED_TAG_DISTANCE = 1.0;  // 100 cm
-                 public static final double MIN_TAG_DISTANCE = 0.99;     // 99 cm
+                public static final double SHOOTER_SPEED = 0.5; // İstediğiniz hızı ayarlayın
 
-                 public static final class AngleSetpoints {
+                public static final double DESIRED_TAG_DISTANCE = 1.0; // 100 cm
+                public static final double MIN_TAG_DISTANCE = 0.99; // 99 cm
+
+                public static final class AngleSetpoints {
                         public static final double L1 = 0;
                         public static final double L2 = 0;
                         public static final double L3 = 0;
                 }
-                    
 
         }
 
@@ -88,18 +105,15 @@ public final class RobotConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
-                
-                        public static final double CLIMB_SPEED = 0.5; // İstediğiniz hızı ayarlayın
-                    
+                public static final double CLIMB_SPEED = 0.5; // İstediğiniz hızı ayarlayın
 
         }
-        
+
         public static final class ClawConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
         }
-        
 
         public static final class WristConstants {
                 public static final double WRIST_MIN_ANGLE = 0.0;
@@ -114,13 +128,8 @@ public final class RobotConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
-                
-
         }
-        
-        
-        
-        
+
         public static final class DrivetrainConstants {
                 public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = 0;
                 public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = 0; // -We do not apply an offset to the
@@ -144,9 +153,9 @@ public final class RobotConstants {
                 // Chassis configuration
 
                 public static final double DRIVE_BASE_RADIUS_METERS = 0.42; // measurement from center point of robot
-                                                                               // to the
-                                                                               // center of one of the wheels. (use the
-                                                                               // CAD)
+                                                                            // to the
+                                                                            // center of one of the wheels. (use the
+                                                                            // CAD)
 
                 public static final double LEFT_RIGHT_DISTANCE_METERS = Units.inchesToMeters(27); // Distance between
                                                                                                   // centers of
@@ -168,17 +177,19 @@ public final class RobotConstants {
 
                 public static final boolean FIELD_RELATIVE = true;
         }
- public static class RobotState {
-        private static boolean canRotate = false;
 
-        public static Command setCanRotate(boolean rotate) {
-            return new InstantCommand(() -> canRotate = rotate);
+        public static class RobotState {
+                private static boolean canRotate = false;
+
+                public static Command setCanRotate(boolean rotate) {
+                        return new InstantCommand(() -> canRotate = rotate);
+                }
+
+                public static boolean getCanRotate() {
+                        return canRotate;
+                }
         }
 
-        public static boolean getCanRotate() {
-            return canRotate;
-        }
-    }
         public static final class SwerveModuleConstants {
 
                 public static final double TRANSLATION_P = 1.0;
@@ -242,11 +253,8 @@ public final class RobotConstants {
 
                 public static final int DRIVING_MOTOR_CURRENT_LIMIT_AMPS = 40; // amps
                 public static final int TURNING_MOTOR_CURRENT_LIMIT_AMPS = 20; // amps
-                
+
         }
-
-
-      
 
         public static interface PortConstants {
 
@@ -266,23 +274,21 @@ public final class RobotConstants {
                         public static final int REAR_LEFT_CANCODERID = 3;
                         public static final int REAR_RIGHT_CANCODERID = 4;
 
-
-                        public static final int ELEVATOR_MOTOR_1 = 22;
+                        public static final int ELEVATOR_MOTOR_1 = 12;
                         public static final int ELEVATOR_MOTOR_2 = 15;
-
-                        public static final int SHOOTER_MOTOR_1 = 21;
                        
-                        public static final int CLAW_MOTOR_1 = 60;
-                        public static final int CLAW_MOTOR_2 = 59;
-                       
-                        public static final int WRIST_MOTOR = 17;
 
-                        public static final int CLIMB_MOTOR = 18;
+                        public static final int SHOOTER_MOTOR_1 = 15;
 
-                        public static final int CLAW_MOTOR = 16;
+                        public static final int CLAW_MOTOR_1 = 16;
+                        public static final int CLAW_MOTOR_2 = 17;
+
+                        public static final int WRIST_MOTOR = 18;
+
+                        public static final int CLIMB_MOTOR = 19;
+
+                        public static final int CLAW_MOTOR = 21;
                         public static final int PDH = 20;
-
-
 
                 }
 
@@ -294,7 +300,7 @@ public final class RobotConstants {
 
                 public static final class PWM {
                         public static final int LED_CONTROLLER = 0; // LED'in bağlı olduğu PWM portu
-                    }
+                }
 
                 public static class Controller {
                         public static final double JOYSTICK_AXIS_THRESHOLD = 0.2;
@@ -316,7 +322,6 @@ public final class RobotConstants {
         public static final class AutonomousConstants {
                 public static final boolean FLIP_PATHPLANNER_AUTOS = false;
 
-                
                 public static final double FIELD_LENGTH_INCHES = 54 * 12 + 1; // 54ft 1in
                 public static final double FIELD_WIDTH_INCHES = 26 * 12 + 7; // 26ft 7in
 

@@ -108,31 +108,6 @@ public class ShooterSubsystem extends SubsystemBase {
         isShooterRunning = false; // Shooter'ın durduğunu işaretle
         
     }
-     public Command goToScoreSetpoint(int level) {
-        return new InstantCommand(() -> {
-            double setpoint;
-            if (RobotBase.isReal()) {
-                if (level == 1) {
-                    setpoint = ShooterConstans.AngleSetpoints.L1;
-                } else if (level == 2) {
-                    setpoint = ShooterConstans.AngleSetpoints.L2;
-                } else if (level == 3) {
-                    setpoint = ShooterConstans.AngleSetpoints.L3;
-                } else {
-                    setpoint = ShooterConstans.AngleSetpoints.L1;
-                }
-                goToSetpoint(setpoint);
-            }
-
-        }, this);
-    }
-
-    public static void goToSetpoint(double setpoint) {
-        if (RobotBase.isReal()) {
-            shooterMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl);
-        }
-
-    }
 
     public boolean isShooterRunning() {
         return isShooterRunning; // Shooter'ın çalışıp çalışmadığını döndür

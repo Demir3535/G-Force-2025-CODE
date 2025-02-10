@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -34,6 +33,8 @@ import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
 import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.PS4Controller;
+
 
 public class RobotContainer {
 
@@ -41,14 +42,14 @@ public class RobotContainer {
     public final VisionSubsystem visionSubsystem = new VisionSubsystem();
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
-    
+
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
-   
+
     private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem(driveSubsystem);
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
-    private final PS5Controller operatorJoystick = new PS5Controller(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
+    private final PS4Controller operatorJoystick = new PS4Controller(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
     public final AutomationSelector automationSelector = new AutomationSelector();
 
     SendableChooser<Command> m_autoPositionChooser = new SendableChooser<>();
@@ -84,64 +85,67 @@ public class RobotContainer {
             System.out.println("Running...");
         }));
         NamedCommands.registerCommand("Score L1",
-                AutomatedScoring.scoreNoPathing(1, elevatorSubsystem, wristSubsystem,shooterSubsystem));
+                AutomatedScoring.scoreNoPathing(1, elevatorSubsystem, wristSubsystem, shooterSubsystem));
         NamedCommands.registerCommand("Score L2",
                 AutomatedScoring.scoreNoPathing(2, elevatorSubsystem, wristSubsystem, shooterSubsystem));
         NamedCommands.registerCommand("Score L3",
                 AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, shooterSubsystem));
 
-                 NamedCommands.registerCommand("AlignToSpeaker", 
-        new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4));  // Speaker AprilTag ID'si
-        
-    NamedCommands.registerCommand("AlignToAmp", 
-        new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5));  // Amp AprilTag ID'si
-        
-    NamedCommands.registerCommand("AlignToReef", 
-        new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11));  // Stage AprilTag ID'si
+        NamedCommands.registerCommand("AlignToReef1",
+                new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); // Speaker AprilTag ID'si
+
+        NamedCommands.registerCommand("AlignToReef2",
+                new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp AprilTag ID'si
+
+        NamedCommands.registerCommand("AlignToReef3",
+                new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); // Stage AprilTag ID'si
 
     }
 
     private void configureButtonBindings() {
-        
 
         new JoystickButton(driveJoystick, 9).onChange(driveSubsystem.xCommand()); // Needs to be while true so the
                                                                                   // command ends
         new JoystickButton(driveJoystick, 2).whileTrue(driveSubsystem.gyroReset());
 
-        
-
-        new JoystickButton(operatorJoystick, PS5Controller.Button.kR1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(1));
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kR1.value)
+                .onTrue(elevatorSubsystem.goToScoreSetpoint(1));
 
         // Buton 2: L2 seviyesine git
-        new JoystickButton(operatorJoystick, PS5Controller.Button.kR2.value).onTrue(elevatorSubsystem.goToScoreSetpoint(2));
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kR2.value)
+                .onTrue(elevatorSubsystem.goToScoreSetpoint(2));
 
         // Buton 3: L3 seviyesine git
-        new JoystickButton(operatorJoystick, PS5Controller.Button.kL1.value).onTrue(elevatorSubsystem.goToScoreSetpoint(3));
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kL1.value)
+                .onTrue(elevatorSubsystem.goToScoreSetpoint(3));
 
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kTriangle.value)
+                .whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
+                .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
 
-        new JoystickButton(operatorJoystick, PS5Controller.Button.kTriangle.value).whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
-        .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
-       
-        new JoystickButton(operatorJoystick, PS5Controller.Button.kSquare.value).whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
-        .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
+        new JoystickButton(operatorJoystick, PS5Controller.Button.kSquare.value)
+                .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
+                .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
-        new JoystickButton(operatorJoystick, PS5Controller.Button.kCross.value)  .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
-        .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
-       
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kCross.value)
+                .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
+                .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
+
         // A butonu ile tüm tag'lere otomatik konumlanma
-        new JoystickButton(operatorJoystick, PS5Controller.Button.kTouchpad.value) // 1 numaralı buton, gerekirse değiştirebilirsiniz
-        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags()));
-         // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
+        new JoystickButton(operatorJoystick, PS4Controller.Button.kCircle.value) // 1 numaralı buton, gerekirse
+                                                                                   // değiştirebilirsiniz
+                .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags()));
+        // Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
 
-         // B butonu ile spesifik tag 3'e konumlanma
+        // B butonu ile spesifik tag 3'e konumlanma
         new JoystickButton(driveJoystick, 2) // 2 numaralı buton, gerekirse değiştirebilirsiniz
-        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
+                .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
         // Spesifik olarak tag 3'e konumlandırma komutunu tetikler
 
         // X butonu ile spesifik tag 4'e konumlanma
         new JoystickButton(driveJoystick, 3) // 3 numaralı buton, gerekirse değiştirebilirsiniz
-        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
- // Spesifik olarak tag 4'e konumlandırma komutunu tetikler
+                .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
+        // Spesifik olarak tag 4'e konumlandırma komutunu tetikler
 
     }
 
@@ -150,11 +154,11 @@ public class RobotContainer {
             return m_autoPositionChooser.getSelected();
         } else {
             return new InstantCommand(() -> limelightSubsystem.autoPositionToAllTags());
-        // Eğer seçili otonom komut yoksa, tüm AprilTag'lere otomatik konumlandırma yapar
-   
-            
+            // Eğer seçili otonom komut yoksa, tüm AprilTag'lere otomatik konumlandırma
+            // yapar
+
         }
-        
+
     }
 
     public Command getTestingCommand() {
@@ -164,6 +168,7 @@ public class RobotContainer {
     public Field2d getField() {
         return field;
     }
+
     public static final class UserPolicy {
         public static boolean xLocked = false;
         public static boolean isManualControlled = true;

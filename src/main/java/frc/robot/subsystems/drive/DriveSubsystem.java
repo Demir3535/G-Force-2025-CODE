@@ -33,6 +33,8 @@ import frc.robot.RobotConstants.SubsystemEnabledConstants;
 import frc.robot.RobotContainer.UserPolicy;
 import frc.robot.subsystems.drive.swerve.SwerveModule;
 import frc.robot.subsystems.drive.swerve.SwerveModuleSim;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.MathUtil;
 
 import frc.robot.RobotConstants.AutonomousConstants;
 import frc.robot.utils.SwerveUtils;
@@ -48,6 +50,7 @@ import edu.wpi.first.wpilibj.Timer;
  * function of the drivetrain.
  * 
  */
+
 public class DriveSubsystem extends SubsystemBase {
     private SwerveModuleSim[] swerveModuleSims = new SwerveModuleSim[4];
     private SwerveModule[] swerveModules = new SwerveModule[4];
@@ -71,6 +74,14 @@ public class DriveSubsystem extends SubsystemBase {
     // temp:
     StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault()
             .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
+
+            private final PIDController xController = new PIDController(1.0, 0, 0);
+    private final PIDController yController = new PIDController(1.0, 0, 0);
+    private final PIDController rotationController = new PIDController(1.0, 0, 0);
+    
+    // YENI EKLENDI: Pozisyonlanma toleransları
+    private static final double POSITION_TOLERANCE = 0.05; // 5 cm
+    private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
     /** Creates a new Drivetrain. */
     public DriveSubsystem() {
@@ -140,6 +151,12 @@ public class DriveSubsystem extends SubsystemBase {
     } catch (Exception e) {
       // Handle exception as needed
       e.printStackTrace();
+    }
+    if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
+        rotationController.enableContinuousInput(-Math.PI, Math.PI);
+        xController.setTolerance(POSITION_TOLERANCE);
+        yController.setTolerance(POSITION_TOLERANCE);
+        rotationController.setTolerance(ROTATION_TOLERANCE);
     }
     
     // Configure AutoBuilder last
@@ -499,6 +516,65 @@ public class DriveSubsystem extends SubsystemBase {
         return new ChassisSpeeds();
     }
 
+
+
+    // YENİ EKLENDİ: AprilTag'e göre pozisyonlanma komutu
+public Command alignToAprilTag(Pose2d tagPose, double targetDistance) {
+    return Commands.run(() -> {
+        if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
+            Pose2d currentPose = getPose();
+            
+            // Hedef pozisyonu hesapla (tag'in önünde belirli mesafede)
+            double targetX = tagPose.getX() - targetDistance * Math.cos(tagPose.getRotation().getRadians());
+            double targetY = tagPose.getY() - targetDistance * Math.sin(tagPose.getRotation().getRadians());
+            Pose2d targetPose = new Pose2d(targetX, targetY, tagPose.getRotation());
+
+            // PID çıktılarını hesapla
+            double xSpeed = xController.calculate(currentPose.getX(), targetPose.getX());
+            double ySpeed = yController.calculate(currentPose.getY(), targetPose.getY());
+            double rotSpeed = rotationController.calculate(
+                currentPose.getRotation().getRadians(),
+                targetPose.getRotation().getRadians()
+            );
+
+            // Hızları sınırla
+            xSpeed = MathUtil.clamp(xSpeed, -DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5,
+                                         DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5);
+            ySpeed = MathUtil.clamp(ySpeed, -DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5,
+                                         DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5);
+            rotSpeed = MathUtil.clamp(rotSpeed, -DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND * 0.5,
+                                            DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND * 0.5);
+
+            // Robot'u hareket ettir
+            ChassisSpeeds speeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
+            pathFollowDrive(speeds);
+        }
+    }).until(() -> isAtTargetPose());
+}
+
+// YENİ EKLENDİ: Robot'un hedef pozisyonda olup olmadığını kontrol et
+private boolean isAtTargetPose() {
+    return xController.atSetpoint() && 
+           yController.atSetpoint() && 
+           rotationController.atSetpoint();
+}
+
+
+// YENİ EKLENDİ: Vision sisteminden gelen pose güncellemelerini ekle
+public void addAprilTagMeasurement(Pose2d visionPose, double timestamp) {
+    if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
+        m_odometry.addVisionMeasurement(visionPose, timestamp);
+    }
+}
+
+// YENİ EKLENDİ: PID değerlerini SmartDashboard'a ekle
+private void putPIDSmartDashboardData() {
+    if (RobotBase.isReal()) {
+        SmartDashboard.putNumber("AprilTag/X Error", xController.getPositionError());
+        SmartDashboard.putNumber("AprilTag/Y Error", yController.getPositionError());
+        SmartDashboard.putNumber("AprilTag/Rotation Error", rotationController.getPositionError());
+    }
+}
     /**
      * Sets the wheels into an X formation to prevent movement.
      */
@@ -637,3 +713,4 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
 }
+

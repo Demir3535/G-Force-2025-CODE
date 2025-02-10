@@ -34,29 +34,26 @@ public class AutoPositionToTagCommand extends Command {
        driveSubsystem.drive(0, 0, 0, false, false);  // Rate limit kapalı
    }
 
-  @Override
-public void execute() {
-    // Debug bilgileri yazdır
-    double x = LimelightHelpers.getTX("limelight");
-    double y = LimelightHelpers.getTY("limelight");
-    double id = LimelightHelpers.getFiducialID("limelight");
-    
-    System.out.println("-------------");
-    System.out.println("Görülen Tag ID: " + id);
-    System.out.println("X Offset: " + x);
-    System.out.println("Y Offset: " + y);
-    
-    // Hesaplanan hızları görelim
-    double rotationSpeed = calculateSpeed(-x * ROTATION_P);
-    double forwardSpeed = calculateSpeed(y * FORWARD_P);
-    
-    System.out.println("Rotation Speed: " + rotationSpeed);
-    System.out.println("Forward Speed: " + forwardSpeed);
-    
-    // Motorlara komut gönder
-    ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, 0, rotationSpeed);
-    driveSubsystem.runChassisSpeeds(speeds, false);
-}
+   @Override
+   public void execute() {
+       if (!LimelightHelpers.getTV("limelight")) {
+           return;
+       }
+   
+       double x = LimelightHelpers.getTX("limelight");
+       double y = LimelightHelpers.getTY("limelight");
+       
+       // Sadece dönüş hareketi için
+       double rotationSpeed = -x * 0.15; // Dönüş hızını düşürdük
+       double forwardSpeed = 0.1; // İleri hareketi devre dışı bıraktık
+   
+       // Hız sınırları
+       rotationSpeed = MathUtil.clamp(rotationSpeed, 0.4, -0.4);
+   
+       // Motor kontrolü
+       ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, 0, rotationSpeed);
+       driveSubsystem.runChassisSpeeds(speeds, false);
+   }
    private double calculateSpeed(double speed) {
        if (Math.abs(speed) < MIN_SPEED) {
            return 0;

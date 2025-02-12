@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RobotSystemsCheckCommand;
-import frc.robot.commands.apriltag.AutoPositionToTagCommand;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.commands.elevator.MoveElevatorManual;
 import frc.robot.commands.wrist.MoveWristManual;
@@ -91,14 +90,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("Score L3",
                 AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, shooterSubsystem));
 
-        NamedCommands.registerCommand("AlignToReef1",
-                new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); // Speaker AprilTag ID'si
+       // NamedCommands.registerCommand("AlignToReef1",
+               // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); // Speaker AprilTag ID'si
 
-        NamedCommands.registerCommand("AlignToReef2",
-                new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp AprilTag ID'si
+        //NamedCommands.registerCommand("AlignToReef2",
+                //new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp AprilTag ID'si
 
-        NamedCommands.registerCommand("AlignToReef3",
-                new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); // Stage AprilTag ID'si
+        //NamedCommands.registerCommand("AlignToReef3",
+                //new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); // Stage AprilTag ID'si
 
     }
 
@@ -132,8 +131,8 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
         // A butonu ile tüm tag'lere otomatik konumlanma
-        new JoystickButton(operatorJoystick, 4)
-    .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4));  // 4 yerine istediğin tag ID'yi yaz// Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
+     //   new JoystickButton(operatorJoystick, 4)
+//    .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4));  // 4 yerine istediğin tag ID'yi yaz// Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
 
         // B butonu ile spesifik tag 3'e konumlanma
         new JoystickButton(driveJoystick, 2) // 2 numaralı buton, gerekirse değiştirebilirsiniz

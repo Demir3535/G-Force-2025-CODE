@@ -314,9 +314,9 @@ public final class RobotConstants {
                         public static final int OPERATOR_JOYSTICK = 0;
 
                         // Joystick Axis
-                        public static final int DRIVE_COMMAND_X_AXIS = 3;
+                        public static final int DRIVE_COMMAND_X_AXIS = 0;
                         public static final int DRIVE_COMMAND_Y_AXIS = 1;
-                        public static final int DRIVE_COMMAND_ROT_AXIS = 0; // 2 for the flight controller, 4 for
+                        public static final int DRIVE_COMMAND_ROT_AXIS = 2; // 2 for the flight controller, 4 for
                                                                             // xbox/gamepad
 
                         // Manual control axis for operator

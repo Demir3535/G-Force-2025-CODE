@@ -82,6 +82,7 @@ public final class RobotConstants {
                 }
 
         }
+       
 
         public static final class ShooterConstans {
                 public static final double MAX_MOTOR_RPM = 500.0;
@@ -135,6 +136,12 @@ public final class RobotConstants {
         }
 
         public static final class DrivetrainConstants {
+              
+                public static final double tP = 0.1;
+                public static final double tI = 0;
+                public static final double tD = 0.02;
+
+              
                 public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = 0;
                 public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = 0; // -We do not apply an offset to the
                                                                                    // CANcoder
@@ -294,6 +301,7 @@ public final class RobotConstants {
 
                         public static final int CLAW_MOTOR = 21;
                         public static final int PDH = 20;
+                        public static double limelightAdjust;
 
                 }
 
@@ -322,6 +330,7 @@ public final class RobotConstants {
                         // Manual control axis for operator
                         public static final int ELEVATOR_MANUAL_CONTROL = 1;
                         public static final int WRIST_MANUAL_CONTROL = 3;
+                        public static final double kDriveDeadband = 0.3;
                 }
         }
 

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import java.lang.ModuleLayer.Controller;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -25,10 +27,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.LimelightHelpers;
 import frc.robot.RobotConstants;
 import frc.robot.RobotState;
 import frc.robot.utils.CowboyUtils;
 import frc.robot.RobotConstants.DrivetrainConstants;
+
 import frc.robot.RobotConstants.SubsystemEnabledConstants;
 import frc.robot.RobotContainer.UserPolicy;
 import frc.robot.subsystems.drive.swerve.SwerveModule;
@@ -51,11 +56,27 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  */
 
+
 public class DriveSubsystem extends SubsystemBase {
     private SwerveModuleSim[] swerveModuleSims = new SwerveModuleSim[4];
     private SwerveModule[] swerveModules = new SwerveModule[4];
     RobotConfig config;
     private static AHRS m_gyro;
+    public CommandXboxController m_driverControllerLocal = new CommandXboxController(OIConstants.kDriverControllerPort);
+
+    private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
+  //PIDController turningPID = new PIDController(DrivetrainConstants.tP, DrivetrainConstants.tI, DrivetrainConstants.tD);
+
+    // Sınıfın üst kısmında, diğer controller'larla birlikte
+// Diğer PID kontrolcüleriyle birlikte buraya ekleyin
+private final PIDController xController = new PIDController(1.0, 0, 0);
+private final PIDController yController = new PIDController(1.0, 0, 0);
+private final PIDController rotationController = new PIDController(1.0, 0, 0);
+private final PIDController turningPID = new PIDController(1.0, 0, 0);  // BUNU EKLEYİN
+
+// YENI EKLENDI: Pozisyonlanma toleransları
+private static final double POSITION_TOLERANCE = 0.05; // 5 cm
+private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
     private double m_currentRotation = 0.0;
     private double m_currentTranslationDir = 0.0;
@@ -75,13 +96,6 @@ public class DriveSubsystem extends SubsystemBase {
     StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault()
             .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
-            private final PIDController xController = new PIDController(1.0, 0, 0);
-    private final PIDController yController = new PIDController(1.0, 0, 0);
-    private final PIDController rotationController = new PIDController(1.0, 0, 0);
-    
-    // YENI EKLENDI: Pozisyonlanma toleransları
-    private static final double POSITION_TOLERANCE = 0.05; // 5 cm
-    private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
     /** Creates a new Drivetrain. */
     public DriveSubsystem() {
@@ -157,8 +171,18 @@ public class DriveSubsystem extends SubsystemBase {
         xController.setTolerance(POSITION_TOLERANCE);
         yController.setTolerance(POSITION_TOLERANCE);
         rotationController.setTolerance(ROTATION_TOLERANCE);
+
+        // Yeni eklenen PID ayarları
+    turningPID.enableContinuousInput(-180, 180); // Açısal değerler için
+    turningPID.setTolerance(1.0); // Hedef toleransı
+    // PID katsayılarını ayarlayın (bunlar örnek değerler, ayarlanması gerekebilir)
+    turningPID.setP(0.1);
+    turningPID.setI(0.0);
+    turningPID.setD(0.0);
     }
     
+   
+
     // Configure AutoBuilder last
     AutoBuilder.configure(
             DriveSubsystem::getPose, // Robot pose supplier
@@ -711,6 +735,20 @@ private void putPIDSmartDashboardData() {
         });
 
     }
+
+
+    public double turnPID(){
+    double output = (turningPID.calculate(LimelightHelpers.getTX(RobotConstants.LLName), 0));
+    SmartDashboard.putNumber("turningoutput", output);
+    return output;
+}
+
+public void aimWhileMovingv2(double PIDValue) {
+    var speeds = new ChassisSpeeds((-MathUtil.applyDeadband(driveJoystick.getLeftY()) * DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND),
+                                   (-MathUtil.applyDeadband(driveJoystick.getLeftX()) * DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND), PIDValue);
+    //apply swerve module states
+    setModuleStates(DrivetrainConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds));
+  }
 
 }
 

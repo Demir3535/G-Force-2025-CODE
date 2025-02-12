@@ -29,6 +29,7 @@ import frc.robot.Robot;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class ShooterSubsystem extends SubsystemBase {
    SparkMax shooterMotor1;
@@ -41,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
    private boolean isShooterRunning = false;
    private boolean shootingMode = false; // YENİ: Atış modu için eklendi
 
-   private PWMMotorController ledController;
+   private PWMSparkMax ledController;
    
    private static final double RED = 0.61;
    private static final double GREEN = 0.77;
@@ -53,6 +54,8 @@ public class ShooterSubsystem extends SubsystemBase {
        shooterMotor2 = new SparkMax(CAN.SHOOTER_MOTOR_2, MotorType.kBrushless);
     
        shooterMotor1Controller = shooterMotor1.getClosedLoopController();
+
+       ledController = new PWMSparkMax(0);
 
        shooterMotor1Config = new SparkMaxConfig();
        shooterMotor2Config = new SparkMaxConfig();
@@ -76,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
            isShooterRunning = false;
        }
 
-       //updateLEDStatus();
+       updateLEDStatus();
 
        // Debug bilgileri
        SmartDashboard.putBoolean("Shooter Distance Sensor", distanceSensor.get());
@@ -95,11 +98,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
    // YENİ: moveAtSpeed metodu güncellendi
    public void moveAtSpeed(double speed) {
-       if (shootingMode || !distanceSensor.get()) {
-           shooterMotor1.set(speed * .5);
-           isShooterRunning = true;
-           shootingMode = true; // Atış modunu aktif et
-       }
+      shootingMode = true;
+      shooterMotor1.set(speed * 0.5);
+      isShooterRunning = true;
    }
 
    // YENİ: stopShooter metodu güncellendi

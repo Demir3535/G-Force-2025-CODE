@@ -119,7 +119,7 @@ public class RobotContainer {
         new JoystickButton(operatorJoystick, 5)
                 .onTrue(elevatorSubsystem.goToScoreSetpoint(3));
 
-        new JoystickButton(operatorJoystick,8)
+        new JoystickButton(operatorJoystick, 8)
                 .whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
                 .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
 

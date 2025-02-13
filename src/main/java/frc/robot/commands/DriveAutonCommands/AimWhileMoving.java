@@ -1,7 +1,6 @@
 package frc.robot.commands.DriveAutonCommands;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
-import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AimWhileMoving extends Command {

@@ -62,8 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
     private SwerveModule[] swerveModules = new SwerveModule[4];
     RobotConfig config;
     private static AHRS m_gyro;
-    public CommandXboxController m_driverControllerLocal = new CommandXboxController(OIConstants.kDriverControllerPort);
-
+    
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
   //PIDController turningPID = new PIDController(DrivetrainConstants.tP, DrivetrainConstants.tI, DrivetrainConstants.tD);
 
@@ -744,8 +743,8 @@ private void putPIDSmartDashboardData() {
 }
 
 public void aimWhileMovingv2(double PIDValue) {
-    var speeds = new ChassisSpeeds((-MathUtil.applyDeadband(driveJoystick.getLeftY()) * DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND),
-                                   (-MathUtil.applyDeadband(driveJoystick.getLeftX()) * DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND), PIDValue);
+    var speeds = new ChassisSpeeds(((driveJoystick.getRawAxis(3)) * DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND),
+                                   ((driveJoystick.getRawAxis(3)) * DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND), PIDValue);
     //apply swerve module states
     setModuleStates(DrivetrainConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds));
   }

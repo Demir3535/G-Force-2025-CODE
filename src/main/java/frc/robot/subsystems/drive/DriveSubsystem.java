@@ -1,11 +1,7 @@
 package frc.robot.subsystems.drive;
 
-import java.lang.ModuleLayer.Controller;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import com.studica.frc.AHRS;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,35 +17,29 @@ import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.SPI.Port;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotConstants;
 import frc.robot.RobotState;
 import frc.robot.utils.CowboyUtils;
 import frc.robot.RobotConstants.DrivetrainConstants;
-
 import frc.robot.RobotConstants.SubsystemEnabledConstants;
 import frc.robot.RobotContainer.UserPolicy;
 import frc.robot.subsystems.drive.swerve.SwerveModule;
 import frc.robot.subsystems.drive.swerve.SwerveModuleSim;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.MathUtil;
-
-import frc.robot.RobotConstants.AutonomousConstants;
 import frc.robot.utils.SwerveUtils;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.subsystems.limelight.Limelight;
+import frc.robot.subsystems.Limelight;
+import frc.robot.LimelightHelpers;
 
 /**
  * The {@code Drivetrain} class contains fields and methods pertaining to the
@@ -60,22 +50,18 @@ import frc.robot.subsystems.limelight.Limelight;
 
 public class DriveSubsystem extends SubsystemBase {
     private SwerveModuleSim[] swerveModuleSims = new SwerveModuleSim[4];
-    private final Limelight m_limelight;
     private SwerveModule[] swerveModules = new SwerveModule[4];
     RobotConfig config;
     private static AHRS m_gyro;
     
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
-  //PIDController turningPID = new PIDController(DrivetrainConstants.tP, DrivetrainConstants.tI, DrivetrainConstants.tD);
+    PIDController turningPID = new PIDController(DrivetrainConstants.tP, DrivetrainConstants.tI, DrivetrainConstants.tD);
 
-    // Sınıfın üst kısmında, diğer controller'larla birlikte
-// Diğer PID kontrolcüleriyle birlikte buraya ekleyin
 private final PIDController xController = new PIDController(1.0, 0, 0);
 private final PIDController yController = new PIDController(1.0, 0, 0);
 private final PIDController rotationController = new PIDController(1.0, 0, 0);
-private final PIDController turningPID = new PIDController(1.0, 0, 0);  // BUNU EKLEYİN
 
-// YENI EKLENDI: Pozisyonlanma toleransları
+// YENI EKLENDI: Pozisyonlanma  
 private static final double POSITION_TOLERANCE = 0.05; // 5 cm
 private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
@@ -99,8 +85,7 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
 
     /** Creates a new Drivetrain. */
-    public DriveSubsystem(Limelight limelight) {  // Constructor'a limelight parametresi ekleyin
-    m_limelight = limelight;  // m_limelight'ı initialize edin
+    public DriveSubsystem() {
 
 
         if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
@@ -176,10 +161,10 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
         yController.setTolerance(POSITION_TOLERANCE);
         rotationController.setTolerance(ROTATION_TOLERANCE);
 
-        // Yeni eklenen PID ayarları
-    turningPID.enableContinuousInput(-180, 180); // Açısal değerler için
-    turningPID.setTolerance(1.0); // Hedef toleransı
-    // PID katsayılarını ayarlayın (bunlar örnek değerler, ayarlanması gerekebilir)
+
+    turningPID.enableContinuousInput(-180, 180); // for degree values
+    turningPID.setTolerance(1.0); //  target tolerance 
+    // set PID value
     turningPID.setP(0.1);
     turningPID.setI(0.0);
     turningPID.setD(0.0);
@@ -275,6 +260,9 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
         }
     }
 
+@Override
+  public void periodic() {
+    }
     private void updateOdometry() {
         // Update the odometry (Called in periodic)
 

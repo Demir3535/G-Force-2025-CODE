@@ -29,25 +29,19 @@ import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
-import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.PS4Controller;
-import frc.robot.subsystems.limelight.Limelight;
-import frc.robot.subsystems.limelight.Limelight;
-
-
+import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
 
-    private final Limelight m_limelight = new Limelight();
-    private final DriveSubsystem m_drive = new DriveSubsystem(m_limelight);
-    
+    private final DriveSubsystem m_drive = new DriveSubsystem();
+    public final Limelight m_limelight = new Limelight();
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
 
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
-
-    public final Limelight limelight = new Limelight();
+    
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
     private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
@@ -93,30 +87,28 @@ public class RobotContainer {
                 AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, shooterSubsystem));
 
        // NamedCommands.registerCommand("AlignToReef1",
-               // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); // Speaker AprilTag ID'si
+               // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); // Speaker AprilTag ID
 
         //NamedCommands.registerCommand("AlignToReef2",
-                //new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp AprilTag ID'si
+                //new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp AprilTag ID
 
         //NamedCommands.registerCommand("AlignToReef3",
-                //new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); // Stage AprilTag ID'si
-
+                //new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); // Stage AprilTag ID
     }
 
     private void configureButtonBindings() {
 
-        new JoystickButton(driveJoystick, 9).onChange(m_drive.xCommand()); // Needs to be while true so the
-                                                                                  // command ends
+        new JoystickButton(driveJoystick, 9).onChange(m_drive.xCommand()); // Needs to be while true so the command ends
         new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
 
         new JoystickButton(operatorJoystick, PS4Controller.Button.kR1.value)
                 .onTrue(elevatorSubsystem.goToScoreSetpoint(1));
 
-        // Buton 2: L2 seviyesine git
+        // Button 2: Go to L2 level
         new JoystickButton(operatorJoystick,8)
                 .onTrue(elevatorSubsystem.goToScoreSetpoint(2));
 
-        // Buton 3: L3 seviyesine git
+        // Button 3: Go to L3 level
         new JoystickButton(operatorJoystick, 5)
                 .onTrue(elevatorSubsystem.goToScoreSetpoint(3));
 
@@ -132,33 +124,23 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
-        // A butonu ile tüm tag'lere otomatik konumlanma
+        // A button for automatic positioning to all tags
      //   new JoystickButton(operatorJoystick, 4)
-//    .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4));  // 4 yerine istediğin tag ID'yi yaz// Tüm AprilTag'lere otomatik konumlandırma komutunu tetikler
+//    .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4));  // Replace 4 with desired tag ID
 
-        // B butonu ile spesifik tag 3'e konumlanma
-        //new JoystickButton(driveJoystick, 2) // 2 numaralı buton, gerekirse değiştirebilirsiniz
+        // B button for positioning to specific tag 3
+        //new JoystickButton(driveJoystick, 2) // Button number 2, can be changed if needed
          //       .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
-        // Spesifik olarak tag 3'e konumlandırma komutunu tetikler
 
-        // X butonu ile spesifik tag 4'e konumlanma
-      //  new JoystickButton(driveJoystick, 3) // 3 numaralı buton, gerekirse değiştirebilirsiniz
+        // X button for positioning to specific tag 4
+      //  new JoystickButton(driveJoystick, 3) // Button number 3, can be changed if needed
         //        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
-        // Spesifik olarak tag 4'e konumlandırma komutunu tetikler
-
     }
 
     public Command getAutonomousCommand() {
-        if (m_autoPositionChooser.getSelected() != null) {
-            return m_autoPositionChooser.getSelected();
-        } else {
-           return new InstantCommand(() -> limelight.autoPositionToAllTags());
-            // Eğer seçili otonom komut yoksa, tüm AprilTag'lere otomatik konumlandırma
-            // yapar
-
-        }
-
+        return null;
     }
+
 
     public Command getTestingCommand() {
         return new RobotSystemsCheckCommand(m_drive);

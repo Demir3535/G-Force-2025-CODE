@@ -14,9 +14,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,40 +22,19 @@ public final class RobotConstants {
 
         public static final String LLName = "limelight";
 
-        public static final class ScoringConstants { // Skor pozisyonları için sabit değerleri içeren sınıf
-                public static final class BlueAlliance { // Mavi takım için özel pozisyonlar
-                        public static final List<Pose2d> REEF_SIDE_POSES = List.of( // Reef (saha kenarı)
-                                                                                    // pozisyonlarının listesi
-                                        new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))), // 1. Pozisyon:
-                                                                                                 // X:2.961m, Y:4m,
-                                                                                                 // Açı:0°
-                                        new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))), // 2. Pozisyon:
-                                                                                                      // X:3.712m,
-                                                                                                      // Y:2.723m,
-                                                                                                      // Açı:30°
-                                        new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))), // 3. Pozisyon:
-                                                                                                      // X:5.253m,
-                                                                                                      // Y:2.656m,
-                                                                                                      // Açı:60°
-                                        new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))), // 4. Pozisyon: X:6m,
-                                                                                              // Y:4m, Açı:90°
-                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))), // 5. Pozisyon: X:0m,
-                                                                                               // Y:0m, Açı:120°
-                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))); // 6. Pozisyon: X:0m,
-                                                                                              // Y:0m, Açı:0°
+        public static final class ScoringConstants { // Class containing constant values for scoring positions
+                public static final class BlueAlliance { // Specific positions for the Blue alliance
+                        public static final List<Pose2d> REEF_SIDE_POSES = List.of( // List of Reef (field edge) positions
+                                        new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))), // 1st Position: X:2.961m, Y:4m, Angle:0°
+                                        new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))), // 2nd Position: X:3.712m, Y:2.723m, Angle:30°
+                                        new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))), // 3rd Position: X:5.253m, Y:2.656m, Angle:60°
+                                        new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))), // 4th Position: X:6m, Y:4m, Angle:90°
+                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))), // 5th Position: X:0m, Y:0m, Angle:120°
+                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))); // 6th Position: X:0m, Y:0m, Angle:0°
 
-                        public static final List<Pose2d> HP_POSES = List.of( // Human Player (insan oyuncu) istasyonu
-                                                                             // pozisyonları
-                                        new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))), // Üst HP
-                                                                                                         // pozisyonu:
-                                                                                                         // X:1.2m,
-                                                                                                         // Y:7m,
-                                                                                                         // Açı:125°
-                                        new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125)))); // Alt HP
-                                                                                                           // pozisyonu:
-                                                                                                           // X:1.2m,
-                                                                                                           // Y:1m,
-                                                                                                           // Açı:-125°
+                        public static final List<Pose2d> HP_POSES = List.of( // Human Player station positions
+                                        new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))), // Upper HP position: X:1.2m, Y:7m, Angle:125°
+                                        new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125)))); // Lower HP position: X:1.2m, Y:1m, Angle:-125°
                 }
         }
 
@@ -88,12 +64,11 @@ public final class RobotConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
-                public static final double ApTagHeight = 6.69291339; // height of the BOTTOM of the apriltags from the
-                                                                     // ground (speaker tags) in inches
+                public static final double ApTagHeight = 6.69291339; // Height of the BOTTOM of the AprilTags from the ground (speaker tags) in inches
                 public static final double CamHeight = 7; // in inches
                 public static final double CamAngle = 35.00; // in degrees
 
-                public static final double SHOOTER_SPEED = 0.5; // İstediğiniz hızı ayarlayın
+                public static final double SHOOTER_SPEED = 0.5; // Adjust the desired speed
 
                 public static final double DESIRED_TAG_DISTANCE = 1.0; // 100 cm
                 public static final double MIN_TAG_DISTANCE = 0.99; // 99 cm
@@ -110,7 +85,7 @@ public final class RobotConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
-                public static final double CLIMB_SPEED = 0.5; // İstediğiniz hızı ayarlayın
+                public static final double CLIMB_SPEED = 0.5; // Adjust the desired speed
 
         }
 
@@ -307,13 +282,12 @@ public final class RobotConstants {
 
                 
                 public static class DIO {
-                        // Distance sensor için DIO port numarası
-                        // Bu numarayı robotunuzdaki gerçek bağlantı portuna göre ayarlayın (0-9 arası)
-                        public static final int SHOOTER_DISTANCE_SENSOR = 0; // Örnek port numarası
+                        
+                        public static final int SHOOTER_DISTANCE_SENSOR = 0; // exp port number 
                 }
 
                 public static final class PWM {
-                        public static final int LED_CONTROLLER = 0; // LED'in bağlı olduğu PWM portu
+                        public static final int LED_CONTROLLER = 0; // led port for roborio
                 }
 
                 public static class Controller {

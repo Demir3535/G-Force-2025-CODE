@@ -29,7 +29,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig elevatorMotor1Config;
     SparkMaxConfig elevatorMotor2Config;
     static SparkClosedLoopController elevatorMotor1Controller;
-    private double lastTargetPosition = 0; // Buraya ekleyin
+    private double lastTargetPosition = 0; // write here 
    
     public ElevatorSubsystem() {
 

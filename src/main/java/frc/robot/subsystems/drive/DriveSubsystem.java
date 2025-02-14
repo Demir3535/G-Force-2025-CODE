@@ -48,8 +48,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.limelight.Limelight;
 
 /**
  * The {@code Drivetrain} class contains fields and methods pertaining to the
@@ -60,6 +60,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class DriveSubsystem extends SubsystemBase {
     private SwerveModuleSim[] swerveModuleSims = new SwerveModuleSim[4];
+    private final Limelight m_limelight;
     private SwerveModule[] swerveModules = new SwerveModule[4];
     RobotConfig config;
     private static AHRS m_gyro;
@@ -98,9 +99,9 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
 
     /** Creates a new Drivetrain. */
-    public DriveSubsystem() {
+    public DriveSubsystem(Limelight limelight) {  // Constructor'a limelight parametresi ekleyin
+    m_limelight = limelight;  // m_limelight'ı initialize edin
 
-        
 
         if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
 

@@ -38,8 +38,9 @@ import frc.robot.subsystems.limelight.Limelight;
 
 public class RobotContainer {
 
-    public final DriveSubsystem driveSubsystem = new DriveSubsystem();
-   
+    private final Limelight m_limelight = new Limelight();
+    private final DriveSubsystem m_drive = new DriveSubsystem(m_limelight);
+    
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
 
@@ -59,7 +60,7 @@ public class RobotContainer {
     private final Field2d field = new Field2d();
 
     public RobotContainer() {
-        driveSubsystem.setDefaultCommand(new TeleopDriveCommand(driveSubsystem, driveJoystick));
+        m_drive.setDefaultCommand(new TeleopDriveCommand(m_drive, driveJoystick));
 
         elevatorSubsystem.setDefaultCommand(new MoveElevatorManual(elevatorSubsystem, operatorJoystick));
         wristSubsystem.setDefaultCommand(new MoveWristManual(wristSubsystem, operatorJoystick));
@@ -104,9 +105,9 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
 
-        new JoystickButton(driveJoystick, 9).onChange(driveSubsystem.xCommand()); // Needs to be while true so the
+        new JoystickButton(driveJoystick, 9).onChange(m_drive.xCommand()); // Needs to be while true so the
                                                                                   // command ends
-        new JoystickButton(driveJoystick, 2).whileTrue(driveSubsystem.gyroReset());
+        new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
 
         new JoystickButton(operatorJoystick, PS4Controller.Button.kR1.value)
                 .onTrue(elevatorSubsystem.goToScoreSetpoint(1));
@@ -160,7 +161,7 @@ public class RobotContainer {
     }
 
     public Command getTestingCommand() {
-        return new RobotSystemsCheckCommand(driveSubsystem);
+        return new RobotSystemsCheckCommand(m_drive);
     }
 
     public Field2d getField() {

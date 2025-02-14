@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -98,6 +99,9 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
     /** Creates a new Drivetrain. */
     public DriveSubsystem() {
+
+        
+
         if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
 
             if (RobotBase.isSimulation()) {
@@ -252,6 +256,7 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
             SmartDashboard.putData("NAVX" , m_gyro);
             SmartDashboard.putNumber("Angle", getGyroAngle());
+            
         }
 
         else {

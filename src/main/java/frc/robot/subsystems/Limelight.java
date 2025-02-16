@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotConstants.ShooterConstans; //TODO typo
+import frc.robot.RobotConstants.ShooterConstants;
 import frc.robot.RobotConstants;
 import frc.robot.LimelightHelpers;
 import static java.lang.Math.*;
@@ -61,7 +61,7 @@ public class Limelight extends SubsystemBase {
     //uses this equation ^
     //distance = (targetheight - cameraheight) / tan(cameraangle + Ty)
         var y = LimelightHelpers.getTY(RobotConstants.LLName);
-        double distance = (ShooterConstans.ApTagHeight - ShooterConstans.CamHeight) / Math.tan((ShooterConstans.CamAngle + (y)) * (Math.PI/180));
+        double distance = (ShooterConstants.ApTagHeight - ShooterConstants.CamHeight) / Math.tan((ShooterConstants.CamAngle + (y)) * (Math.PI/180));
         return distance;
    }
 }

@@ -43,10 +43,20 @@ public final class RobotConstants {
                 public static final double ELEVATOR_MIN_HEIGHT = 0.0;
 
                 public static final class HeightSetpoints {
-                        public static final double L1 = -68;
-                        public static final double L2 = 0;
-                        public static final double L3 = 0;
+                      
+                        public static final double HOME = -3;
+                        public static final double HP = -50;
+
+                        public static final class Coral {
+                                public static final double L1 = -20;
+                                public static final double L2 = -45;
+                                public static final double L3 = -70.5;
+                        }
+                      
                 }
+
+               
+
 
                 public static final double MAX_MOTOR_RPM = 5000.0;
                 public static final double MAX_MOTOR_ACCELERATION = 3000.0;
@@ -60,7 +70,7 @@ public final class RobotConstants {
         }
        
 
-        public static final class ShooterConstans {
+        public static final class ShooterConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
 
@@ -73,12 +83,6 @@ public final class RobotConstants {
                 public static final double DESIRED_TAG_DISTANCE = 1.0; // 100 cm
                 public static final double MIN_TAG_DISTANCE = 0.99; // 99 cm
 
-                public static final class AngleSetpoints {
-                        public static final double L1 = 0;
-                        public static final double L2 = 0;
-                        public static final double L3 = 0;
-                }
-
         }
 
         public static final class ClimbConstans {
@@ -89,20 +93,22 @@ public final class RobotConstants {
 
         }
 
-        public static final class ClawConstants {
-                public static final double MAX_MOTOR_RPM = 500.0;
-                public static final double MAX_MOTOR_ACCELERATION = 500.0;
-
-        }
 
         public static final class WristConstants {
                 public static final double WRIST_MIN_ANGLE = 0.0;
                 public static final double ELEVATOR_MIN_HEIGHT = 30.0;
 
                 public static final class AngleSetpoints {
-                        public static final double L1 = 0;
-                        public static final double L2 = 0;
-                        public static final double L3 = 0;
+                      
+                        public static final double HOME = 0.0;
+                        public static final double HP = -7.0;
+
+                        public static final class Coral {
+                                public static final double L1 = 0;
+                                public static final double L2 = -3;
+                                public static final double L3 = -5;
+                        }
+
                 }
 
                 public static final double MAX_MOTOR_RPM = 500.0;

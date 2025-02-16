@@ -16,7 +16,7 @@ import frc.robot.RobotConstants.DrivetrainConstants;
 import frc.robot.RobotConstants.PathPlannerConstants;
 import frc.robot.RobotContainer.UserPolicy;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.utils.CowboyUtils;
+import frc.robot.utils.GforceUtils;
 
 public class AlignWithPose {
 
@@ -37,6 +37,6 @@ public class AlignWithPose {
     }
 
     public static Command alignWithSpeakerCommand(DriveSubsystem driveSubsystem) {
-        return pathToPoseCommand(CowboyUtils.testPose, driveSubsystem);
+        return pathToPoseCommand(GforceUtils.testPose, driveSubsystem);
     }
 }

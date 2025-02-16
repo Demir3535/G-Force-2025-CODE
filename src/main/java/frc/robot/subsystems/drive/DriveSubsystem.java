@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotConstants;
 import frc.robot.RobotState;
-import frc.robot.utils.CowboyUtils;
+import frc.robot.utils.GforceUtils;
 import frc.robot.RobotConstants.DrivetrainConstants;
 import frc.robot.RobotConstants.SubsystemEnabledConstants;
 import frc.robot.RobotContainer.UserPolicy;
@@ -47,23 +47,23 @@ import frc.robot.LimelightHelpers;
  * 
  */
 
-
 public class DriveSubsystem extends SubsystemBase {
     private SwerveModuleSim[] swerveModuleSims = new SwerveModuleSim[4];
     private SwerveModule[] swerveModules = new SwerveModule[4];
     RobotConfig config;
     private static AHRS m_gyro;
-    
+
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
-    PIDController turningPID = new PIDController(DrivetrainConstants.tP, DrivetrainConstants.tI, DrivetrainConstants.tD);
+    PIDController turningPID = new PIDController(DrivetrainConstants.tP, DrivetrainConstants.tI,
+            DrivetrainConstants.tD);
 
-private final PIDController xController = new PIDController(1.0, 0, 0);
-private final PIDController yController = new PIDController(1.0, 0, 0);
-private final PIDController rotationController = new PIDController(1.0, 0, 0);
+    private final PIDController xController = new PIDController(1.0, 0, 0);
+    private final PIDController yController = new PIDController(1.0, 0, 0);
+    private final PIDController rotationController = new PIDController(1.0, 0, 0);
 
-// YENI EKLENDI: Pozisyonlanma  
-private static final double POSITION_TOLERANCE = 0.05; // 5 cm
-private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
+    // YENI EKLENDI: Pozisyonlanma
+    private static final double POSITION_TOLERANCE = 0.05; // 5 cm
+    private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
     private double m_currentRotation = 0.0;
     private double m_currentTranslationDir = 0.0;
@@ -83,10 +83,8 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
     StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault()
             .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
-
     /** Creates a new Drivetrain. */
     public DriveSubsystem() {
-
 
         if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
 
@@ -148,54 +146,54 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
             }
         }
 
-        
-    try{
-      config = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      // Handle exception as needed
-      e.printStackTrace();
-    }
-    if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
-        rotationController.enableContinuousInput(-Math.PI, Math.PI);
-        xController.setTolerance(POSITION_TOLERANCE);
-        yController.setTolerance(POSITION_TOLERANCE);
-        rotationController.setTolerance(ROTATION_TOLERANCE);
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            // Handle exception as needed
+            e.printStackTrace();
+        }
+        if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
+            rotationController.enableContinuousInput(-Math.PI, Math.PI);
+            xController.setTolerance(POSITION_TOLERANCE);
+            yController.setTolerance(POSITION_TOLERANCE);
+            rotationController.setTolerance(ROTATION_TOLERANCE);
 
+            turningPID.enableContinuousInput(-180, 180); // for degree values
+            turningPID.setTolerance(1.0); // target tolerance
+            // set PID value
+            turningPID.setP(0.1);
+            turningPID.setI(0.0);
+            turningPID.setD(0.0);
+        }
 
-    turningPID.enableContinuousInput(-180, 180); // for degree values
-    turningPID.setTolerance(1.0); //  target tolerance 
-    // set PID value
-    turningPID.setP(0.1);
-    turningPID.setI(0.0);
-    turningPID.setD(0.0);
-    }
-    
-   
+        // Configure AutoBuilder last
+        AutoBuilder.configure(
+                DriveSubsystem::getPose, // Robot pose supplier
+                this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                (speeds) -> pathFollowDrive(speeds), // Method that will drive the robot given ROBOT RELATIVE
+                                                     // ChassisSpeeds. Also optionally outputs individual module
+                                                     // feedforwards
+                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for
+                                                // holonomic drive trains
+                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                ),
+                config, // The robot configuration
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red
+                    // alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    // Configure AutoBuilder last
-    AutoBuilder.configure(
-            DriveSubsystem::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds) -> pathFollowDrive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-            ),
-            config, // The robot configuration
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
-    );
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                this // Reference to this subsystem to set requirements
+        );
     }
 
     private double getGyroAngle() {
@@ -238,11 +236,11 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
                     swerveModules[2].getTurningAbsoluteEncoder().getPosition(),
                     swerveModules[3].getTurningAbsoluteEncoder().getPosition()
             });
-            //SmartDashboard.putData("NAVX", m_gyro);
+            // SmartDashboard.putData("NAVX", m_gyro);
 
-            SmartDashboard.putData("NAVX" , m_gyro);
+            SmartDashboard.putData("NAVX", m_gyro);
             SmartDashboard.putNumber("Angle", getGyroAngle());
-            
+
         }
 
         else {
@@ -260,9 +258,10 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
         }
     }
 
-@Override
-  public void periodic() {
+    @Override
+    public void periodic() {
     }
+
     private void updateOdometry() {
         // Update the odometry (Called in periodic)
 
@@ -295,9 +294,6 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
         field.setRobotPose(m_odometry.getEstimatedPosition());
         RobotState.updatePose(m_odometry.getEstimatedPosition());
     }
-
-    
-   
 
     public static Pose2d getPose() {
         return SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED ? m_odometry.getEstimatedPosition() : new Pose2d();
@@ -408,7 +404,7 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
             Rotation2d rotation = Rotation2d.fromDegrees(
                     getGyroAngle()
-                            + (CowboyUtils.isRedAlliance() ? 180 : 0));
+                            + (GforceUtils.isRedAlliance() ? 180 : 0));
 
             var swerveModuleStates = DrivetrainConstants.DRIVE_KINEMATICS.toSwerveModuleStates(
                     fieldRelative
@@ -436,7 +432,8 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
     public void runChassisSpeeds(ChassisSpeeds speeds, Boolean fieldRelative) {
         Rotation2d rotation = RobotBase.isSimulation() ? Rotation2d.fromDegrees(
                 getGyroAngle()
-                        + (CowboyUtils.isRedAlliance() ? 180 : 0)) : Rotation2d.fromDegrees(0);
+                        + (GforceUtils.isRedAlliance() ? 180 : 0))
+                : Rotation2d.fromDegrees(0);
 
         var swerveModuleStates = DrivetrainConstants.DRIVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative
@@ -522,7 +519,7 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
 
             Rotation2d rotation = Rotation2d.fromDegrees(
                     getGyroAngle()
-                            + (CowboyUtils.isRedAlliance() ? 180 : 0));
+                            + (GforceUtils.isRedAlliance() ? 180 : 0));
 
             return !fieldRelative
                     ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
@@ -533,65 +530,62 @@ private static final double ROTATION_TOLERANCE = 2.0; // 2 derece
         return new ChassisSpeeds();
     }
 
-
-
     // YENİ EKLENDİ: AprilTag'e göre pozisyonlanma komutu
-public Command alignToAprilTag(Pose2d tagPose, double targetDistance) {
-    return Commands.run(() -> {
+    public Command alignToAprilTag(Pose2d tagPose, double targetDistance) {
+        return Commands.run(() -> {
+            if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
+                Pose2d currentPose = getPose();
+
+                // Hedef pozisyonu hesapla (tag'in önünde belirli mesafede)
+                double targetX = tagPose.getX() - targetDistance * Math.cos(tagPose.getRotation().getRadians());
+                double targetY = tagPose.getY() - targetDistance * Math.sin(tagPose.getRotation().getRadians());
+                Pose2d targetPose = new Pose2d(targetX, targetY, tagPose.getRotation());
+
+                // PID çıktılarını hesapla
+                double xSpeed = xController.calculate(currentPose.getX(), targetPose.getX());
+                double ySpeed = yController.calculate(currentPose.getY(), targetPose.getY());
+                double rotSpeed = rotationController.calculate(
+                        currentPose.getRotation().getRadians(),
+                        targetPose.getRotation().getRadians());
+
+                // Hızları sınırla
+                xSpeed = MathUtil.clamp(xSpeed, -DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5,
+                        DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5);
+                ySpeed = MathUtil.clamp(ySpeed, -DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5,
+                        DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5);
+                rotSpeed = MathUtil.clamp(rotSpeed, -DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND * 0.5,
+                        DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND * 0.5);
+
+                // Robot'u hareket ettir
+                ChassisSpeeds speeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
+                pathFollowDrive(speeds);
+            }
+        }).until(() -> isAtTargetPose());
+    }
+
+    // check if robots in align to target
+    private boolean isAtTargetPose() {
+        return xController.atSetpoint() &&
+                yController.atSetpoint() &&
+                rotationController.atSetpoint();
+    }
+
+    // getting pose updates from vision
+    public void addAprilTagMeasurement(Pose2d visionPose, double timestamp) {
         if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
-            Pose2d currentPose = getPose();
-            
-            // Hedef pozisyonu hesapla (tag'in önünde belirli mesafede)
-            double targetX = tagPose.getX() - targetDistance * Math.cos(tagPose.getRotation().getRadians());
-            double targetY = tagPose.getY() - targetDistance * Math.sin(tagPose.getRotation().getRadians());
-            Pose2d targetPose = new Pose2d(targetX, targetY, tagPose.getRotation());
-
-            // PID çıktılarını hesapla
-            double xSpeed = xController.calculate(currentPose.getX(), targetPose.getX());
-            double ySpeed = yController.calculate(currentPose.getY(), targetPose.getY());
-            double rotSpeed = rotationController.calculate(
-                currentPose.getRotation().getRadians(),
-                targetPose.getRotation().getRadians()
-            );
-
-            // Hızları sınırla
-            xSpeed = MathUtil.clamp(xSpeed, -DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5,
-                                         DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5);
-            ySpeed = MathUtil.clamp(ySpeed, -DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5,
-                                         DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND * 0.5);
-            rotSpeed = MathUtil.clamp(rotSpeed, -DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND * 0.5,
-                                            DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND * 0.5);
-
-            // Robot'u hareket ettir
-            ChassisSpeeds speeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
-            pathFollowDrive(speeds);
+            m_odometry.addVisionMeasurement(visionPose, timestamp);
         }
-    }).until(() -> isAtTargetPose());
-}
-
-// YENİ EKLENDİ: Robot'un hedef pozisyonda olup olmadığını kontrol et
-private boolean isAtTargetPose() {
-    return xController.atSetpoint() && 
-           yController.atSetpoint() && 
-           rotationController.atSetpoint();
-}
-
-
-// YENİ EKLENDİ: Vision sisteminden gelen pose güncellemelerini ekle
-public void addAprilTagMeasurement(Pose2d visionPose, double timestamp) {
-    if (SubsystemEnabledConstants.DRIVE_SUBSYSTEM_ENABLED) {
-        m_odometry.addVisionMeasurement(visionPose, timestamp);
     }
-}
 
-// YENİ EKLENDİ: PID değerlerini SmartDashboard'a ekle
-private void putPIDSmartDashboardData() {
-    if (RobotBase.isReal()) {
-        SmartDashboard.putNumber("AprilTag/X Error", xController.getPositionError());
-        SmartDashboard.putNumber("AprilTag/Y Error", yController.getPositionError());
-        SmartDashboard.putNumber("AprilTag/Rotation Error", rotationController.getPositionError());
+    // added pid values to dashboard
+    private void putPIDSmartDashboardData() {
+        if (RobotBase.isReal()) {
+            SmartDashboard.putNumber("AprilTag/X Error", xController.getPositionError());
+            SmartDashboard.putNumber("AprilTag/Y Error", yController.getPositionError());
+            SmartDashboard.putNumber("AprilTag/Rotation Error", rotationController.getPositionError());
+        }
     }
-}
+
     /**
      * Sets the wheels into an X formation to prevent movement.
      */
@@ -729,19 +723,18 @@ private void putPIDSmartDashboardData() {
 
     }
 
+    public double turnPID() {
+        double output = (turningPID.calculate(LimelightHelpers.getTX(RobotConstants.LLName), 0));
+        SmartDashboard.putNumber("turningoutput", output);
+        return output;
+    }
 
-    public double turnPID(){
-    double output = (turningPID.calculate(LimelightHelpers.getTX(RobotConstants.LLName), 0));
-    SmartDashboard.putNumber("turningoutput", output);
-    return output;
+    public void aimWhileMovingv2(double PIDValue) {
+        var speeds = new ChassisSpeeds(
+                ((driveJoystick.getRawAxis(3)) * DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND),
+                ((driveJoystick.getRawAxis(3)) * DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND), PIDValue);
+        // apply swerve module states
+        setModuleStates(DrivetrainConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds));
+    }
+
 }
-
-public void aimWhileMovingv2(double PIDValue) {
-    var speeds = new ChassisSpeeds(((driveJoystick.getRawAxis(3)) * DrivetrainConstants.MAX_SPEED_METERS_PER_SECOND),
-                                   ((driveJoystick.getRawAxis(3)) * DrivetrainConstants.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND), PIDValue);
-    //apply swerve module states
-    setModuleStates(DrivetrainConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds));
-  }
-
-}
-

@@ -1,6 +1,5 @@
 package frc.robot.subsystems.wrist;
 
-import java.util.function.Supplier;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -11,17 +10,11 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.RobotConstants.WristConstants;
-import frc.robot.subsystems.ElevatorWristSim;
-import frc.robot.Robot;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class WristSubsystem extends SubsystemBase {
@@ -62,25 +55,24 @@ public class WristSubsystem extends SubsystemBase {
         wristMotor.set(speed * .75);
     }
 
-    public Command goToScoreSetpoint(int level) {
+    public Command goToCoralScoreSetpoint(int level) {
         return new InstantCommand(() -> {
             double setpoint;
             if (RobotBase.isReal()) {
                 if (level == 1) {
-                    setpoint = WristConstants.AngleSetpoints.L1;
+                    setpoint = WristConstants.AngleSetpoints.Coral.L1;
                 } else if (level == 2) {
-                    setpoint = WristConstants.AngleSetpoints.L2;
+                    setpoint = WristConstants.AngleSetpoints.Coral.L2;
                 } else if (level == 3) {
-                    setpoint = WristConstants.AngleSetpoints.L3;
+                    setpoint = WristConstants.AngleSetpoints.Coral.L3;
                 } else {
-                    setpoint = WristConstants.AngleSetpoints.L1;
+                    setpoint = WristConstants.AngleSetpoints.Coral.L1;
                 }
                 goToSetpoint(setpoint);
             }
 
         }, this);
     }
-
     @Override
     public void periodic() {
         if (RobotBase.isReal()) {

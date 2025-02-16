@@ -2,31 +2,17 @@ package frc.robot.subsystems.shooter;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.RobotConstants.ElevatorConstants;
-import frc.robot.RobotConstants.ShooterConstans;
-import frc.robot.RobotConstants.WristConstants;
+import frc.robot.RobotConstants.ShooterConstants;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.RobotConstants.PortConstants.DIO;
-import frc.robot.RobotConstants.PortConstants.PWM;
-import frc.robot.subsystems.ElevatorWristSim;
-import frc.robot.Robot;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -52,8 +38,8 @@ public class ShooterSubsystem extends SubsystemBase {
        shooterMotor1Config = new SparkMaxConfig();
        shooterMotor2Config = new SparkMaxConfig();
        shooterMotor1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-       shooterMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstans.MAX_MOTOR_RPM);
-       shooterMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstans.MAX_MOTOR_ACCELERATION);
+       shooterMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstants.MAX_MOTOR_RPM);
+       shooterMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstants.MAX_MOTOR_ACCELERATION);
        shooterMotor1Config.closedLoop.pid(.5, 0.0, 0.0);
        shooterMotor2Config.follow(CAN.SHOOTER_MOTOR_1, true);
 

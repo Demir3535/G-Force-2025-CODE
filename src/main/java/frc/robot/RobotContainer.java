@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -80,12 +81,12 @@ public class RobotContainer {
             System.out.println("Running...");
         }));
         NamedCommands.registerCommand("Score L1",
-                AutomatedScoring.scoreNoPathing(1, elevatorSubsystem, wristSubsystem, shooterSubsystem));
+                AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
         NamedCommands.registerCommand("Score L2",
-                AutomatedScoring.scoreNoPathing(2, elevatorSubsystem, wristSubsystem, shooterSubsystem));
+                AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
         NamedCommands.registerCommand("Score L3",
-                AutomatedScoring.scoreNoPathing(3, elevatorSubsystem, wristSubsystem, shooterSubsystem));
-
+                AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
+  
        // NamedCommands.registerCommand("AlignToReef1",
                // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); // Speaker AprilTag ID
 
@@ -102,15 +103,18 @@ public class RobotContainer {
         new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
 
         new JoystickButton(operatorJoystick, PS4Controller.Button.kR1.value)
-                .onTrue(elevatorSubsystem.goToScoreSetpoint(1));
+                .onTrue(elevatorSubsystem.goToCoralScoreSetpoint(1));
 
-        // Button 2: Go to L2 level
-        new JoystickButton(operatorJoystick,8)
-                .onTrue(elevatorSubsystem.goToScoreSetpoint(2));
+                new POVButton(operatorJoystick, 180)
+                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
 
-        // Button 3: Go to L3 level
-        new JoystickButton(operatorJoystick, 5)
-                .onTrue(elevatorSubsystem.goToScoreSetpoint(3));
+        // L2, RIGHT POV BUTTON
+        new POVButton(operatorJoystick, 90)
+                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
+
+        // L3, RIGHT POV BUTTON
+        new POVButton(operatorJoystick, 0)
+                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
         new JoystickButton(operatorJoystick, 8)
                 .whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
@@ -137,7 +141,7 @@ public class RobotContainer {
         //        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
     }
 
-    public Command getAutonomousCommand() {
+    public Command getAutonomousCommand() {  
         return null;
     }
 

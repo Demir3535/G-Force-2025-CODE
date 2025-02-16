@@ -9,13 +9,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.wrist.WristSubsystem;
-import frc.robot.utils.CowboyUtils;
+import frc.robot.utils.GforceUtils;
 import frc.robot.RobotConstants.ScoringConstants;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.RobotState;
 import com.pathplanner.lib.util.FlippingUtil;
 
 public class AutomatedScoring {
@@ -27,7 +24,7 @@ public class AutomatedScoring {
         targetPose = ScoringConstants.BlueAlliance.HP_POSES.get(humanPlayerSide); // no -1 since 0 is left and 1 is
                                                                                   // right
                                                                                   // and indexing starts at 0'
-        if (CowboyUtils.isRedAlliance()) {
+        if (GforceUtils.isRedAlliance()) {
             targetPose = FlippingUtil.flipFieldPose(targetPose);
         }
         return targetPose;
@@ -37,7 +34,7 @@ public class AutomatedScoring {
         // System.out.println("Reef Side: " + reefSide.get());
         targetPose = ScoringConstants.BlueAlliance.REEF_SIDE_POSES.get(reefSide - 1);
 
-        if (CowboyUtils.isRedAlliance()) {
+        if (GforceUtils.isRedAlliance()) {
             targetPose = FlippingUtil.flipFieldPose(targetPose);
             // System.out.println("Flipping pose");
             targetPose = new Pose2d(targetPose.getX(), targetPose.getY(),
@@ -77,14 +74,15 @@ public class AutomatedScoring {
 
         return new ParallelCommandGroup(
                 AlignWithPose.pathToPoseCommand(pose, drivesubsystem),
-                new SequentialCommandGroup(elevatorSubsystem.goToScoreSetpoint(height),
-                        wristSubsystem.goToScoreSetpoint(height)));
+                new SequentialCommandGroup(elevatorSubsystem.goToCoralScoreSetpoint(height),
+                        wristSubsystem.goToCoralScoreSetpoint(height)));
     }
 
-    public static Command scoreNoPathing(int height, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem,
-             ShooterSubsystem shooterSubsystem) {
-        return new SequentialCommandGroup(elevatorSubsystem.goToScoreSetpoint(height),
-                wristSubsystem.goToScoreSetpoint(height));
+    public static Command scoreCoralNoPathing(int height, ElevatorSubsystem elevatorSubsystem,
+            WristSubsystem wristSubsystem) {
+        RobotState.isAlgaeMode = false;
+        return new SequentialCommandGroup(elevatorSubsystem.goToCoralScoreSetpoint(height),
+                wristSubsystem.goToCoralScoreSetpoint(height));
     }
 
     public static Command humanPlayerPickup(int humanPlayerSide, DriveSubsystem drivesubsystem,

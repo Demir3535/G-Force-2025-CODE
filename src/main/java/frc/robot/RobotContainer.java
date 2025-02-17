@@ -141,8 +141,12 @@ public class RobotContainer {
         //        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
     }
 
-    public Command getAutonomousCommand() {  
-        return null;
+    public Command getAutonomousCommand() {
+        if (m_autoPositionChooser.getSelected() != null) {
+            return m_autoPositionChooser.getSelected();
+        } else {
+            return m_drive.gyroReset();
+        }
     }
 
 

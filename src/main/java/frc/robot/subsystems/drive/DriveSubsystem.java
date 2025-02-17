@@ -1,5 +1,10 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import java.util.Optional;
 import com.studica.frc.AHRS;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -38,8 +43,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import frc.robot.subsystems.Limelight;
-import frc.robot.LimelightHelpers;
 
 /**
  * The {@code Drivetrain} class contains fields and methods pertaining to the
@@ -240,7 +243,6 @@ public class DriveSubsystem extends SubsystemBase {
 
             SmartDashboard.putData("NAVX", m_gyro);
             SmartDashboard.putNumber("Angle", getGyroAngle());
-
         }
 
         else {

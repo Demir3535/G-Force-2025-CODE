@@ -30,7 +30,6 @@ import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
-import edu.wpi.first.wpilibj.PS4Controller;
 import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
@@ -86,17 +85,17 @@ public class RobotContainer {
         NamedCommands.registerCommand("Score L3",
                 AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
-        // NamedCommands.registerCommand("AlignToReef1",
-        // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); //
-        // Speaker AprilTag ID
+        /*  NamedCommands.registerCommand("AlignToReef1",
+         new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); //
+         Speaker AprilTag ID
 
-        // NamedCommands.registerCommand("AlignToReef2",
-        // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp
-        // AprilTag ID
+         NamedCommands.registerCommand("AlignToReef2",
+         new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp
+         AprilTag ID
 
-        // NamedCommands.registerCommand("AlignToReef3",
-        // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); //
-        // Stage AprilTag ID
+         NamedCommands.registerCommand("AlignToReef3",
+         new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); //
+         Stage AprilTag ID */
     }
 
     private void configureButtonBindings() {
@@ -111,13 +110,14 @@ public class RobotContainer {
 
         // L2, RIGHT POV BUTTON
         new POVButton(operatorJoystick, 90)
-                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
+                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
         // L3, RIGHT POV BUTTON
         new POVButton(operatorJoystick, 0)
-                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
+                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
 
-                new JoystickButton(operatorJoystick, 8)
+       
+        new JoystickButton(operatorJoystick, 4)
                 .onTrue(new InstantCommand(() -> shooterSubsystem.shooterButton(), shooterSubsystem));
         
         new JoystickButton(operatorJoystick, 1)
@@ -128,20 +128,20 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
-        // A button for automatic positioning to all tags
-        // new JoystickButton(operatorJoystick, 4)
-        // .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem,
-        // 4)); // Replace 4 with desired tag ID
+        /*  A button for automatic positioning to all tags
+         new JoystickButton(operatorJoystick, 4)
+         .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem,
+         4)); // Replace 4 with desired tag ID
 
-        // B button for positioning to specific tag 3
-        // new JoystickButton(driveJoystick, 2) // Button number 2, can be changed if
-        // needed
-        // .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
+         B button for positioning to specific tag 3
+         new JoystickButton(driveJoystick, 2) // Button number 2, can be changed if
+         needed
+         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
 
-        // X button for positioning to specific tag 4
-        // new JoystickButton(driveJoystick, 3) // Button number 3, can be changed if
-        // needed
-        // .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
+         X button for positioning to specific tag 4
+         new JoystickButton(driveJoystick, 3) // Button number 3, can be changed if
+         needed
+         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));*/
     }
 
     public Command getAutonomousCommand() {

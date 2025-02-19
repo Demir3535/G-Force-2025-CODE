@@ -39,8 +39,8 @@ public final class RobotConstants {
         }
 
         public static final class ElevatorConstants {
-                public static final double ELEVATOR_MAX_HEIGHT = -71;
-                public static final double ELEVATOR_MIN_HEIGHT = 0.0;
+                public static final double ELEVATOR_MAX_HEIGHT = -112;
+                public static final double ELEVATOR_MIN_HEIGHT = 0.2;
 
                 public static final class HeightSetpoints {
                       
@@ -49,8 +49,8 @@ public final class RobotConstants {
 
                         public static final class Coral {
                                 public static final double L1 = -20;
-                                public static final double L2 = -45;
-                                public static final double L3 = -70.5;
+                                public static final double L2 = -46;
+                                public static final double L3 = -60;
                         }
                       
                 }
@@ -66,6 +66,11 @@ public final class RobotConstants {
                         public static final double L2 = 0.3;
                         public static final double L3 = 0.55;
                 }
+
+
+                public static final double P = 2.5;
+                public static final double I = 0;
+                public static final double D = 0;
 
         }
        
@@ -257,20 +262,19 @@ public final class RobotConstants {
 
                         public static final int FRONT_LEFT_TURNING = 9;
                         public static final int REAR_LEFT_TURNING = 11;
-                        public static final int FRONT_RIGHT_TURNING = 10;
-                        public static final int REAR_RIGHT_TURNING = 12;
+                        public static final int FRONT_RIGHT_TURNING = 23;
+                        public static final int REAR_RIGHT_TURNING = 22;
 
                         public static final int FRONT_LEFT_CANCODERID = 1;
                         public static final int FRONT_RIGHT_CANCODERID = 2;
                         public static final int REAR_LEFT_CANCODERID = 3;
                         public static final int REAR_RIGHT_CANCODERID = 4;
 
-                        public static final int ELEVATOR_MOTOR_1 = 13;
-                        public static final int ELEVATOR_MOTOR_2 = 15;
+                        public static final int ELEVATOR_MOTOR_1 = 10;
+                        public static final int ELEVATOR_MOTOR_2 = 12;
                        
 
-                        public static final int SHOOTER_MOTOR_1 = 23;
-                        public static final int SHOOTER_MOTOR_2 = 22;
+                        public static final int SHOOTER_MOTOR_1 = 45;
 
                         public static final int CLAW_MOTOR_1 = 16;
                         public static final int CLAW_MOTOR_2 = 17;

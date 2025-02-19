@@ -31,21 +31,17 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem() {
         distanceSensor = new DigitalInput(DIO.SHOOTER_DISTANCE_SENSOR);
         shooterMotor1 = new SparkMax(CAN.SHOOTER_MOTOR_1, MotorType.kBrushless);
-        shooterMotor2 = new SparkMax(CAN.SHOOTER_MOTOR_2, MotorType.kBrushless);
         shooterMotor1Controller = shooterMotor1.getClosedLoopController();
         ledController = new PWMSparkMax(0);
         
         // Motor configurations
         shooterMotor1Config = new SparkMaxConfig();
-        shooterMotor2Config = new SparkMaxConfig();
         shooterMotor1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         shooterMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstants.MAX_MOTOR_RPM);
         shooterMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstants.MAX_MOTOR_ACCELERATION);
         shooterMotor1Config.closedLoop.pid(.5, 0.0, 0.0);
-        shooterMotor2Config.follow(CAN.SHOOTER_MOTOR_1, true);
         
         shooterMotor1.configure(shooterMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        shooterMotor2.configure(shooterMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override

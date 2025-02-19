@@ -16,82 +16,91 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class ShooterSubsystem extends SubsystemBase {
-   SparkMax shooterMotor1;
-   SparkMax shooterMotor2;
-   SparkMaxConfig shooterMotor1Config;
-   SparkMaxConfig shooterMotor2Config;
-   static SparkClosedLoopController shooterMotor1Controller;
-   private DigitalInput distanceSensor;
-   private boolean isShooterRunning = false;
-   private boolean shootingMode = false; // NEW: Added for shooting mode
-   private PWMSparkMax ledController;
-   private static final double RED = 0.61;
-   private static final double GREEN = 0.77;
+    SparkMax shooterMotor1;
+    SparkMax shooterMotor2;
+    SparkMaxConfig shooterMotor1Config;
+    SparkMaxConfig shooterMotor2Config;
+    static SparkClosedLoopController shooterMotor1Controller;
+    private DigitalInput distanceSensor;
+    private boolean isShooterRunning = false;
+    private boolean gameElementDetected = false; 
+    private PWMSparkMax ledController;
+    private static final double RED = 0.61;
+    private static final double GREEN = 0.77;
 
-   public ShooterSubsystem() {
-       distanceSensor = new DigitalInput(DIO.SHOOTER_DISTANCE_SENSOR);
-       shooterMotor1 = new SparkMax(CAN.SHOOTER_MOTOR_1, MotorType.kBrushless);
-       shooterMotor2 = new SparkMax(CAN.SHOOTER_MOTOR_2, MotorType.kBrushless);
-       shooterMotor1Controller = shooterMotor1.getClosedLoopController();
-       ledController = new PWMSparkMax(0);
+    public ShooterSubsystem() {
+        distanceSensor = new DigitalInput(DIO.SHOOTER_DISTANCE_SENSOR);
+        shooterMotor1 = new SparkMax(CAN.SHOOTER_MOTOR_1, MotorType.kBrushless);
+        shooterMotor2 = new SparkMax(CAN.SHOOTER_MOTOR_2, MotorType.kBrushless);
+        shooterMotor1Controller = shooterMotor1.getClosedLoopController();
+        ledController = new PWMSparkMax(0);
+        
+        // Motor configurations
+        shooterMotor1Config = new SparkMaxConfig();
+        shooterMotor2Config = new SparkMaxConfig();
+        shooterMotor1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+        shooterMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstants.MAX_MOTOR_RPM);
+        shooterMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstants.MAX_MOTOR_ACCELERATION);
+        shooterMotor1Config.closedLoop.pid(.5, 0.0, 0.0);
+        shooterMotor2Config.follow(CAN.SHOOTER_MOTOR_1, true);
+        
+        shooterMotor1.configure(shooterMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        shooterMotor2.configure(shooterMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
 
-       shooterMotor1Config = new SparkMaxConfig();
-       shooterMotor2Config = new SparkMaxConfig();
-       shooterMotor1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-       shooterMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstants.MAX_MOTOR_RPM);
-       shooterMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstants.MAX_MOTOR_ACCELERATION);
-       shooterMotor1Config.closedLoop.pid(.5, 0.0, 0.0);
-       shooterMotor2Config.follow(CAN.SHOOTER_MOTOR_1, true);
+    @Override
+    public void periodic() {
+        // When game element is detected
+        if (!gameElementDetected && !distanceSensor.get()) {
+            gameElementDetected = true;
+            stopShooter();
+        }
+        
+        updateLEDStatus();
+        
+        // Debug information
+        SmartDashboard.putBoolean("Shooter Distance Sensor", distanceSensor.get());
+        SmartDashboard.putBoolean("Is Shooter Running", isShooterRunning);
+        SmartDashboard.putBoolean("Game Element Detected", gameElementDetected);
+    }
 
-       shooterMotor1.configure(shooterMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-       shooterMotor2.configure(shooterMotor2Config, ResetMode.kResetSafeParameters,
-               PersistMode.kPersistParameters);
-   }
+    private void updateLEDStatus() {
+        if (gameElementDetected) {
+            ledController.set(GREEN);  // Game element ready
+        } else {
+            ledController.set(RED);    // Waiting for game element
+        }
+    }
 
-   @Override
-   public void periodic() {
-       // NEW: Added shooting mode control
-       if (!shootingMode && distanceSensor.get()) {
-           stopShooter();
-           isShooterRunning = false;
-       }
-       updateLEDStatus();
+    public void shooterButton() {
+        if (gameElementDetected) {
+            // If game element is present and button is pressed, shoot
+            moveAtSpeed(1.0);  // Shoot at full speed
+            gameElementDetected = false;  // Game element has been shot
+        } else if (!isShooterRunning) {
+            // If no game element and motor is not running, start motor
+            moveAtSpeed(0.5);  // Collect at half speed
+        } else {
+            // If motor is already running, stop it
+            stopShooter();
+        }
+    }
 
-       // Debug information
-       SmartDashboard.putBoolean("Shooter Distance Sensor", distanceSensor.get());
-       SmartDashboard.putBoolean("Is Shooter Running", isShooterRunning);
-       SmartDashboard.putBoolean("Coral Detected", !distanceSensor.get());
-       SmartDashboard.putBoolean("Shooting Mode", shootingMode); // NEW: Added shooting mode status
-   }
+    public void moveAtSpeed(double speed) {
+        shooterMotor1.set(speed);
+        isShooterRunning = true;
+    }
 
-   private void updateLEDStatus() {
-       if (distanceSensor.get()) {
-           ledController.set(RED);
-       } else {
-           ledController.set(GREEN);
-       }
-   }
+    public void stopShooter() {
+        shooterMotor1.set(0);
+        isShooterRunning = false;
+    }
 
-   // NEW: Updated moveAtSpeed method
-   public void moveAtSpeed(double speed) {
-       shootingMode = true;
-       shooterMotor1.set(speed * 0.5);
-       isShooterRunning = true;
-   }
-
-   // NEW: Updated stopShooter method
-   public void stopShooter() {
-       shooterMotor1.set(0);
-       isShooterRunning = false;
-       shootingMode = false; // Turn off shooting mode
-   }
-
-   public boolean isShooterRunning() {
-       return isShooterRunning;
-   }
-
-   // NEW: New method to check shooting mode status
-   public boolean isShootingMode() {
-       return shootingMode;
-   }
+    public boolean isShooterRunning() {
+        return isShooterRunning;
+    }
+    
+    public boolean hasGameElement() {
+        return gameElementDetected;
+    }
 }

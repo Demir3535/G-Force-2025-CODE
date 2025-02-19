@@ -42,7 +42,6 @@ public class RobotContainer {
 
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
-    
 
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
     private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
@@ -86,15 +85,18 @@ public class RobotContainer {
                 AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
         NamedCommands.registerCommand("Score L3",
                 AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
-  
-       // NamedCommands.registerCommand("AlignToReef1",
-               // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); // Speaker AprilTag ID
 
-        //NamedCommands.registerCommand("AlignToReef2",
-                //new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp AprilTag ID
+        // NamedCommands.registerCommand("AlignToReef1",
+        // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); //
+        // Speaker AprilTag ID
 
-        //NamedCommands.registerCommand("AlignToReef3",
-                //new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); // Stage AprilTag ID
+        // NamedCommands.registerCommand("AlignToReef2",
+        // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp
+        // AprilTag ID
+
+        // NamedCommands.registerCommand("AlignToReef3",
+        // new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); //
+        // Stage AprilTag ID
     }
 
     private void configureButtonBindings() {
@@ -102,10 +104,9 @@ public class RobotContainer {
         new JoystickButton(driveJoystick, 9).onChange(m_drive.xCommand()); // Needs to be while true so the command ends
         new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
 
-        new JoystickButton(operatorJoystick, PS4Controller.Button.kR1.value)
-                .onTrue(elevatorSubsystem.goToCoralScoreSetpoint(1));
 
-                new POVButton(operatorJoystick, 180)
+        // L1, RIGHT POV BUTTON
+        new POVButton(operatorJoystick, 180)
                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
 
         // L2, RIGHT POV BUTTON
@@ -116,10 +117,9 @@ public class RobotContainer {
         new POVButton(operatorJoystick, 0)
                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
-        new JoystickButton(operatorJoystick, 8)
-                .whileTrue(new RunCommand(() -> shooterSubsystem.moveAtSpeed(1.0), shooterSubsystem))
-                .onFalse(new InstantCommand(() -> shooterSubsystem.stopShooter(), shooterSubsystem));
-
+                new JoystickButton(operatorJoystick, 8)
+                .onTrue(new InstantCommand(() -> shooterSubsystem.shooterButton(), shooterSubsystem));
+        
         new JoystickButton(operatorJoystick, 1)
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
@@ -129,16 +129,19 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
         // A button for automatic positioning to all tags
-     //   new JoystickButton(operatorJoystick, 4)
-//    .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4));  // Replace 4 with desired tag ID
+        // new JoystickButton(operatorJoystick, 4)
+        // .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem,
+        // 4)); // Replace 4 with desired tag ID
 
         // B button for positioning to specific tag 3
-        //new JoystickButton(driveJoystick, 2) // Button number 2, can be changed if needed
-         //       .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
+        // new JoystickButton(driveJoystick, 2) // Button number 2, can be changed if
+        // needed
+        // .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
 
         // X button for positioning to specific tag 4
-      //  new JoystickButton(driveJoystick, 3) // Button number 3, can be changed if needed
-        //        .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
+        // new JoystickButton(driveJoystick, 3) // Button number 3, can be changed if
+        // needed
+        // .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
     }
 
     public Command getAutonomousCommand() {
@@ -148,7 +151,6 @@ public class RobotContainer {
             return m_drive.gyroReset();
         }
     }
-
 
     public Command getTestingCommand() {
         return new RobotSystemsCheckCommand(m_drive);

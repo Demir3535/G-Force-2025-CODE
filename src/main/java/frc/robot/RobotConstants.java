@@ -108,7 +108,6 @@ public final class RobotConstants {
                                 public static final double L2 = -3;
                                 public static final double L3 = -5;
                         }
-
                 }
 
                 public static final double MAX_MOTOR_RPM = 500.0;

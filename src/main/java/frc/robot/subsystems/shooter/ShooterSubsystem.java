@@ -17,14 +17,12 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class ShooterSubsystem extends SubsystemBase {
     SparkMax shooterMotor1;
-    SparkMax shooterMotor2;
     SparkMaxConfig shooterMotor1Config;
-    SparkMaxConfig shooterMotor2Config;
     static SparkClosedLoopController shooterMotor1Controller;
     private DigitalInput distanceSensor;
-    private boolean isShooterRunning = false;
-    private boolean gameElementDetected = false; 
-    private PWMSparkMax ledController;
+    private boolean isShooterRunning = false; //TODO may be changed as not defined
+    private boolean gameElementDetected = false; //TODO
+    private PWMSparkMax ledController; //TODO 
     private static final double RED = 0.61;
     private static final double GREEN = 0.77;
 
@@ -40,22 +38,22 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstants.MAX_MOTOR_RPM);
         shooterMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstants.MAX_MOTOR_ACCELERATION);
         shooterMotor1Config.closedLoop.pid(.5, 0.0, 0.0);
-        
+        gameElementDetected = !distanceSensor.get(); 
         shooterMotor1.configure(shooterMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
     }
 
     @Override
     public void periodic() {
         // When game element is detected
-        if (!gameElementDetected && !distanceSensor.get()) {
-            gameElementDetected = true;
+        if (gameElementDetected) {
             stopShooter();
         }
         
         updateLEDStatus();
         
         // Debug information
-        SmartDashboard.putBoolean("Shooter Distance Sensor", distanceSensor.get());
+        SmartDashboard.putBoolean("distance Sensor.get value", distanceSensor.get());
         SmartDashboard.putBoolean("Is Shooter Running", isShooterRunning);
         SmartDashboard.putBoolean("Game Element Detected", gameElementDetected);
     }
@@ -72,8 +70,8 @@ public class ShooterSubsystem extends SubsystemBase {
         if (gameElementDetected) {
             // If game element is present and button is pressed, shoot
             moveAtSpeed(1.0);  // Shoot at full speed
-            gameElementDetected = false;  // Game element has been shot
-        } else if (!isShooterRunning) {
+            //TODO gameElementDetected = false;  // Game element has been shot
+        } else if (!gameElementDetected) {
             // If no game element and motor is not running, start motor
             moveAtSpeed(0.5);  // Collect at half speed
         } else {

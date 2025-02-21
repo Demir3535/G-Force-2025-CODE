@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public final class RobotConstants {
 
+
         public static final String LLName = "limelight";
 
         public static final class ScoringConstants { // Class containing constant values for scoring positions
@@ -87,6 +88,8 @@ public final class RobotConstants {
 
                 public static final double DESIRED_TAG_DISTANCE = 1.0; // 100 cm
                 public static final double MIN_TAG_DISTANCE = 0.99; // 99 cm
+
+                public static final int LIMIT_PORT = 1;
 
         }
 

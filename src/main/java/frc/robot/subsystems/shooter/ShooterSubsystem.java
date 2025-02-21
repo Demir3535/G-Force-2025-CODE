@@ -33,10 +33,14 @@ public class ShooterSubsystem extends SubsystemBase {
    if (isShooting && !gameElementDetected) {
     stopShooter();
     isShooting = false;
+
+   }
+   else if (isShooting) {
     
    }
    
         else if (gameElementDetected && isShooterRunning && !readyToShoot) {
+            
             stopShooter();
             readyToShoot = true; // Ready to shoot
         }

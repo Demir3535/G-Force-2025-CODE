@@ -4,7 +4,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotConstants.ShooterConstants;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.RobotConstants.PortConstants.DIO;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
@@ -65,13 +64,13 @@ public class ShooterSubsystem extends SubsystemBase {
         
         if (!gameElementDetected && !isShooterRunning) {
             SmartDashboard.putString("Shooter State", "Starting Intake");
-            moveAtSpeed(0.7);
+            moveAtSpeed(-0.25);
             readyToShoot = false;
         }
         else if (readyToShoot && gameElementDetected) {
             isShooting = true;
             SmartDashboard.putString("Shooter State", "Shooting");
-            moveAtSpeed(0.7)   ;
+            moveAtSpeed(-0.25)   ;
             readyToShoot = false;
         }
         else if (isShooterRunning) {

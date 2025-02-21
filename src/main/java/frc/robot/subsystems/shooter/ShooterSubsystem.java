@@ -16,20 +16,27 @@ public class ShooterSubsystem extends SubsystemBase {
     private PWMSparkMax ledController;
     private static final double RED = 0.61;
     private static final double GREEN = 0.77;
-    
+    private boolean isShooting = false;
     private boolean readyToShoot = false; // Is game piece ready?
     public ShooterSubsystem() {
         limitSwitch = new DigitalInput(DIO.SHOOTER_DISTANCE_SENSOR);
         shooterMotor = new SparkMax(CAN.SHOOTER_MOTOR_1, MotorType.kBrushless);
         ledController = new PWMSparkMax(0);
     }
+
     @Override
     public void periodic() {
         // Check limit switch status
         gameElementDetected = limitSwitch.get();
         
         // If game piece is detected and motor is in intake mode, stop the motor
-        if (gameElementDetected && isShooterRunning && !readyToShoot) {
+   if (isShooting && !gameElementDetected) {
+    stopShooter();
+    isShooting = false;
+    
+   }
+   
+        else if (gameElementDetected && isShooterRunning && !readyToShoot) {
             stopShooter();
             readyToShoot = true; // Ready to shoot
         }
@@ -58,6 +65,7 @@ public class ShooterSubsystem extends SubsystemBase {
             readyToShoot = false;
         }
         else if (readyToShoot && gameElementDetected) {
+            isShooting = true;
             SmartDashboard.putString("Shooter State", "Shooting");
             moveAtSpeed(0.7)   ;
             readyToShoot = false;

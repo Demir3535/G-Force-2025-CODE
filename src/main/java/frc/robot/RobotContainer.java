@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -116,10 +117,11 @@ public class RobotContainer {
         new POVButton(operatorJoystick, 0)
                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
 
-       
-        new JoystickButton(operatorJoystick, 4)
-                .onTrue(new InstantCommand(() -> shooterSubsystem.shooterButton(), shooterSubsystem));
-        
+       new JoystickButton(operatorJoystick, 4)  // PS5'te üçgen butonu 4 numaralı buton
+    .onTrue(new InstantCommand(() -> {
+        SmartDashboard.putBoolean("Triangle Button Pressed", true);
+        shooterSubsystem.shooterButton();
+    }));
         new JoystickButton(operatorJoystick, 1)
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));

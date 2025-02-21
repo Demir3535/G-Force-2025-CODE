@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotConstants.ShooterConstants;
 import frc.robot.RobotConstants.PortConstants.CAN;
+import frc.robot.RobotConstants.PortConstants.DIO;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 public class ShooterSubsystem extends SubsystemBase {
     private SparkMax shooterMotor;
@@ -18,14 +19,14 @@ public class ShooterSubsystem extends SubsystemBase {
     
     private boolean readyToShoot = false; // Is game piece ready?
     public ShooterSubsystem() {
-        limitSwitch = new DigitalInput(ShooterConstants.LIMIT_PORT);
+        limitSwitch = new DigitalInput(DIO.SHOOTER_DISTANCE_SENSOR);
         shooterMotor = new SparkMax(CAN.SHOOTER_MOTOR_1, MotorType.kBrushless);
         ledController = new PWMSparkMax(0);
     }
     @Override
     public void periodic() {
         // Check limit switch status
-        gameElementDetected = !limitSwitch.get();
+        gameElementDetected = limitSwitch.get();
         
         // If game piece is detected and motor is in intake mode, stop the motor
         if (gameElementDetected && isShooterRunning && !readyToShoot) {
@@ -47,18 +48,22 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
     public void shooterButton() {
+        // Debug info
+        SmartDashboard.putBoolean("Button Pressed", true);
+        SmartDashboard.putNumber("Motor Output", shooterMotor.get());
+        
         if (!gameElementDetected && !isShooterRunning) {
-            // If no game piece and motor is stopped -> Start intake
-            moveAtSpeed(0.5); // Half power for intake 
+            SmartDashboard.putString("Shooter State", "Starting Intake");
+            moveAtSpeed(0.7);
             readyToShoot = false;
         }
         else if (readyToShoot && gameElementDetected) {
-            // If game piece present and ready to shoot -> Shoot
-            moveAtSpeed(1.0); // Full power for shooting
+            SmartDashboard.putString("Shooter State", "Shooting");
+            moveAtSpeed(0.7)   ;
             readyToShoot = false;
         }
         else if (isShooterRunning) {
-            // If motor is running -> Stop
+            SmartDashboard.putString("Shooter State", "Stopping");
             stopShooter();
         }
     }

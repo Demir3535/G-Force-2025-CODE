@@ -39,7 +39,7 @@ public final class RobotConstants {
                 }
         }
 
-        public static final class ElevatorConstants {
+        public static final class ElevatorConstants {   //TODO elevator settings
                 public static final double ELEVATOR_MAX_HEIGHT = -112;
                 public static final double ELEVATOR_MIN_HEIGHT = 0.2;
 
@@ -75,7 +75,7 @@ public final class RobotConstants {
 
         }
        
-        public static final class LimelightConstants {
+        public static final class LimelightConstants {   // TODO changes these if theres a error for limelight
                 public static final double STEER_K = 0.06;
                 public static final double DESIRED_TARGET = 4.0;
                 public static final double MAX_DRIVE_SPEED = 0.7;
@@ -96,15 +96,7 @@ public final class RobotConstants {
         public static final class ShooterConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
                 public static final double MAX_MOTOR_ACCELERATION = 500.0;
-
-                public static final double ApTagHeight = 6.69291339; // Height of the BOTTOM of the AprilTags from the ground (speaker tags) in inches
-                public static final double CamHeight = 7; // in inches
-                public static final double CamAngle = 35.00; // in degrees
-
                 public static final double SHOOTER_SPEED = 0.5; // Adjust the desired speed
-
-                public static final double DESIRED_TAG_DISTANCE = 1.0; // 100 cm
-                public static final double MIN_TAG_DISTANCE = 0.99; // 99 cm
 
                 public static final int LIMIT_PORT = 1;
 
@@ -119,7 +111,7 @@ public final class RobotConstants {
         }
 
 
-        public static final class WristConstants {
+        public static final class WristConstants {    //TODO wrist constants for robot
                 public static final double WRIST_MIN_ANGLE = 0.0;
                 public static final double ELEVATOR_MIN_HEIGHT = 30.0;
 
@@ -345,11 +337,11 @@ public final class RobotConstants {
 
         }
 
-        public static final class TeleopConstants {
+        public static final class TeleopConstants {  // TODO speed settings 
                 public static final double MAX_SPEED_PERCENT = 1; // ex: 0.4 -> 40%
         }
 
-        public static final class PathPlannerConstants {
+        public static final class PathPlannerConstants {  // TODO pathplanner speeds for autonomous 
                 public static final Alliance DEFAULT_ALLIANCE = Alliance.Blue;
 
                 public static final double kMaxAngularAcceleration = 4 * Math.PI;
@@ -365,62 +357,6 @@ public final class RobotConstants {
                 public static final double MAX_ACCELERATION = 1.0; // Meters per second squared
                 public static final double MAX_ANGULAR_SPEED = 180.0; // Degrees per second
                 public static final double MAX_ANGULAR_ACCELERATION = 270.0; // Degrees per second squared
-        }
-
-        public static final class VisionConstants {
-                public static final Transform3d[] CAMERA_POSITIONS = {
-                                new Transform3d(
-                                                // Back Left
-                                                new Translation3d(
-                                                                Units.inchesToMeters(-13.5), // forward+
-                                                                Units.inchesToMeters(12.75), // left+
-                                                                Units.inchesToMeters(9)), // up+
-                                                new Rotation3d(
-                                                                Units.degreesToRadians(0),
-                                                                Units.degreesToRadians(-40), // Note, these are all
-                                                                                             // counter clockwise so to
-                                                                                             // face up we
-                                                                                             // need
-                                                                // -40 ;)
-                                                                Units.degreesToRadians(180 - 15))),
-                                // Back Right
-                                new Transform3d(
-                                                new Translation3d(
-                                                                Units.inchesToMeters(-13.5), // forward+
-                                                                Units.inchesToMeters(-12.75), // left+
-                                                                Units.inchesToMeters(9)), // up+
-                                                new Rotation3d(
-                                                                Units.degreesToRadians(0),
-                                                                Units.degreesToRadians(-40), // Note, these are all
-                                                                                             // counter clockwise so to
-                                                                                             // face up we
-                                                                                             // need -40 ;)
-                                                                Units.degreesToRadians(180 + 15))),
-                                // Front Left
-                                new Transform3d(
-                                                new Translation3d(
-                                                                Units.inchesToMeters(13.5), // forward+
-                                                                Units.inchesToMeters(12.75), // left+
-                                                                Units.inchesToMeters(9)), // up+
-                                                new Rotation3d(
-                                                                Units.degreesToRadians(0),
-                                                                Units.degreesToRadians(-40), // Note, these are all
-                                                                                             // counter clockwise so to
-                                                                                             // face up we
-                                                                                             // need -40 ;)
-                                                                Units.degreesToRadians(-15))),
-                                // Front Right
-                                new Transform3d(new Translation3d(
-                                                Units.inchesToMeters(13.5), // forward+
-                                                Units.inchesToMeters(-12.75), // left+
-                                                Units.inchesToMeters(9)), // up+
-                                                new Rotation3d(
-                                                                Units.degreesToRadians(0),
-                                                                Units.degreesToRadians(-40), // Note, these are all
-                                                                                             // counter clockwise so to
-                                                                                             // face up we
-                                                                                             // need -40 ;)
-                                                                Units.degreesToRadians(15))) };
         }
 
         public static final class SubsystemEnabledConstants {

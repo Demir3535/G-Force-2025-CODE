@@ -75,6 +75,23 @@ public final class RobotConstants {
 
         }
        
+        public static final class LimelightConstants {
+                public static final double STEER_K = 0.06;
+                public static final double DESIRED_TARGET = 4.0;
+                public static final double MAX_DRIVE_SPEED = 0.7;
+                public static final double MAX_TURN_SPEED = 0.7;
+                public static final double ACCEPTABLE_TX_ERROR = 1.0;
+                public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+                public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(0);
+                public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(45);
+                public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+                public static final double LINEAR_P = 0.1;
+                public static final double LINEAR_D = 0.0;
+                public static final double ANGULAR_P = 0.1;
+                public static final double ANGULAR_D = 0.0;
+          
+         }
+
 
         public static final class ShooterConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;

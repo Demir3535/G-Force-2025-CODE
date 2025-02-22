@@ -5,6 +5,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotConstants.DrivetrainConstants;
+import frc.robot.RobotConstants.LimelightConstants;
 
 public class LimelightDriveCommand extends Command {
     private final DriveSubsystem drive;
@@ -20,21 +21,10 @@ public class LimelightDriveCommand extends Command {
 
     @Override
     public void execute() {
-       // Take joystick values ​​and slow them down (multiply by 0.7)
-        double xSpeed = -joystick.getRawAxis(3) * 0.7;
-        double ySpeed = -joystick.getRawAxis(2) * 0.7;
-        
-        //get Limelight return value
+        double xSpeed = -joystick.getRawAxis(3) * LimelightConstants.MAX_DRIVE_SPEED;
+        double ySpeed = -joystick.getRawAxis(2) * LimelightConstants.MAX_DRIVE_SPEED;
         double rot = limelight.getSteer();
-        
-        // Apply driving
-        drive.drive(
-            ySpeed, 
-            xSpeed, 
-            rot,
-            DrivetrainConstants.FIELD_RELATIVE, 
-            true
-        );
+        drive.drive(ySpeed, xSpeed, rot, DrivetrainConstants.FIELD_RELATIVE, true);
     }
 
     @Override

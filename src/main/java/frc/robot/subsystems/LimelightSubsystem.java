@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.RobotConstants.LimelightConstants;
 
 public class LimelightSubsystem extends SubsystemBase {
     // NetworkTable for the Limelight camera
@@ -56,17 +57,15 @@ public class LimelightSubsystem extends SubsystemBase {
         return (int) tid.getDouble(0.0);
     }
 
-    public boolean targetAreaReached() {
-        double area = ta.getDouble(0.0);
-        return area >= DESIRED_TARGET;
-    }
-
     public double getSteer() {
         double tx = getTx();
-        final double STEER_K = 0.06; // Dönüş hassasiyeti
-        return tx * STEER_K;
+        return tx * LimelightConstants.STEER_K;
     }
 
+    public boolean targetAreaReached() {
+        double area = ta.getDouble(0.0);
+        return area >= LimelightConstants.DESIRED_TARGET;
+    }
     public double getXDisplacement() {
         xDisplacement = tx.getDouble(0.0);
         return xDisplacement;

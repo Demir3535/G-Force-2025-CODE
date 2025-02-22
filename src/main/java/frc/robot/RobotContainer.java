@@ -89,19 +89,19 @@ public class RobotContainer {
                 AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
                 NamedCommands.registerCommand("AlignToTag2",
-                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 2) // ID'si 2 olan AprilTag
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 2) // AprilTag with ID 2
             );
             
             NamedCommands.registerCommand("AlignToTag3",
-                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 3) // ID'si 3 olan AprilTag
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 3) // AprilTag with ID 3
             );
             
             NamedCommands.registerCommand("AlignToTag4",
-                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 4) // ID'si 4 olan AprilTag
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 4) // AprilTag with ID 4
             );
             
             NamedCommands.registerCommand("AlignToTag5",
-                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 5) // ID'si 5 olan AprilTag
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 5) // AprilTag with ID 5
             );
         /*
          * NamedCommands.registerCommand("AlignToReef1",
@@ -136,9 +136,9 @@ public class RobotContainer {
                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
 
         new JoystickButton(operatorJoystick, 5).whileTrue(
-                new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Herhangi bir AprilTag
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
         );
-        new JoystickButton(operatorJoystick, 4) // PS5'te üçgen butonu 4 numaralı buton
+        new JoystickButton(operatorJoystick, 4) 
                 .onTrue(new InstantCommand(() -> {
                     SmartDashboard.putBoolean("Triangle Button Pressed", true);
                     shooterSubsystem.shooterButton();

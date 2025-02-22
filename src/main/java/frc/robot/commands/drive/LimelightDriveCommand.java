@@ -20,14 +20,14 @@ public class LimelightDriveCommand extends Command {
 
     @Override
     public void execute() {
-        // Joystick değerlerini al ve yavaşlat (0.7 ile çarp)
+       // Take joystick values ​​and slow them down (multiply by 0.7)
         double xSpeed = -joystick.getRawAxis(3) * 0.7;
         double ySpeed = -joystick.getRawAxis(2) * 0.7;
         
-        // Limelight dönüş değerini al
+        //get Limelight return value
         double rot = limelight.getSteer();
         
-        // Sürüşü uygula
+        // Apply driving
         drive.drive(
             ySpeed, 
             xSpeed, 

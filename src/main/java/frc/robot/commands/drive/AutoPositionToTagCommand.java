@@ -7,12 +7,12 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 public class AutoPositionToTagCommand extends Command {
     private final LimelightSubsystem limelight;
     private final DriveSubsystem drive;
-    private final int targetTagID; // -1 ise herhangi bir AprilTag'e kenetlenir
+    private final int targetTagID; // if -1 its connect to any tag
 
     public AutoPositionToTagCommand(LimelightSubsystem limelight, DriveSubsystem drive, int targetTagID) {
         this.limelight = limelight;
         this.drive = drive;
-        this.targetTagID = targetTagID; // Belirli bir ID veya -1 (herhangi bir AprilTag)
+        this.targetTagID = targetTagID; // specific id or any id for -1
         addRequirements(drive);
     }
 
@@ -21,31 +21,31 @@ public class AutoPositionToTagCommand extends Command {
         if (limelight.hasTargets()) {
             int currentTagID = limelight.getTargetID();
 
-            // Eğer targetTagID -1 ise veya mevcut hedef targetTagID ile eşleşiyorsa
+            // If targetTagID is -1 or matches current target targetTagID
             if (targetTagID == -1 || currentTagID == targetTagID) {
                 double steer = limelight.getSteer();
-                drive.drive(0, 0, steer, true, true); // Robotu döndür
+                drive.drive(0, 0, steer, true, true); // turn robot
             } else {
-                drive.drive(0, 0, 0, true, true); // Hedef bulunamadı, dur
+                drive.drive(0, 0, 0, true, true); // no tag, stop
             }
         } else {
-            drive.drive(0, 0, 0, true, true); // Hedef yoksa, robotu durdur
+            drive.drive(0, 0, 0, true, true); // if there no tag robot stop
         }
     }
 
     @Override
     public boolean isFinished() {
         if (targetTagID == -1) {
-            // Herhangi bir AprilTag'e kenetlenme durumu
+          // Docking status to any AprilTag
             return limelight.hasTargets() && Math.abs(limelight.getTx()) < 1.0;
         } else {
-            // Belirli bir AprilTag ID'sine kenetlenme durumu
+            //Docking status to a specific AprilTag ID
             return limelight.getTargetID() == targetTagID && Math.abs(limelight.getTx()) < 1.0;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        drive.drive(0, 0, 0, true, true); // Komut sonlandığında robotu durdur
+        drive.drive(0, 0, 0, true, true); //Stop the robot when the command ends
     }
 }

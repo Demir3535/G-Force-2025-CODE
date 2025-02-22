@@ -87,7 +87,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // Read values periodically
+         // Read values ​​periodically
         x = getTx();
         y = getTy();
         area = getTa();
@@ -97,6 +97,6 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Limelight X", x);
         SmartDashboard.putNumber("Limelight Y", y);
         SmartDashboard.putNumber("Limelight Area", area);
-        SmartDashboard.putNumber("Limelight Target ID", targetID); // AprilTag ID'sini yaz
+        SmartDashboard.putNumber("Limelight Target ID", targetID); // Write the AprilTag ID
     }
 }

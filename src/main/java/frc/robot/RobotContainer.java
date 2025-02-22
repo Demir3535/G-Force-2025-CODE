@@ -7,7 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import frc.robot.commands.drive.AutoPositionToTagCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -31,12 +31,16 @@ import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.commands.drive.AutoPositionToTagCommand;
+import frc.robot.commands.drive.LimelightDriveCommand;
 
 public class RobotContainer {
 
     private final DriveSubsystem m_drive = new DriveSubsystem();
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
+    public static LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
@@ -84,24 +88,40 @@ public class RobotContainer {
         NamedCommands.registerCommand("Score L3",
                 AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
-        /*  NamedCommands.registerCommand("AlignToReef1",
-         new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); //
-         Speaker AprilTag ID
-
-         NamedCommands.registerCommand("AlignToReef2",
-         new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp
-         AprilTag ID
-
-         NamedCommands.registerCommand("AlignToReef3",
-         new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); //
-         Stage AprilTag ID */
+                NamedCommands.registerCommand("AlignToTag2",
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 2) // ID'si 2 olan AprilTag
+            );
+            
+            NamedCommands.registerCommand("AlignToTag3",
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 3) // ID'si 3 olan AprilTag
+            );
+            
+            NamedCommands.registerCommand("AlignToTag4",
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 4) // ID'si 4 olan AprilTag
+            );
+            
+            NamedCommands.registerCommand("AlignToTag5",
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, 5) // ID'si 5 olan AprilTag
+            );
+        /*
+         * NamedCommands.registerCommand("AlignToReef1",
+         * new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); //
+         * Speaker AprilTag ID
+         * 
+         * NamedCommands.registerCommand("AlignToReef2",
+         * new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 5)); // Amp
+         * AprilTag ID
+         * 
+         * NamedCommands.registerCommand("AlignToReef3",
+         * new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 11)); //
+         * Stage AprilTag ID
+         */
     }
 
     private void configureButtonBindings() {
 
         new JoystickButton(driveJoystick, 9).onChange(m_drive.xCommand()); // Needs to be while true so the command ends
         new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
-
 
         // L1, RIGHT POV BUTTON
         new POVButton(operatorJoystick, 180)
@@ -115,11 +135,17 @@ public class RobotContainer {
         new POVButton(operatorJoystick, 0)
                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
 
-       new JoystickButton(operatorJoystick, 4)  // PS5'te üçgen butonu 4 numaralı buton
-    .onTrue(new InstantCommand(() -> {
-        SmartDashboard.putBoolean("Triangle Button Pressed", true);
-        shooterSubsystem.shooterButton();
-    }));
+        new JoystickButton(operatorJoystick, 5).whileTrue(
+                new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Herhangi bir AprilTag
+        );
+        new JoystickButton(operatorJoystick, 4) // PS5'te üçgen butonu 4 numaralı buton
+                .onTrue(new InstantCommand(() -> {
+                    SmartDashboard.putBoolean("Triangle Button Pressed", true);
+                    shooterSubsystem.shooterButton();
+                }));
+
+        new JoystickButton(operatorJoystick, 1).whileTrue(
+                new LimelightDriveCommand(m_drive, operatorJoystick, limelightSubsystem));
         new JoystickButton(operatorJoystick, 1)
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
@@ -128,20 +154,22 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
-        /*  A button for automatic positioning to all tags
-         new JoystickButton(operatorJoystick, 4)
-         .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem,
-         4)); // Replace 4 with desired tag ID
-
-         B button for positioning to specific tag 3
-         new JoystickButton(driveJoystick, 2) // Button number 2, can be changed if
-         needed
-         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
-
-         X button for positioning to specific tag 4
-         new JoystickButton(driveJoystick, 3) // Button number 3, can be changed if
-         needed
-         .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));*/
+        /*
+         * A button for automatic positioning to all tags
+         * new JoystickButton(operatorJoystick, 4)
+         * .whileTrue(new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem,
+         * 4)); // Replace 4 with desired tag ID
+         * 
+         * B button for positioning to specific tag 3
+         * new JoystickButton(driveJoystick, 2) // Button number 2, can be changed if
+         * needed
+         * .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(3)));
+         * 
+         * X button for positioning to specific tag 4
+         * new JoystickButton(driveJoystick, 3) // Button number 3, can be changed if
+         * needed
+         * .onTrue(new InstantCommand(() -> limelightSubsystem.autoPositionToTag(4)));
+         */
     }
 
     public Command getAutonomousCommand() {

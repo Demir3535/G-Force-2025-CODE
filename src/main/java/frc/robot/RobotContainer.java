@@ -31,12 +31,10 @@ import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
-import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
 
     private final DriveSubsystem m_drive = new DriveSubsystem();
-    public final Limelight m_limelight = new Limelight();
     public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
 

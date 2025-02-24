@@ -88,21 +88,21 @@ public class RobotContainer {
         NamedCommands.registerCommand("Score L3",
                 AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
-                NamedCommands.registerCommand("AlignToTag2",
+        NamedCommands.registerCommand("AlignToTag2",
                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, 2) // AprilTag with ID 2
-            );
-            
-            NamedCommands.registerCommand("AlignToTag3",
+        );
+
+        NamedCommands.registerCommand("AlignToTag3",
                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, 3) // AprilTag with ID 3
-            );
-            
-            NamedCommands.registerCommand("AlignToTag4",
+        );
+
+        NamedCommands.registerCommand("AlignToTag4",
                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, 4) // AprilTag with ID 4
-            );
-            
-            NamedCommands.registerCommand("AlignToTag5",
+        );
+
+        NamedCommands.registerCommand("AlignToTag5",
                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, 5) // AprilTag with ID 5
-            );
+        );
         /*
          * NamedCommands.registerCommand("AlignToReef1",
          * new AutoPositionToTagCommand(limelightSubsystem, driveSubsystem, 4)); //
@@ -130,15 +130,16 @@ public class RobotContainer {
         // L2, RIGHT POV BUTTON
         new POVButton(operatorJoystick, 90)
                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
-
+        new JoystickButton(operatorJoystick, 2).whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
         // L3, RIGHT POV BUTTON
-        new POVButton(operatorJoystick, 0)
-                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
+        // new POVButton(operatorJoystick, 0)
+        // .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,
+        // wristSubsystem));
 
         new JoystickButton(operatorJoystick, 5).whileTrue(
                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
         );
-        new JoystickButton(operatorJoystick, 4) 
+        new JoystickButton(operatorJoystick, 4)
                 .onTrue(new InstantCommand(() -> {
                     SmartDashboard.putBoolean("Triangle Button Pressed", true);
                     shooterSubsystem.shooterButton();

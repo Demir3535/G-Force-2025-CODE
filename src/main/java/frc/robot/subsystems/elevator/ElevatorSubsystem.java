@@ -28,24 +28,23 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig elevatorMotor1Config;
     SparkMaxConfig elevatorMotor2Config;
     static SparkClosedLoopController elevatorMotor1Controller;
+    private double targetSetpoint = 0.0;  // YENİ: Hedef pozisyonu takip etmek için eklendi
 
     public ElevatorSubsystem() {
-
         elevatorMotor1 = new SparkMax(CAN.ELEVATOR_MOTOR_1, MotorType.kBrushless);
         elevatorMotor2 = new SparkMax(CAN.ELEVATOR_MOTOR_2, MotorType.kBrushless);
 
         elevatorMotor1Controller = elevatorMotor1.getClosedLoopController();
-        
 
         elevatorMotor1Config = new SparkMaxConfig();
         elevatorMotor2Config = new SparkMaxConfig();
 
         elevatorMotor1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        elevatorMotor1Config.closedLoop.maxMotion.allowedClosedLoopError(1);
+        elevatorMotor1Config.closedLoop.maxMotion.allowedClosedLoopError(.5);
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.5, 0.01, 0.1); // TODO made some changes for elevator 
+        elevatorMotor1Config.closedLoop.pid(0.7, 0.01, 0.15); // PID değerleri güncellendi
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
@@ -59,16 +58,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void goToSetpoint(double setpoint) {
-        // Add code here to move the elevator to the scoring height
         if (RobotBase.isReal()) {
-            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -0.4); //TODO try to decreas the value 
+            targetSetpoint = setpoint;  // YENİ: Hedefi kaydet
+            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -1.1);
         }
     }
 
     public void setEncoderValue(double value) {
-        // In rotations
         elevatorMotor1.getEncoder().setPosition(value);
     }
+
     public void setMotorVoltage(double volts){
         elevatorMotor1.setVoltage(volts);
     }
@@ -88,24 +87,14 @@ public class ElevatorSubsystem extends SubsystemBase {
                 }
                 goToSetpoint(setpoint);
             } else {
-                ElevatorWristSim.goToScoreSetpoint(level);// Passes in the L1-L3 into the sim logic
+                ElevatorWristSim.goToScoreSetpoint(level);
             }
         }, this);
     }
-    
-
-    
 
     public void moveAtSpeed(double speed) {
         elevatorMotor1.set(speed * .5);
     }
-    
-
-    // public Command homeElevator() {
-    // return this.run(() -> elevatorMotor1.setVoltage(1)).until(() ->
-    // getCurrentDraw() > 30.0)
-    // .finallyDo(() -> setEncoderValue(0));
-    // }
 
     public double getCurrentDraw() {
         return elevatorMotor1.getOutputCurrent();
@@ -115,15 +104,19 @@ public class ElevatorSubsystem extends SubsystemBase {
         return elevatorMotor1.getEncoder();
     }
 
-    
-
     @Override
     public void periodic() {
         if (RobotBase.isReal()) {
-            SmartDashboard.putNumber("elevator encoder pos", elevatorMotor1.getEncoder().getPosition());
-            // SmartDashboard.putNumber("elevator motor current draw", getCurrentDraw());
+            double currentPosition = elevatorMotor1.getEncoder().getPosition();
+            SmartDashboard.putNumber("elevator encoder pos", currentPosition);
+            
+            // YENİ: Hata ve diğer değerleri hesapla ve göster
+            double error = targetSetpoint - currentPosition;
+            SmartDashboard.putNumber("elevator error", error);
+            SmartDashboard.putNumber("elevator output", elevatorMotor1.getAppliedOutput());
+            SmartDashboard.putNumber("elevator current", getCurrentDraw());
         } else {
+            // Simülasyon kodu
         }
     }
-
 }

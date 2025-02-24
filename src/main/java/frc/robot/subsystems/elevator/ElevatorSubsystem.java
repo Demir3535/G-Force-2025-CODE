@@ -9,7 +9,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.epilogue.Logged;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,7 +45,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.5, 0.01, 0.1);
+        elevatorMotor1Config.closedLoop.pid(0.5, 0.01, 0.1); // TODO made some changes for elevator 
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
@@ -62,7 +61,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void goToSetpoint(double setpoint) {
         // Add code here to move the elevator to the scoring height
         if (RobotBase.isReal()) {
-            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -0.4);
+            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -0.4); //TODO try to decreas the value 
         }
     }
 

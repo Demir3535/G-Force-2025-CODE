@@ -47,11 +47,11 @@ public final class RobotConstants {
                       
                         public static final double HOME = -3;
                         public static final double HP = -50;
-
                         public static final class Coral {
                                 public static final double L1 = -20;
                                 public static final double L2 = -46;
                                 public static final double L3 = -60;
+                                public static final double HOME = 0;
                         }
                       
                 }

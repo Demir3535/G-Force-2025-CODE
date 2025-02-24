@@ -130,8 +130,15 @@ public class RobotContainer {
         // L2, RIGHT POV BUTTON
         new POVButton(operatorJoystick, 90)
                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
-        new JoystickButton(operatorJoystick, 2).whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
-        // L3, RIGHT POV BUTTON
+       
+       
+      new JoystickButton(operatorJoystick, 4)
+              .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
+
+        new JoystickButton(operatorJoystick, 2).whileTrue(AutomatedScoring.scoreCoralNoPathing(0, elevatorSubsystem, wristSubsystem));
+       
+       
+                // L3, RIGHT POV BUTTON
         // new POVButton(operatorJoystick, 0)
         // .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,
         // wristSubsystem));
@@ -139,7 +146,7 @@ public class RobotContainer {
         new JoystickButton(operatorJoystick, 5).whileTrue(
                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
         );
-        new JoystickButton(operatorJoystick, 4)
+        new JoystickButton(operatorJoystick, 2)
                 .onTrue(new InstantCommand(() -> {
                     SmartDashboard.putBoolean("Triangle Button Pressed", true);
                     shooterSubsystem.shooterButton();
@@ -151,7 +158,7 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
-        new JoystickButton(operatorJoystick, 2)
+        new JoystickButton(operatorJoystick, 9)
                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(-1.0), climbSubsystem))
                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 

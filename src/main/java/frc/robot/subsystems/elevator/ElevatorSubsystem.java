@@ -23,6 +23,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 
 @Logged
 public class ElevatorSubsystem extends SubsystemBase {
+  //  double p, i, d;
     SparkMax elevatorMotor1;
     SparkMax elevatorMotor2;
     SparkMaxConfig elevatorMotor1Config;
@@ -44,8 +45,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.7, 0.01, 0.15); // PID değerleri güncellendi
-
+        elevatorMotor1Config.closedLoop.pid(3, 0.05, 0.3);
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
         elevatorMotor1.configure(elevatorMotor1Config, ResetMode.kResetSafeParameters,
@@ -59,8 +59,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void goToSetpoint(double setpoint) {
         if (RobotBase.isReal()) {
-            targetSetpoint = setpoint;  // YENİ: Hedefi kaydet
-            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -1.1);
+            targetSetpoint = setpoint;
+            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -3);
         }
     }
 
@@ -82,7 +82,11 @@ public class ElevatorSubsystem extends SubsystemBase {
                     setpoint = ElevatorConstants.HeightSetpoints.Coral.L2;
                 } else if (level == 3) {
                     setpoint = ElevatorConstants.HeightSetpoints.Coral.L3;
-                } else {
+                } 
+                else if (level == 0) {
+                    setpoint = ElevatorConstants.HeightSetpoints.Coral.HOME;
+                }
+                  else {
                     setpoint = ElevatorConstants.HeightSetpoints.HOME;
                 }
                 goToSetpoint(setpoint);
@@ -110,13 +114,15 @@ public class ElevatorSubsystem extends SubsystemBase {
             double currentPosition = elevatorMotor1.getEncoder().getPosition();
             SmartDashboard.putNumber("elevator encoder pos", currentPosition);
             
-            // YENİ: Hata ve diğer değerleri hesapla ve göster
+            
             double error = targetSetpoint - currentPosition;
             SmartDashboard.putNumber("elevator error", error);
             SmartDashboard.putNumber("elevator output", elevatorMotor1.getAppliedOutput());
-            SmartDashboard.putNumber("elevator current", getCurrentDraw());
+           /*  SmartDashboard.putNumber("elevator current", getCurrentDraw());
+            SmartDashboard.putNumber("Elev P value", p);
+            SmartDashboard.putNumber("Elev I value", i);
+            SmartDashboard.putNumber("Elev D value", d);*/
         } else {
-            // Simülasyon kodu
         }
     }
 }

@@ -45,7 +45,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(3, 0.05, 0.3);
+        elevatorMotor1Config.closedLoop.pid(1, 0, 1.5);
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
         elevatorMotor1.configure(elevatorMotor1Config, ResetMode.kResetSafeParameters,
@@ -60,7 +60,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void goToSetpoint(double setpoint) {
         if (RobotBase.isReal()) {
             targetSetpoint = setpoint;
-            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -3);
+            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -.2);
         }
     }
 
@@ -83,9 +83,6 @@ public class ElevatorSubsystem extends SubsystemBase {
                 } else if (level == 3) {
                     setpoint = ElevatorConstants.HeightSetpoints.Coral.L3;
                 } 
-                else if (level == 0) {
-                    setpoint = ElevatorConstants.HeightSetpoints.Coral.HOME;
-                }
                   else {
                     setpoint = ElevatorConstants.HeightSetpoints.HOME;
                 }

@@ -59,7 +59,7 @@ public final class RobotConstants {
                
 
 
-                public static final double MAX_MOTOR_RPM = 5000.0;
+                public static final double MAX_MOTOR_RPM = 210.2;
                 public static final double MAX_MOTOR_ACCELERATION = 3000.0;
 
                 public static final class SimConstants {
@@ -275,7 +275,7 @@ public final class RobotConstants {
                         public static final int FRONT_LEFT_TURNING = 9;
                         public static final int REAR_LEFT_TURNING = 11;
                         public static final int FRONT_RIGHT_TURNING = 23;
-                        public static final int REAR_RIGHT_TURNING = 22;
+                        public static final int REAR_RIGHT_TURNING = 45;
 
                         public static final int FRONT_LEFT_CANCODERID = 1;
                         public static final int FRONT_RIGHT_CANCODERID = 2;
@@ -286,7 +286,7 @@ public final class RobotConstants {
                         public static final int ELEVATOR_MOTOR_2 = 10;
                        
 
-                        public static final int SHOOTER_MOTOR_1 = 45;
+                        public static final int SHOOTER_MOTOR_1 = 22;
 
                         public static final int CLAW_MOTOR_1 = 16;
                         public static final int CLAW_MOTOR_2 = 17;

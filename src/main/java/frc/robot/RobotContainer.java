@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.AutoPositionToTagCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -124,18 +125,16 @@ public class RobotContainer {
         new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
 
         // L1, RIGHT POV BUTTON
-        new POVButton(operatorJoystick, 180)
-                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
-
-        // L2, RIGHT POV BUTTON
-        new POVButton(operatorJoystick, 90)
-                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
-       
-       
-      new JoystickButton(operatorJoystick, 4)
+        new JoystickButton(operatorJoystick, 3)
               .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
-
-        new JoystickButton(operatorJoystick, 2).whileTrue(AutomatedScoring.scoreCoralNoPathing(0, elevatorSubsystem, wristSubsystem));
+       
+        // L2, RIGHT POV BUTTON
+        new JoystickButton(operatorJoystick, 1)
+              .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
+       
+       
+      new JoystickButton(operatorJoystick, 2)
+              .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
        
        
                 // L3, RIGHT POV BUTTON
@@ -146,7 +145,7 @@ public class RobotContainer {
         new JoystickButton(operatorJoystick, 5).whileTrue(
                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
         );
-        new JoystickButton(operatorJoystick, 2)
+        new JoystickButton(operatorJoystick, 4)
                 .onTrue(new InstantCommand(() -> {
                     SmartDashboard.putBoolean("Triangle Button Pressed", true);
                     shooterSubsystem.shooterButton();

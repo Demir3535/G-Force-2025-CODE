@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -45,7 +45,6 @@ public class RobotContainer {
 
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
-
     private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
     private final Joystick operatorJoystick = new Joystick(RobotConstants.PortConstants.Controller.OPERATOR_JOYSTICK);
     public final AutomationSelector automationSelector = new AutomationSelector();
@@ -130,11 +129,11 @@ public class RobotContainer {
        
         // L2, RIGHT POV BUTTON
         new JoystickButton(operatorJoystick, 1)
-              .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
+              .onTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
        
        
-      new JoystickButton(operatorJoystick, 2)
-              .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
+      new JoystickButton(operatorJoystick, 4)
+              .whileTrue(new InstantCommand(()->{elevatorSubsystem.goToSetpoint(-20);} ));
        
        
                 // L3, RIGHT POV BUTTON
@@ -145,7 +144,7 @@ public class RobotContainer {
         new JoystickButton(operatorJoystick, 5).whileTrue(
                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
         );
-        new JoystickButton(operatorJoystick, 4)
+        new JoystickButton(operatorJoystick, 2)
                 .onTrue(new InstantCommand(() -> {
                     SmartDashboard.putBoolean("Triangle Button Pressed", true);
                     shooterSubsystem.shooterButton();

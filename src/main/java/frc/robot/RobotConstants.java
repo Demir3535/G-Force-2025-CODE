@@ -38,6 +38,29 @@ public final class RobotConstants {
                                         new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125)))); // Lower HP position: X:1.2m, Y:1m, Angle:-125°
                 }
         }
+        public static final class MotorSpeeds{
+                public static final double eP = 0.075;
+                public static final double eI = 0;
+                public static final double eD = 0;
+                //slower pid values for going down
+                public static final double edP = 0.01;
+                public static final double edI = 0;
+                public static final double edD = 0;
+                //encoder values for each setpoint, assuming bottom is 0
+                //top of elevator is around encoder count = 28
+                //index to close to zero for faster drop (motors will fall the rest of the way to prevent damage)
+                public static final double elevatorL0 = 1;
+                public static final double elevatorL1 = -23;
+                public static final double elevatorL2 = -5;
+                public static final double elevatorL3 = -10;
+                public static final double elevatorL4 = -15;
+            
+                public static final double elevatorSpeed = .2;
+                public static final double elevatorSpeedDown = .085;
+            
+                public static final double coralSpeed = .2;
+            
+              }
 
         public static final class ElevatorConstants {   //TODO elevator settings
                 public static final double ELEVATOR_MAX_HEIGHT = -112;

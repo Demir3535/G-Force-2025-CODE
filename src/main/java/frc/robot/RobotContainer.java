@@ -28,26 +28,14 @@ import frc.robot.commands.elevator.MoveElevatorManual;
 import frc.robot.commands.wrist.MoveWristManual;
 import frc.robot.subsystems.climb.ClimbSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.automation.AutomatedScoring;
 import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.commands.drive.AutoPositionToTagCommand;
 import frc.robot.commands.drive.LimelightDriveCommand;
 
-import edu.wpi.first.hal.simulation.RoboRioDataJNI;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import com.pathplanner.lib.auto.*;
-import edu.wpi.first.wpilibj.smartdashboard.*;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 //Subsystem imports
 //Command imports
@@ -145,7 +133,7 @@ public class RobotContainer {
                 new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
 
                 // L1, RIGHT POV BUTTON
-                new JoystickButton(operatorJoystick, 3)
+             /*    new JoystickButton(operatorJoystick, 3)
                                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
                 // L2, RIGHT POV BUTTON
@@ -155,7 +143,7 @@ public class RobotContainer {
                 new JoystickButton(operatorJoystick, 4)
                                 .whileTrue(new InstantCommand(() -> {
                                         elevatorSubsystem.goToSetpoint(-20);
-                                }));
+                                }));*/
 
                 // PS5 düğme numaralarıyla trigger tanımlama
                 final Trigger ElevatorUp = new Trigger(() -> operatorJoystick.getRawButton(4));
@@ -166,11 +154,7 @@ public class RobotContainer {
 
                 final Trigger ElevatorL1 = new Trigger(() -> operatorJoystick.getRawButton(3));
                 ElevatorL1.whileTrue(new ElevatorL1(m_elevator));
-                // L3, RIGHT POV BUTTON
-                // new POVButton(operatorJoystick, 0)
-                // .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,
-                // wristSubsystem));
-
+               
                 new JoystickButton(operatorJoystick, 5).whileTrue(
                                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
                 );

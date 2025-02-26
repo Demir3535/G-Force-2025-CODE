@@ -4,12 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.AutoPositionToTagCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -36,12 +34,8 @@ import frc.robot.automation.AutomatedScoring;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.commands.drive.LimelightDriveCommand;
 
-
 //Subsystem imports
 //Command imports
-import frc.robot.commands.elevator.ElevatorDown;
-import frc.robot.commands.elevator.ElevatorL1;
-import frc.robot.commands.elevator.ElevatorUp;
 
 public class RobotContainer {
 
@@ -49,7 +43,6 @@ public class RobotContainer {
         public final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
         public final WristSubsystem wristSubsystem = new WristSubsystem();
         public static LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-        public final Elevator m_elevator = new Elevator();
         public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
         public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
         private final Joystick driveJoystick = new Joystick(RobotConstants.PortConstants.Controller.DRIVE_JOYSTICK);
@@ -133,28 +126,24 @@ public class RobotContainer {
                 new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
 
                 // L1, RIGHT POV BUTTON
-             /*    new JoystickButton(operatorJoystick, 3)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
-
-                // L2, RIGHT POV BUTTON
-                new JoystickButton(operatorJoystick, 1)
-                                .onTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
-
-                new JoystickButton(operatorJoystick, 4)
-                                .whileTrue(new InstantCommand(() -> {
-                                        elevatorSubsystem.goToSetpoint(-20);
-                                }));*/
+                /*
+                 * new JoystickButton(operatorJoystick, 3)
+                 * .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem,
+                 * wristSubsystem));
+                 * 
+                 * // L2, RIGHT POV BUTTON
+                 * new JoystickButton(operatorJoystick, 1)
+                 * .onTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,
+                 * wristSubsystem));
+                 * 
+                 * new JoystickButton(operatorJoystick, 4)
+                 * .whileTrue(new InstantCommand(() -> {
+                 * elevatorSubsystem.goToSetpoint(-20);
+                 * }));
+                 */
 
                 // PS5 düğme numaralarıyla trigger tanımlama
-                final Trigger ElevatorUp = new Trigger(() -> operatorJoystick.getRawButton(4));
-                ElevatorUp.whileTrue(new ElevatorUp(m_elevator));
 
-                final Trigger ElevatorDown = new Trigger(() -> operatorJoystick.getRawButton(1));
-                ElevatorDown.whileTrue(new ElevatorDown(m_elevator));
-
-                final Trigger ElevatorL1 = new Trigger(() -> operatorJoystick.getRawButton(3));
-                ElevatorL1.whileTrue(new ElevatorL1(m_elevator));
-               
                 new JoystickButton(operatorJoystick, 5).whileTrue(
                                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
                 );
@@ -163,6 +152,17 @@ public class RobotContainer {
                                         SmartDashboard.putBoolean("Triangle Button Pressed", true);
                                         shooterSubsystem.shooterButton();
                                 }));
+
+                new POVButton(operatorJoystick, 180)
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
+
+                // L2, RIGHT POV BUTTON
+                new POVButton(operatorJoystick, 90)
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
+
+                // L3, RIGHT POV BUTTON
+                new POVButton(operatorJoystick, 0)
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
 
                 new JoystickButton(operatorJoystick, 1).whileTrue(
                                 new LimelightDriveCommand(m_drive, operatorJoystick, limelightSubsystem));

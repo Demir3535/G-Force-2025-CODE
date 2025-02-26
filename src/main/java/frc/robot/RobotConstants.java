@@ -8,10 +8,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -50,9 +47,9 @@ public final class RobotConstants {
                 //top of elevator is around encoder count = 28
                 //index to close to zero for faster drop (motors will fall the rest of the way to prevent damage)
                 public static final double elevatorL0 = 1;
-                public static final double elevatorL1 = -23;
-                public static final double elevatorL2 = -5;
-                public static final double elevatorL3 = -10;
+                public static final double elevatorL1 = -20;
+                public static final double elevatorL2 = -40;
+                public static final double elevatorL3 = -60;
                 public static final double elevatorL4 = -15;
             
                 public static final double elevatorSpeed = .2;
@@ -76,11 +73,14 @@ public final class RobotConstants {
                                 public static final double L3 = -60;
                                 public static final double HOME = 0;
                         }
-                      
+                        public static final class Algae {
+                                public static final double L2 = -42;
+                                public static final double L3 = -70;
+                        }
+                       
+        
                 }
-
                
-
 
                 public static final double MAX_MOTOR_RPM = 210.2;
                 public static final double MAX_MOTOR_ACCELERATION = 3000.0;
@@ -89,6 +89,8 @@ public final class RobotConstants {
                         public static final double L1 = 0.2;
                         public static final double L2 = 0.3;
                         public static final double L3 = 0.55;
+                        public static final double HP = -50;
+
                 }
 
 
@@ -136,24 +138,27 @@ public final class RobotConstants {
 
         public static final class WristConstants {    //TODO wrist constants for robot
                 public static final double WRIST_MIN_ANGLE = 0.0;
-                public static final double ELEVATOR_MIN_HEIGHT = 30.0;
+                public static final double ELEVATOR_MAX_ANGLE = 30.0;
 
                 public static final class AngleSetpoints {
-                      
-                        public static final double HOME = 0.0;
-                        public static final double HP = -7.0;
+                        public static final double HOME = -5;
+                        public static final double HP = -10.0;
 
                         public static final class Coral {
-                                public static final double L1 = 0;
+                                public static final double L1 = -10;
                                 public static final double L2 = -3;
                                 public static final double L3 = -5;
                         }
+
+                        public static final class Algae {
+                                public static final double L2 = 12;
+                                public static final double L3 = 13.5;
+                        }
                 }
 
-                public static final double MAX_MOTOR_RPM = 500.0;
-                public static final double MAX_MOTOR_ACCELERATION = 500.0;
-
-        }
+                public static final double MAX_MOTOR_RPM = 3000.0;
+                public static final double MAX_MOTOR_ACCELERATION = 1000.0;
+      }
 
         public static final class DrivetrainConstants {
               
@@ -311,9 +316,7 @@ public final class RobotConstants {
 
                         public static final int SHOOTER_MOTOR_1 = 22;
 
-                        public static final int CLAW_MOTOR_1 = 16;
-                        public static final int CLAW_MOTOR_2 = 17;
-
+                        
                         public static final int WRIST_MOTOR = 18;
 
                         public static final int CLIMB_MOTOR = 19;

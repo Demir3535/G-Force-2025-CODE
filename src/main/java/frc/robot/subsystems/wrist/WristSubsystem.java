@@ -3,6 +3,7 @@ package frc.robot.subsystems.wrist;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -25,7 +26,7 @@ public class WristSubsystem extends SubsystemBase {
     SparkMax wristMotor;
     SparkMaxConfig wristMotorConfig;
     static SparkClosedLoopController wristMotorController;
-
+    private double targetSetpoint = 0;
     public WristSubsystem() {
 
         // if (RobotBase.isReal()) {
@@ -120,6 +121,11 @@ public class WristSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Wrist Encoder val", getEncoderValue());
             // System.out.println("EA SPORTSSS");
         }
+        double currentPos = wristMotor.getEncoder().getPosition();
+            if (Math.abs(currentPos - targetSetpoint) > 0.5) {
+                wristMotorController.setReference(targetSetpoint, ControlType.kMAXMotionPositionControl);
+            }
+        }
     }
 
-}
+   

@@ -68,9 +68,9 @@ public final class RobotConstants {
                         public static final double HOME = -3;
                         public static final double HP = -50;
                         public static final class Coral {
-                                public static final double L1 = -20;
-                                public static final double L2 = -46;
-                                public static final double L3 = -60;
+                                public static final double L1 = -5;
+                                public static final double L2 = -75;
+                                public static final double L3 = -114;
                                 public static final double HOME = 0;
                         }
                         public static final class Algae {
@@ -82,7 +82,7 @@ public final class RobotConstants {
                 }
                
 
-                public static final double MAX_MOTOR_RPM = 210.2;
+                public static final double MAX_MOTOR_RPM = 5670;
                 public static final double MAX_MOTOR_ACCELERATION = 3000.0;
 
                 public static final class SimConstants {
@@ -100,7 +100,7 @@ public final class RobotConstants {
 
         }
        
-        public static final class LimelightConstants {   // TODO changes these if theres a error for limelight
+        public static final class LimelightConstants {  // TODO LL constants for robot
                 public static final double STEER_K = 0.06;
                 public static final double DESIRED_TARGET = 4.0;
                 public static final double MAX_DRIVE_SPEED = 0.7;

@@ -28,6 +28,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig elevatorMotor1Config;
     SparkMaxConfig elevatorMotor2Config;
     static SparkClosedLoopController elevatorMotor1Controller;
+    private double targetSetpoint = 0; // Sınıf seviyesinde değişken
+
+
 
     public ElevatorSubsystem() {
 
@@ -41,11 +44,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor2Config = new SparkMaxConfig();
 
         elevatorMotor1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        elevatorMotor1Config.closedLoop.maxMotion.allowedClosedLoopError(.5);
+        elevatorMotor1Config.closedLoop.maxMotion.allowedClosedLoopError(.75);
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.2, 0.0,1.5);
+        elevatorMotor1Config.closedLoop.pid(0.1, 0.0,.5);
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
@@ -59,6 +62,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void goToSetpoint(double setpoint) {
+       
+        this.targetSetpoint = setpoint;
+
+       
         // Add code here to move the elevator to the scoring height
         if (RobotBase.isReal()) {
             elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -.2);
@@ -88,10 +95,11 @@ public class ElevatorSubsystem extends SubsystemBase {
                 }
                 goToSetpoint(setpoint);
             } else {
-                ElevatorWristSim.goToScoreSetpoint(level);// Passes in the L1-L3 into the sim logic
+                ElevatorWristSim.goToScoreSetpoint(level);
             }
         }, this);
     }
+    
     public Command goToHumanPlayerPickup() {
         return new InstantCommand(() -> {
             double setpoint;

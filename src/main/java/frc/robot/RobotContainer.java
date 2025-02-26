@@ -153,16 +153,20 @@ public class RobotContainer {
                                         shooterSubsystem.shooterButton();
                                 }));
 
+                // L1 Button
                 new POVButton(operatorJoystick, 180)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem))
+                                .onFalse(AutomatedScoring.homeSubsystems(elevatorSubsystem, wristSubsystem));
 
-                // L2, RIGHT POV BUTTON
+                // L2 Button
                 new POVButton(operatorJoystick, 90)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem))
+                                .onFalse(AutomatedScoring.homeSubsystems(elevatorSubsystem, wristSubsystem));
 
-                // L3, RIGHT POV BUTTON
+                // L3 Button
                 new POVButton(operatorJoystick, 0)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem))
+                                .onFalse(AutomatedScoring.homeSubsystems(elevatorSubsystem, wristSubsystem));
 
                 new JoystickButton(operatorJoystick, 1).whileTrue(
                                 new LimelightDriveCommand(m_drive, operatorJoystick, limelightSubsystem));

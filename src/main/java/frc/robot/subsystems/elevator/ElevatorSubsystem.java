@@ -48,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.1, 0.0,.5);
+        elevatorMotor1Config.closedLoop.pid(2, 0.0,.5);
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
@@ -68,7 +68,7 @@ public class ElevatorSubsystem extends SubsystemBase {
        
         // Add code here to move the elevator to the scoring height
         if (RobotBase.isReal()) {
-            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -.2);
+            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -.9);
         }
     }
 
@@ -99,7 +99,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
         }, this);
     }
-    
+
     public Command goToHumanPlayerPickup() {
         return new InstantCommand(() -> {
             double setpoint;
@@ -159,8 +159,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void periodic() {
         if (RobotBase.isReal()) {
             SmartDashboard.putNumber("elevator encoder pos", elevatorMotor1.getEncoder().getPosition());
-            // SmartDashboard.putNumber("elevator motor current draw", getCurrentDraw());
-        } else {
+            
+            // Sürekli olarak hedef değerini kontrol et ve gerekirse tekrar gönder
+            double currentPos = elevatorMotor1.getEncoder().getPosition();
+            if (Math.abs(currentPos - targetSetpoint) > 0.75) {
+                elevatorMotor1Controller.setReference(targetSetpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, -.2);
+            }
         }
     }
 

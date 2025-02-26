@@ -310,8 +310,8 @@ public final class RobotConstants {
                         public static final int REAR_LEFT_CANCODERID = 3;
                         public static final int REAR_RIGHT_CANCODERID = 4;
 
-                        public static final int ELEVATOR_MOTOR_1 = 12;
-                        public static final int ELEVATOR_MOTOR_2 = 10;
+                        public static final int ELEVATOR_MOTOR_1 = 10;
+                        public static final int ELEVATOR_MOTOR_2 = 12;
                        
 
                         public static final int SHOOTER_MOTOR_1 = 22;

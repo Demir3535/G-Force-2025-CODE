@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
@@ -93,12 +94,20 @@ public class AutomatedScoring {
 
     }
 
-    public static Command scoreCoralNoPathing(int height, ElevatorSubsystem elevatorSubsystem,
-            WristSubsystem wristSubsystem) {
-        RobotState.isAlgaeMode = false;
-        return new SequentialCommandGroup(elevatorSubsystem.goToCoralScoreSetpoint(height),
-                wristSubsystem.goToCoralScoreSetpoint(height));
-    }
+    public static Command scoreCoralNoPathing(int height, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {
+    RobotState.isAlgaeMode = false;
+    
+    return new RunCommand(() -> {
+        // Sürekli olarak komut gönder
+        if (height == 1) {
+            elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.Coral.L1);
+        } else if (height == 2) {
+            elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.Coral.L2);
+        } else if (height == 3) {
+            elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.Coral.L3);
+        }
+    }, elevatorSubsystem);
+}
 
     public static Command grabAlgaeNoPathing(int height, ElevatorSubsystem elevatorSubsystem,
             WristSubsystem wristSubsystem
@@ -111,10 +120,10 @@ public class AutomatedScoring {
      
 
     public static Command homeSubsystems(ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {
-        return new InstantCommand(() -> {
+        return new RunCommand(() -> {
             elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.HOME);
             wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.HOME);
-        });
+        }, elevatorSubsystem, wristSubsystem);
     }
 
     public static Command humanPlayerPickup(int humanPlayerSide, DriveSubsystem drivesubsystem,

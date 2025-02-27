@@ -16,8 +16,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean isShooterRunning = false;
     private boolean gameElementDetected = false;
     private PWM blinkinController;
-    private static final double RED = 0.61;
-    private static final double GREEN = 0.77;
+    private static final double RED = -0.41;
+    private static final double GREEN = -0.05;
     private boolean isShooting = false;
     private boolean readyToShoot = false; // Is game piece ready?
 
@@ -57,9 +57,9 @@ public class ShooterSubsystem extends SubsystemBase {
     private void updateLEDStatus() {
         if (readyToShoot) {
             blinkinController.setSpeed(GREEN); // Yeşil renk
-        } else {
+        } else if (!gameElementDetected) {
             blinkinController.setSpeed(RED); // Kırmızı renk
-        }
+        } 
     }
 
     public void shooterButton() {

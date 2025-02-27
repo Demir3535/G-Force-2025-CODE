@@ -107,10 +107,15 @@ public class RobotContainer {
                                 }));
 
                 new JoystickButton(operatorJoystick, 3)
-                                .onTrue(new InstantCommand(() -> {
+                                .whileTrue(new InstantCommand(() -> {
                                         SmartDashboard.putBoolean("Circle Button Pressed", true);
                                         shooterSubsystem.reverseShooter();
+
                                 }));
+
+                new JoystickButton(operatorJoystick, 3).whileFalse(new InstantCommand(() -> {
+                        shooterSubsystem.stopShooter();
+                }));
                 // elevator buttons code
                 new POVButton(operatorJoystick, 0)
                                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));

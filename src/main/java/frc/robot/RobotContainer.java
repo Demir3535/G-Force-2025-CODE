@@ -88,7 +88,7 @@ public class RobotContainer {
                                 AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
                 NamedCommands.registerCommand("Score L3",
                                 AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
-               
+
         }
 
         private void configureButtonBindings() {
@@ -100,13 +100,18 @@ public class RobotContainer {
                 new JoystickButton(operatorJoystick, 5).whileTrue(
                                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
                 );
-                new JoystickButton(operatorJoystick, 2)
+                new JoystickButton(operatorJoystick, 4)
                                 .onTrue(new InstantCommand(() -> {
                                         SmartDashboard.putBoolean("Triangle Button Pressed", true);
                                         shooterSubsystem.shooterButton();
                                 }));
 
-                // elevator buttons code                 
+                new JoystickButton(operatorJoystick, 3)
+                                .onTrue(new InstantCommand(() -> {
+                                        SmartDashboard.putBoolean("Circle Button Pressed", true);
+                                        shooterSubsystem.reverseShooter();
+                                }));
+                // elevator buttons code
                 new POVButton(operatorJoystick, 0)
                                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
                 new POVButton(operatorJoystick, 90)
@@ -115,9 +120,9 @@ public class RobotContainer {
                                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
 
                 new JoystickButton(operatorJoystick, 1)
-                                  .whileTrue( new LimelightDriveCommand(m_drive, operatorJoystick, limelightSubsystem));
-              
-               new JoystickButton(operatorJoystick, 1)
+                                .whileTrue(new LimelightDriveCommand(m_drive, operatorJoystick, limelightSubsystem));
+
+                new JoystickButton(operatorJoystick, 1)
                                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
                                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 

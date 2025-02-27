@@ -78,6 +78,15 @@ public class ShooterSubsystem extends SubsystemBase {
             stopShooter();
         }
     }
+
+    public void reverseShooter() {
+        SmartDashboard.putBoolean("Reverse Button Pressed", true);
+        SmartDashboard.putString("Shooter State", "Reversing");
+        
+        moveAtSpeed(-0.25);
+        
+        readyToShoot = false;
+    }
     public void moveAtSpeed(double speed) {
         shooterMotor.set(speed);
         isShooterRunning = true;

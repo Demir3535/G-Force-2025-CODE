@@ -8,6 +8,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotConstants.ClimbConstans;
 import frc.robot.RobotConstants.ShooterConstants;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -29,8 +30,8 @@ public class ClimbSubsystem extends SubsystemBase {
         climbMotor1Config = new SparkMaxConfig();
 
         climbMotor1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        climbMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstants.MAX_MOTOR_RPM);
-        climbMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstants.MAX_MOTOR_ACCELERATION);
+        climbMotor1Config.closedLoop.maxMotion.maxVelocity(ClimbConstans.MAX_MOTOR_RPM);
+        climbMotor1Config.closedLoop.maxMotion.maxAcceleration(ClimbConstans.MAX_MOTOR_ACCELERATION);
 
 
 

@@ -22,7 +22,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public ClimbSubsystem() {
 
         // if (RobotBase.isReal()) {
-        climbMotor1 = new SparkMax(CAN.CLIMB_MOTOR, MotorType.kBrushless);
+        climbMotor1 = new SparkMax(CAN.CLIMB_MOTOR, MotorType.kBrushed);
 
         climbMotor1Controller = climbMotor1.getClosedLoopController();
 
@@ -32,7 +32,7 @@ public class ClimbSubsystem extends SubsystemBase {
         climbMotor1Config.closedLoop.maxMotion.maxVelocity(ShooterConstants.MAX_MOTOR_RPM);
         climbMotor1Config.closedLoop.maxMotion.maxAcceleration(ShooterConstants.MAX_MOTOR_ACCELERATION);
 
-        climbMotor1Config.closedLoop.pid(.5, 0.0, 0.0);
+
 
         climbMotor1.configure(climbMotor1Config, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);

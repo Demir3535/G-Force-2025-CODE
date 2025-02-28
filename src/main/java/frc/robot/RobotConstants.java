@@ -278,26 +278,26 @@ public final class RobotConstants {
 
                         public static final int FRONT_LEFT_TURNING = 9;
                         public static final int REAR_LEFT_TURNING = 11;
-                        public static final int FRONT_RIGHT_TURNING = 23;
-                        public static final int REAR_RIGHT_TURNING = 45;
+                        public static final int FRONT_RIGHT_TURNING = 10;
+                        public static final int REAR_RIGHT_TURNING = 12;
 
                         public static final int FRONT_LEFT_CANCODERID = 1;
                         public static final int FRONT_RIGHT_CANCODERID = 2;
                         public static final int REAR_LEFT_CANCODERID = 3;
                         public static final int REAR_RIGHT_CANCODERID = 4;
 
-                        public static final int ELEVATOR_MOTOR_1 = 10;
-                        public static final int ELEVATOR_MOTOR_2 = 12;
+                        public static final int ELEVATOR_MOTOR_1 = 14;
+                        public static final int ELEVATOR_MOTOR_2 = 15;
                        
 
-                        public static final int SHOOTER_MOTOR_1 = 22;
+                        public static final int SHOOTER_MOTOR_1 = 16;
 
                         
-                        public static final int WRIST_MOTOR = 18;
+                        public static final int WRIST_MOTOR = 17;
 
-                        public static final int CLIMB_MOTOR = 19;
+                        public static final int CLIMB_MOTOR = 18;
 
-                        public static final int CLAW_MOTOR = 21;
+                        public static final int CLAW_MOTOR = 19;
                         public static final int PDH = 20;
                         public static double limelightAdjust;
 

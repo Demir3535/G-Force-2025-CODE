@@ -158,6 +158,7 @@ public class SwerveModule {
 
                 correctedDesiredState.optimize(new Rotation2d(m_turningEncoder.getPosition()));
 
+        
                 if (Math.abs(correctedDesiredState.speedMetersPerSecond) < 0.001 // less than 1 mm per sec
                                 && Math.abs(correctedDesiredState.angle.getRadians()
                                                 - m_turningEncoder.getPosition()) < 0.1) // 10% of

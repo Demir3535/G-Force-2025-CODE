@@ -95,9 +95,9 @@ public class RobotContainer {
 
                 new JoystickButton(driveJoystick, 9).onChange(m_drive.xCommand()); // Needs to be while true so the
                                                                                    // command ends
-                new JoystickButton(driveJoystick, 2).whileTrue(m_drive.gyroReset());
+                new JoystickButton(driveJoystick, 4).whileTrue(m_drive.gyroReset());
 
-                new JoystickButton(operatorJoystick, 5).whileTrue(
+                new JoystickButton(driveJoystick, 2).whileTrue(
                                 new AutoPositionToTagCommand(limelightSubsystem, m_drive, -1) // Any AprilTag
                 );
                 new JoystickButton(operatorJoystick, 4)

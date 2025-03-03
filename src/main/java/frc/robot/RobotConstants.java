@@ -5,7 +5,6 @@ import java.util.List;
 import com.pathplanner.lib.path.PathConstraints;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,45 +16,65 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public final class RobotConstants {
 
-
         public static final String LLName = "limelight";
 
         public static final class ScoringConstants { // Class containing constant values for scoring positions
                 public static final class BlueAlliance { // Specific positions for the Blue alliance
-                        public static final List<Pose2d> REEF_SIDE_POSES = List.of( // List of Reef (field edge) positions
-                                        new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))), // 1st Position: X:2.961m, Y:4m, Angle:0°
-                                        new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))), // 2nd Position: X:3.712m, Y:2.723m, Angle:30°
-                                        new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))), // 3rd Position: X:5.253m, Y:2.656m, Angle:60°
-                                        new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))), // 4th Position: X:6m, Y:4m, Angle:90°
-                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))), // 5th Position: X:0m, Y:0m, Angle:120°
-                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))); // 6th Position: X:0m, Y:0m, Angle:0°
+                        public static final List<Pose2d> REEF_SIDE_POSES = List.of( // List of Reef (field edge)
+                                                                                    // positions
+                                        new Pose2d(2.961, 4, new Rotation2d(Math.toRadians(0))), // 1st Position:
+                                                                                                 // X:2.961m, Y:4m,
+                                                                                                 // Angle:0°
+                                        new Pose2d(3.712, 2.723, new Rotation2d(Math.toRadians(30))), // 2nd Position:
+                                                                                                      // X:3.712m,
+                                                                                                      // Y:2.723m,
+                                                                                                      // Angle:30°
+                                        new Pose2d(5.253, 2.656, new Rotation2d(Math.toRadians(60))), // 3rd Position:
+                                                                                                      // X:5.253m,
+                                                                                                      // Y:2.656m,
+                                                                                                      // Angle:60°
+                                        new Pose2d(6, 4, new Rotation2d(Math.toRadians(90))), // 4th Position: X:6m,
+                                                                                              // Y:4m, Angle:90°
+                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(120))), // 5th Position: X:0m,
+                                                                                               // Y:0m, Angle:120°
+                                        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))); // 6th Position: X:0m,
+                                                                                              // Y:0m, Angle:0°
 
                         public static final List<Pose2d> HP_POSES = List.of( // Human Player station positions
-                                        new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))), // Upper HP position: X:1.2m, Y:7m, Angle:125°
-                                        new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125)))); // Lower HP position: X:1.2m, Y:1m, Angle:-125°
+                                        new Pose2d(1.2, 7, new Rotation2d(Units.degreesToRadians(125))), // Upper HP
+                                                                                                         // position:
+                                                                                                         // X:1.2m,
+                                                                                                         // Y:7m,
+                                                                                                         // Angle:125°
+                                        new Pose2d(1.2, 1, new Rotation2d(Units.degreesToRadians(-125)))); // Lower HP
+                                                                                                           // position:
+                                                                                                           // X:1.2m,
+                                                                                                           // Y:1m,
+                                                                                                           // Angle:-125°
                 }
         }
 
-        public static final class ElevatorConstants {   //TODO elevator settings
+        public static final class ElevatorConstants { // TODO elevator settings
                 public static final double ELEVATOR_MAX_HEIGHT = -112;
                 public static final double ELEVATOR_MIN_HEIGHT = -0.2;
 
                 public static final class HeightSetpoints {
-                      
+
                         public static final double HOME = -3;
                         public static final double HP = -50;
+
                         public static final class Coral {
                                 public static final double L1 = -5;
                                 public static final double L2 = -75;
                                 public static final double L3 = -114;
                                 public static final double HOME = 0;
                         }
+
                         public static final class Algae {
                                 public static final double L2 = -42;
                                 public static final double L3 = -70;
                         }
-                       
-        
+
                 }
 
                 public static final double MAX_MOTOR_RPM = 5670;
@@ -69,30 +88,28 @@ public final class RobotConstants {
 
                 }
 
-
                 public static final double P = 2.5;
                 public static final double I = 0;
                 public static final double D = 0;
 
         }
-       
-        public static final class LimelightConstants {  // TODO LL constants for robot
-                public static final double STEER_K = 0.06;
-                public static final double DESIRED_TARGET = 4.0;
-                public static final double MAX_DRIVE_SPEED = 0.7;
-                public static final double MAX_TURN_SPEED = 0.7;
-                public static final double ACCEPTABLE_TX_ERROR = 1.0;
+
+        public static final class LimelightConstants { // TODO LL constants for robot
+                public static final double STEER_K = 0.04; // Düşürülmüş (daha hassas dönüş)
+                public static final double DESIRED_TARGET = 10.0; // Artırılmış (daha yakın mesafe)
+                public static final double MAX_DRIVE_SPEED = 0.3; // Düşürülmüş (daha yavaş sürüş)
+                public static final double MAX_TURN_SPEED = 0.3; // Düşürülmüş (daha yavaş dönüş)
+                public static final double ACCEPTABLE_TX_ERROR = 1.0; // Hizalama toleransı
                 public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
-                public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(0);
-                public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(45);
+                public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(6.6);
+                public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(35);
                 public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
                 public static final double LINEAR_P = 0.1;
                 public static final double LINEAR_D = 0.0;
                 public static final double ANGULAR_P = 0.1;
                 public static final double ANGULAR_D = 0.0;
-          
-         }
 
+        }
 
         public static final class ShooterConstants {
                 public static final double MAX_MOTOR_RPM = 500.0;
@@ -111,8 +128,7 @@ public final class RobotConstants {
 
         }
 
-
-        public static final class WristConstants {    //TODO wrist constants for robot
+        public static final class WristConstants { // TODO wrist constants for robot
                 public static final double WRIST_MIN_ANGLE = 0.0;
                 public static final double ELEVATOR_MAX_ANGLE = 30.0;
 
@@ -134,15 +150,14 @@ public final class RobotConstants {
 
                 public static final double MAX_MOTOR_RPM = 3000.0;
                 public static final double MAX_MOTOR_ACCELERATION = 1000.0;
-      }
+        }
 
         public static final class DrivetrainConstants {
-              
+
                 public static final double tP = 0.1;
                 public static final double tI = 0;
                 public static final double tD = 0.02;
 
-              
                 public static final double FRONT_LEFT_VIRTUAL_OFFSET_RADIANS = 0;
                 public static final double FRONT_RIGHT_VIRTUAL_OFFSET_RADIANS = 0; // -We do not apply an offset to the
                                                                                    // CANcoder
@@ -288,11 +303,9 @@ public final class RobotConstants {
 
                         public static final int ELEVATOR_MOTOR_1 = 14;
                         public static final int ELEVATOR_MOTOR_2 = 15;
-                       
 
                         public static final int SHOOTER_MOTOR_1 = 16;
 
-                        
                         public static final int WRIST_MOTOR = 17;
 
                         public static final int CLIMB_MOTOR = 18;
@@ -303,10 +316,9 @@ public final class RobotConstants {
 
                 }
 
-                
                 public static class DIO {
-                        
-                        public static final int SHOOTER_DISTANCE_SENSOR = 0; // exp port number 
+
+                        public static final int SHOOTER_DISTANCE_SENSOR = 0; // exp port number
                 }
 
                 public static final class PWM {
@@ -315,8 +327,8 @@ public final class RobotConstants {
 
                 public static class Controller {
                         public static final double JOYSTICK_AXIS_THRESHOLD = 0.2;
-                        public static final int DRIVE_JOYSTICK = 1;
-                        public static final int OPERATOR_JOYSTICK = 0;
+                        public static final int DRIVE_JOYSTICK = 0;
+                        public static final int OPERATOR_JOYSTICK = 1;
 
                         // Joystick Axis
                         public static final int DRIVE_COMMAND_X_AXIS = 0;
@@ -326,7 +338,7 @@ public final class RobotConstants {
 
                         // Manual control axis for operator
                         public static final int ELEVATOR_MANUAL_CONTROL = 1;
-                        public static final int WRIST_MANUAL_CONTROL = 3;
+                        public static final int WRIST_MANUAL_CONTROL = 5;
                         public static final double kDriveDeadband = 0.3;
                 }
         }
@@ -339,11 +351,11 @@ public final class RobotConstants {
 
         }
 
-        public static final class TeleopConstants {  // TODO speed settings 
+        public static final class TeleopConstants { // TODO speed settings
                 public static final double MAX_SPEED_PERCENT = 1; // ex: 0.4 -> 40%
         }
 
-        public static final class PathPlannerConstants {  // TODO pathplanner speeds for autonomous 
+        public static final class PathPlannerConstants { // TODO pathplanner speeds for autonomous
                 public static final Alliance DEFAULT_ALLIANCE = Alliance.Blue;
 
                 public static final double kMaxAngularAcceleration = 4 * Math.PI;

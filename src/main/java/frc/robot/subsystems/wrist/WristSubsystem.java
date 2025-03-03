@@ -52,6 +52,9 @@ public class WristSubsystem extends SubsystemBase {
     }
 
     public void goToSetpoint(double setpoint) {
+        this.targetSetpoint = setpoint;
+
+       
         if (RobotBase.isReal()) {
             wristMotorController.setReference(setpoint, ControlType.kMAXMotionPositionControl);
         }
@@ -118,14 +121,19 @@ public class WristSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (RobotBase.isReal()) {
-            SmartDashboard.putNumber("Wrist Encoder val", getEncoderValue());
-            // System.out.println("EA SPORTSSS");
-        }
-        double currentPos = wristMotor.getEncoder().getPosition();
+            // SmartDashboard'a daha fazla teşhis bilgisi ekleyelim
+            SmartDashboard.putNumber("Wrist Encoder Position", getEncoderValue());
+            SmartDashboard.putNumber("Wrist Target Position", targetSetpoint);
+            SmartDashboard.putNumber("Wrist Position Error", getEncoderValue() - targetSetpoint);
+            SmartDashboard.putNumber("Wrist Motor Output", wristMotor.getAppliedOutput());
+            
+            // Sürekli olarak hedef değerini kontrol et ve gerekirse tekrar gönder
+            double currentPos = getEncoderValue();
             if (Math.abs(currentPos - targetSetpoint) > 0.5) {
-                wristMotorController.setReference(targetSetpoint, ControlType.kMAXMotionPositionControl);
+                // Slot parametresi ekleyelim (Elevator ile aynı olacak şekilde)
+                wristMotorController.setReference(targetSetpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0);
             }
         }
     }
-
+}
    

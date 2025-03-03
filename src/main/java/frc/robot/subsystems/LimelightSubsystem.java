@@ -98,7 +98,7 @@ public class LimelightSubsystem extends SubsystemBase {
      */
     public double getSteer() {
         double tx = getTx();
-        return tx * LimelightConstants.STEER_K;
+        return -tx * LimelightConstants.STEER_K; // Negatif işaret ekledik
     }
     
     /**
@@ -150,10 +150,10 @@ public class LimelightSubsystem extends SubsystemBase {
      * @return Distance to target in meters
      */
     public double getDistanceToTarget() {
-        // Use the ty value to calculate distance
+        // Ty değerini kullanarak trigonometri ile mesafeyi hesapla
         double targetOffsetAngle_Vertical = getTy();
         
-        // Calculate distance using trigonometry
+        // Mesafe hesaplama formülü
         double angleToGoalRadians = LimelightConstants.CAMERA_PITCH_RADIANS + Math.toRadians(targetOffsetAngle_Vertical);
         double distanceFromLimelightToGoalMeters = (LimelightConstants.TARGET_HEIGHT_METERS - LimelightConstants.CAMERA_HEIGHT_METERS) / 
                                                   Math.tan(angleToGoalRadians);

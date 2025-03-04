@@ -113,6 +113,12 @@ public class ShooterSubsystem extends SubsystemBase {
         isShooterRunning = false;
     }
 
+    public Command PPstopshooter() {
+        return new InstantCommand(() -> {
+            moveAtSpeed(0);
+        }, this);
+    }
+
     public boolean isShooterRunning() {
         return isShooterRunning;
     }

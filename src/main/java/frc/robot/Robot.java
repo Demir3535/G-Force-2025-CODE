@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
 
         // Kamera özelliklerini ayarla
         camera.setResolution(1920, 1080);   // Çözünürlük ayarı
-        camera.setFPS(90);                // FPS (saniyedeki kare sayısı) ayarı
+        camera.setFPS(120);                // FPS (saniyedeki kare sayısı) ayarı
         
         // Kamera sunucusunu al
         server = CameraServer.getServer();

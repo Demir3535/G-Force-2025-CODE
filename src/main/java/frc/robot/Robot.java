@@ -34,10 +34,10 @@ public class Robot extends TimedRobot {
         
         // USB kamerayı başlat
         camera = CameraServer.startAutomaticCapture();
-        
+
         // Kamera özelliklerini ayarla
-        camera.setResolution(320, 240);   // Çözünürlük ayarı
-        camera.setFPS(30);                // FPS (saniyedeki kare sayısı) ayarı
+        camera.setResolution(1920, 1080);   // Çözünürlük ayarı
+        camera.setFPS(90);                // FPS (saniyedeki kare sayısı) ayarı
         
         // Kamera sunucusunu al
         server = CameraServer.getServer();

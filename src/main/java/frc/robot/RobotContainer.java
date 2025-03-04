@@ -88,6 +88,10 @@ public class RobotContainer {
                                 AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
                 NamedCommands.registerCommand("Score L3",
                                 AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
+                NamedCommands.registerCommand("CoralIn", shooterSubsystem.intakeCoral());
+                NamedCommands.registerCommand("CoralOut", shooterSubsystem.shootCoral());
+                NamedCommands.registerCommand("ProcessorHome",
+                AutomatedScoring.homeSubsystems(elevatorSubsystem, wristSubsystem));
 
         }
 

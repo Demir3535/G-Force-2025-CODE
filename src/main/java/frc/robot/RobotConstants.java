@@ -129,9 +129,9 @@ public final class RobotConstants {
         }
 
         public static final class WristConstants { // TODO wrist constants for robot
-                public static final double WRIST_MIN_ANGLE = 0.0;
-                public static final double ELEVATOR_MAX_ANGLE = 30.0;
-
+                public static final double WRIST_MIN_ANGLE = -10.0; // Alt limit
+                public static final double WRIST_MAX_ANGLE = 70.0;  // Üst limit - Intake için gerekli maksimum değer
+              
                 public static final class AngleSetpoints {
                         public static final double HOME = -5;
                         public static final double HP = -10.0;

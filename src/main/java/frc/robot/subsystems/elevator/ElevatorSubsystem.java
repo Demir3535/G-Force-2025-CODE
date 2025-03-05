@@ -30,15 +30,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     static SparkClosedLoopController elevatorMotor1Controller;
     private double targetSetpoint = 0; // Sınıf seviyesinde değişken
 
-
-
     public ElevatorSubsystem() {
-
         elevatorMotor1 = new SparkMax(CAN.ELEVATOR_MOTOR_1, MotorType.kBrushless);
         elevatorMotor2 = new SparkMax(CAN.ELEVATOR_MOTOR_2, MotorType.kBrushless);
 
         elevatorMotor1Controller = elevatorMotor1.getClosedLoopController();
-        
 
         elevatorMotor1Config = new SparkMaxConfig();
         elevatorMotor2Config = new SparkMaxConfig();
@@ -48,27 +44,37 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.1, 0.0,.9);
+        elevatorMotor1Config.closedLoop.pid(0.1, 0.0, .9);
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
         elevatorMotor1.configure(elevatorMotor1Config, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
-
         elevatorMotor2.configure(elevatorMotor2Config, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
+
         // } else {
         new ElevatorWristSim();
     }
 
-    public void goToSetpoint(double setpoint) {
-       
-        this.targetSetpoint = setpoint;
+    // Setpoint değerini limitlere göre sınırlayan yeni metod
+    private double limitSetpoint(double setpoint) {
+        if (setpoint < ElevatorConstants.ELEVATOR_MAX_HEIGHT) {
+            return ElevatorConstants.ELEVATOR_MAX_HEIGHT;
+        } else if (setpoint > ElevatorConstants.ELEVATOR_MIN_HEIGHT) {
+            return ElevatorConstants.ELEVATOR_MIN_HEIGHT;
+        }
+        return setpoint;
+    }
 
-       
+    public void goToSetpoint(double setpoint) {
+        // Setpoint değerini limitlere göre sınırla
+        double limitedSetpoint = limitSetpoint(setpoint);
+        this.targetSetpoint = limitedSetpoint;
+
         // Add code here to move the elevator to the scoring height
         if (RobotBase.isReal()) {
-            elevatorMotor1Controller.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0);
+            elevatorMotor1Controller.setReference(limitedSetpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0);
         }
     }
 
@@ -76,7 +82,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         // In rotations
         elevatorMotor1.getEncoder().setPosition(value);
     }
-    public void setMotorVoltage(double volts){
+
+    public void setMotorVoltage(double volts) {
         elevatorMotor1.setVoltage(volts);
     }
 
@@ -109,8 +116,6 @@ public class ElevatorSubsystem extends SubsystemBase {
                 ElevatorWristSim.setElevatorToHeight(ElevatorConstants.SimConstants.HP);// Passes in the L1-L3 into the sim logic
             }
         }, this);
-
-        
     }
 
     public Command goToAlgaeGrabSetpoint(int level) {
@@ -131,13 +136,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         }, this);
     }
 
-
-   
-
     public void moveAtSpeed(double speed) {
-        elevatorMotor1.set(speed );
+        // Encoder değeri limitlere ulaştıysa o yönde hareketi durdur
+        double currentPosition = elevatorMotor1.getEncoder().getPosition();
+        
+        if ((currentPosition <= ElevatorConstants.ELEVATOR_MAX_HEIGHT && speed < 0) || 
+            (currentPosition >= ElevatorConstants.ELEVATOR_MIN_HEIGHT && speed > 0)) {
+            elevatorMotor1.set(0);
+        } else {
+            elevatorMotor1.set(speed);
+        }
     }
-    
 
     // public Command homeElevator() {
     // return this.run(() -> elevatorMotor1.setVoltage(1)).until(() ->
@@ -153,19 +162,24 @@ public class ElevatorSubsystem extends SubsystemBase {
         return elevatorMotor1.getEncoder();
     }
 
-    
-
     @Override
     public void periodic() {
         if (RobotBase.isReal()) {
             SmartDashboard.putNumber("elevator encoder pos", elevatorMotor1.getEncoder().getPosition());
+            SmartDashboard.putNumber("elevator target pos", targetSetpoint);
+            SmartDashboard.putBoolean("Elevator At Max Height", elevatorMotor1.getEncoder().getPosition() <= ElevatorConstants.ELEVATOR_MAX_HEIGHT);
+            SmartDashboard.putBoolean("Elevator At Min Height", elevatorMotor1.getEncoder().getPosition() >= ElevatorConstants.ELEVATOR_MIN_HEIGHT);
             
             // Sürekli olarak hedef değerini kontrol et ve gerekirse tekrar gönder
             double currentPos = elevatorMotor1.getEncoder().getPosition();
             if (Math.abs(currentPos - targetSetpoint) > 0.5) {
                 elevatorMotor1Controller.setReference(targetSetpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0);
             }
+            
+            // Eğer encoder değeri limitlerin ötesindeyse, motoru durdur
+            if (currentPos < ElevatorConstants.ELEVATOR_MAX_HEIGHT || currentPos > ElevatorConstants.ELEVATOR_MIN_HEIGHT) {
+                elevatorMotor1.set(0);
+            }
         }
     }
-
 }

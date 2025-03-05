@@ -23,7 +23,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public ClimbSubsystem() {
 
         // if (RobotBase.isReal()) {
-        climbMotor1 = new SparkMax(CAN.CLIMB_MOTOR, MotorType.kBrushed);
+        climbMotor1 = new SparkMax(CAN.CLIMB_MOTOR, MotorType.kBrushless);
 
         climbMotor1Controller = climbMotor1.getClosedLoopController();
 

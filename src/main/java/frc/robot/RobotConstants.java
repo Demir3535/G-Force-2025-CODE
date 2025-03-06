@@ -88,10 +88,7 @@ public final class RobotConstants {
 
                 }
 
-                public static final double P = 2.5;
-                public static final double I = 0;
-                public static final double D = 0;
-
+               
         }
 
         public static final class LimelightConstants { // TODO LL constants for robot

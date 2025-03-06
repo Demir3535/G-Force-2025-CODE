@@ -9,7 +9,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotConstants.ClimbConstans;
-import frc.robot.RobotConstants.ShooterConstants;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import com.revrobotics.spark.SparkBase.ResetMode;
 

@@ -26,7 +26,7 @@ public class WristSubsystem extends SubsystemBase {
     SparkMaxConfig wristMotorConfig;
     static SparkClosedLoopController wristMotorController;
     private double targetSetpoint = 0;
-    
+
     public WristSubsystem() {
 
         wristMotor = new SparkMax(CAN.WRIST_MOTOR, MotorType.kBrushless);
@@ -50,36 +50,17 @@ public class WristSubsystem extends SubsystemBase {
     }
 
     public void goToSetpoint(double setpoint) {
-        // Limitlere göre setpoint değerini sınırla
-        double limitedSetpoint = limitSetpoint(setpoint);
-        this.targetSetpoint = limitedSetpoint;
-
-       
+        // Setpoint değerini doğrudan kullan (limit kontrolü yok)
+        this.targetSetpoint = setpoint;
+        
         if (RobotBase.isReal()) {
-            wristMotorController.setReference(limitedSetpoint, ControlType.kMAXMotionPositionControl);
+            wristMotorController.setReference(setpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0);
         }
-    }
-    
-    // Setpoint değerini WristConstants içindeki limitlere göre sınırla
-    private double limitSetpoint(double setpoint) {
-        if (setpoint > WristConstants.WRIST_MAX_ANGLE) {
-            return WristConstants.WRIST_MAX_ANGLE;
-        } else if (setpoint < WristConstants.WRIST_MIN_ANGLE) {
-            return WristConstants.WRIST_MIN_ANGLE;
-        }
-        return setpoint;
     }
 
     public void moveAtSpeed(double speed) {
-        // Encoder değeri limitlere ulaştıysa o yönde hareketi durdur
-        double currentPosition = getEncoderValue();
-        
-        if ((currentPosition >= WristConstants.WRIST_MAX_ANGLE && speed > 0) || 
-            (currentPosition <= WristConstants.WRIST_MIN_ANGLE && speed < 0)) {
-            wristMotor.set(0);
-        } else {
-            wristMotor.set(speed * .5);
-        }
+        // Limit kontrolü olmadan direkt hız ayarı
+        wristMotor.set(speed * .5);
     }
 
     public Command goToCoralScoreSetpoint(int level) {
@@ -101,7 +82,7 @@ public class WristSubsystem extends SubsystemBase {
         }, this);
     }
 
-    public void setEncoderValue(double value){
+    public void setEncoderValue(double value) {
         wristMotor.getEncoder().setPosition(value);
     }
 
@@ -145,16 +126,13 @@ public class WristSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Wrist Motor Output", wristMotor.getAppliedOutput());
             SmartDashboard.putBoolean("Wrist At Upper Limit", getEncoderValue() >= WristConstants.WRIST_MAX_ANGLE);
             SmartDashboard.putBoolean("Wrist At Lower Limit", getEncoderValue() <= WristConstants.WRIST_MIN_ANGLE);
-            
+            SmartDashboard.putNumber("wrist encoder pos", wristMotor.getEncoder().getPosition());
+            SmartDashboard.putNumber("wrist encoder pos1", wristMotor.getEncoder().getPosition());
+
             // Hedef değerini kontrol et ve gerekirse tekrar gönder
             double currentPos = getEncoderValue();
             if (Math.abs(currentPos - targetSetpoint) > 0.5) {
                 wristMotorController.setReference(targetSetpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0);
-            }
-            
-            // Eğer encoder değeri limitlerin ötesindeyse, motoru durdur
-            if (currentPos > WristConstants.WRIST_MAX_ANGLE || currentPos < WristConstants.WRIST_MIN_ANGLE) {
-                wristMotor.set(0);
             }
         }
     }

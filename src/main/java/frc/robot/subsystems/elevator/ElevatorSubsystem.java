@@ -35,7 +35,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor2 = new SparkMax(CAN.ELEVATOR_MOTOR_2, MotorType.kBrushless);
 
         elevatorMotor1Controller = elevatorMotor1.getClosedLoopController();
-
         elevatorMotor1Config = new SparkMaxConfig();
         elevatorMotor2Config = new SparkMaxConfig();
 
@@ -44,7 +43,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.1, 0.0, .9);
+        elevatorMotor2Config.closedLoop.pid(0.1, 0.0, .9);
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 

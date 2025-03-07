@@ -55,7 +55,7 @@ public final class RobotConstants {
         }
 
         public static final class ElevatorConstants { // TODO elevator settings
-                public static final double ELEVATOR_MAX_HEIGHT = -112;
+                public static final double ELEVATOR_MAX_HEIGHT = -150;
                 public static final double ELEVATOR_MIN_HEIGHT = -0.2;
 
                 public static final class HeightSetpoints {
@@ -299,7 +299,7 @@ public final class RobotConstants {
                         public static final int REAR_RIGHT_CANCODERID = 4;
 
                         public static final int ELEVATOR_MOTOR_1 = 14;
-                        public static final int ELEVATOR_MOTOR_2 = 15;
+                        public static final int ELEVATOR_MOTOR_2 = 13;
 
                         public static final int SHOOTER_MOTOR_1 = 16;
 
@@ -324,8 +324,8 @@ public final class RobotConstants {
 
                 public static class Controller {
                         public static final double JOYSTICK_AXIS_THRESHOLD = 0.2;
-                        public static final int DRIVE_JOYSTICK = 0;
-                        public static final int OPERATOR_JOYSTICK = 1;
+                        public static final int DRIVE_JOYSTICK = 1;
+                        public static final int OPERATOR_JOYSTICK = 0;
 
                         // Joystick Axis
                         public static final int DRIVE_COMMAND_X_AXIS = 0;

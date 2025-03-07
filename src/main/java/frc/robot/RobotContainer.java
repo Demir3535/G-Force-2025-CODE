@@ -109,7 +109,6 @@ public class RobotContainer {
                 );
                 new JoystickButton(operatorJoystick, 4)
                                 .onTrue(new InstantCommand(() -> {
-                                        SmartDashboard.putBoolean("Triangle Button Pressed", true);
                                         shooterSubsystem.shooterButton();
                                 }));
 

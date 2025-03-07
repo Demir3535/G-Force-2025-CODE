@@ -71,12 +71,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if (!gameElementDetected && !isShooterRunning) {
             SmartDashboard.putString("Shooter State", "Starting Intake");
-            moveAtSpeed(0.25);
+            moveAtSpeed(-0.25);
             readyToShoot = false;
         } else if (readyToShoot && gameElementDetected) {
             isShooting = true;
             SmartDashboard.putString("Shooter State", "Shooting");
-            moveAtSpeed(0.25);
+            moveAtSpeed(-0.25);
             readyToShoot = false;
         } else if (isShooterRunning) {
             SmartDashboard.putString("Shooter State", "Stopping");
@@ -88,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Reverse Button Pressed", true);
         SmartDashboard.putString("Shooter State", "Reversing");
 
-        moveAtSpeed(-0.25);
+        moveAtSpeed(0.25);
 
         readyToShoot = false;
     }

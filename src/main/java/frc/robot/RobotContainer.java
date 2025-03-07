@@ -83,11 +83,11 @@ public class RobotContainer {
                         System.out.println("Running...");
                 }));
                 NamedCommands.registerCommand("Score L1",
-                                AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
+                                AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem,wristSubsystem));
                 NamedCommands.registerCommand("Score L2",
                                 AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
                 NamedCommands.registerCommand("Score L3",
-                                AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
+                                AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem,wristSubsystem));
                 NamedCommands.registerCommand("CoralIn", shooterSubsystem.intakeCoral());
                 NamedCommands.registerCommand("CoralOut", shooterSubsystem.shootCoral());
                 NamedCommands.registerCommand("ProcessorHome",
@@ -112,7 +112,7 @@ public class RobotContainer {
                                         shooterSubsystem.shooterButton();
                                 }));
 
-                new JoystickButton(operatorJoystick, 3)
+              /* */  new JoystickButton(operatorJoystick, 3)
                                 .whileTrue(new InstantCommand(() -> {
                                         SmartDashboard.putBoolean("Circle Button Pressed", true);
                                         shooterSubsystem.reverseShooter();
@@ -123,11 +123,12 @@ public class RobotContainer {
                         shooterSubsystem.stopShooter();
                 }));
                 new POVButton(operatorJoystick, 0)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem,wristSubsystem));
                 new POVButton(operatorJoystick, 90)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,wristSubsystem));
                 new POVButton(operatorJoystick, 180)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem,wristSubsystem));
+
 
                 new JoystickButton(operatorJoystick, 1)
                                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))

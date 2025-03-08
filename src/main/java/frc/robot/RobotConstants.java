@@ -55,18 +55,18 @@ public final class RobotConstants {
         }
 
         public static final class ElevatorConstants { // TODO elevator settings
-                public static final double ELEVATOR_MAX_HEIGHT = -150;
-                public static final double ELEVATOR_MIN_HEIGHT = -0.2;
+                public static final double ELEVATOR_MAX_HEIGHT = -90;
+                public static final double ELEVATOR_MIN_HEIGHT = 1;
 
                 public static final class HeightSetpoints {
 
-                        public static final double HOME = -3;
+                        public static final double HOME = -0.1;
                         public static final double HP = -50;
 
                         public static final class Coral {
-                                public static final double L1 = 5;
-                                public static final double L2 = 75;
-                                public static final double L3 = 114;
+                                public static final double L1 = -10;
+                                public static final double L2 = -75;
+                                public static final double L3 = -80;
                                 public static final double HOME = 0;
                         }
 
@@ -78,7 +78,7 @@ public final class RobotConstants {
                 }
 
                 public static final double MAX_MOTOR_RPM = 5670;
-                public static final double MAX_MOTOR_ACCELERATION = 3000.0;
+                public static final double MAX_MOTOR_ACCELERATION = 10000.0;
 
                 public static final class SimConstants {
                         public static final double L1 = 0.2;
@@ -126,17 +126,17 @@ public final class RobotConstants {
         }
 
         public static final class WristConstants { // TODO wrist constants for robot
-                public static final double WRIST_MIN_ANGLE = -10.0; // Alt limit
+                public static final double WRIST_MIN_ANGLE = -1; // Alt limit
                 public static final double WRIST_MAX_ANGLE = 70.0;  // Üst limit - Intake için gerekli maksimum değer
               
                 public static final class AngleSetpoints {
-                        public static final double HOME = -5;
-                        public static final double HP = -10.0;
+                        public static final double HOME = 1;
+                        public static final double HP = 70;
 
                         public static final class Coral {
-                                public static final double L1 = 9;
+                                public static final double L1 = 11;
                                 public static final double L2 = 9;
-                                public static final double L3 = 9;
+                                public static final double L3 = 1;
                         }
 
                         public static final class Algae {
@@ -290,7 +290,7 @@ public final class RobotConstants {
 
                         public static final int FRONT_LEFT_TURNING = 9;
                         public static final int REAR_LEFT_TURNING = 11;
-                        public static final int FRONT_RIGHT_TURNING = 10;
+                        public static final int FRONT_RIGHT_TURNING = 21;
                         public static final int REAR_RIGHT_TURNING = 12;
 
                         public static final int FRONT_LEFT_CANCODERID = 1;

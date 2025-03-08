@@ -29,7 +29,9 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.automation.AutomationSelector;
+import frc.robot.RobotConstants.ElevatorConstants;
 import frc.robot.RobotConstants.PortConstants.CAN;
+import frc.robot.RobotConstants.WristConstants;
 import frc.robot.automation.AutomatedScoring;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.commands.drive.LimelightDriveCommand;
@@ -83,11 +85,11 @@ public class RobotContainer {
                         System.out.println("Running...");
                 }));
                 NamedCommands.registerCommand("Score L1",
-                                AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem,wristSubsystem));
+                                AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem, wristSubsystem));
                 NamedCommands.registerCommand("Score L2",
                                 AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem));
                 NamedCommands.registerCommand("Score L3",
-                                AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem,wristSubsystem));
+                                AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem, wristSubsystem));
                 NamedCommands.registerCommand("CoralIn", shooterSubsystem.intakeCoral());
                 NamedCommands.registerCommand("CoralOut", shooterSubsystem.shootCoral());
                 NamedCommands.registerCommand("ProcessorHome",
@@ -109,10 +111,12 @@ public class RobotContainer {
                 );
                 new JoystickButton(operatorJoystick, 4)
                                 .onTrue(new InstantCommand(() -> {
+                                        SmartDashboard.putBoolean("Button 4 Button Pressed", true);
+
                                         shooterSubsystem.shooterButton();
                                 }));
 
-              /* */  new JoystickButton(operatorJoystick, 3)
+                /* */ new JoystickButton(operatorJoystick, 3)
                                 .whileTrue(new InstantCommand(() -> {
                                         SmartDashboard.putBoolean("Circle Button Pressed", true);
                                         shooterSubsystem.reverseShooter();
@@ -122,17 +126,50 @@ public class RobotContainer {
                 new JoystickButton(operatorJoystick, 3).whileFalse(new InstantCommand(() -> {
                         shooterSubsystem.stopShooter();
                 }));
-                new POVButton(operatorJoystick, 0)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem,wristSubsystem));
-                new POVButton(operatorJoystick, 90)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,wristSubsystem));
-                new POVButton(operatorJoystick, 180)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem,wristSubsystem));
+                /*
+                 * new POVButton(operatorJoystick, 0)
+                 * .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem,
+                 * wristSubsystem));
+                 * new POVButton(operatorJoystick, 90)
+                 * .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,
+                 * wristSubsystem));
+                 * new POVButton(operatorJoystick, 180)
+                 * .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem,
+                 * wristSubsystem));
+                 */
+                new POVButton(operatorJoystick, 270)
+                                .whileTrue(AutomatedScoring.scoreWristCoralPathing(3, wristSubsystem));
 
+                new JoystickButton(operatorJoystick, 2)
+                                .whileTrue(AutomatedScoring.scoreWristCoralPathing(1, wristSubsystem));
 
                 new JoystickButton(operatorJoystick, 1)
                                 .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
                                 .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
+
+                new POVButton(operatorJoystick, 0) 
+                                .whileTrue(AutomatedScoring.wristThenElevator(
+                                                WristConstants.AngleSetpoints.Coral.L1, // Wrist hedef encoder değeri
+                                                ElevatorConstants.HeightSetpoints.Coral.L1, // Elevator hedef yüksekliği
+                                                wristSubsystem,
+                                                elevatorSubsystem));
+
+                new POVButton(operatorJoystick, 90) 
+                                .whileTrue(AutomatedScoring.wristThenElevator(
+                                                WristConstants.AngleSetpoints.Coral.L2, // Wrist hedef encoder değeri
+                                                ElevatorConstants.HeightSetpoints.Coral.L2, // Elevator hedef yüksekliği
+                                                wristSubsystem,
+                                                elevatorSubsystem));
+
+                new POVButton(operatorJoystick, 180) 
+                                .whileTrue(AutomatedScoring.wristThenElevator(
+                                                WristConstants.AngleSetpoints.Coral.L2, // Wrist hedef encoder değeri
+                                                ElevatorConstants.HeightSetpoints.Coral.L2, // Elevator hedef yüksekliği
+                                                wristSubsystem,
+                                                elevatorSubsystem));
+
+                new POVButton(operatorJoystick, 270) // POV 90 derece (sağ yön)
+                                .whileTrue(AutomatedScoring.intakePosition(elevatorSubsystem, wristSubsystem));
 
         }
 

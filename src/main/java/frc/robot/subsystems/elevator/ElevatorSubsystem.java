@@ -35,6 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor2 = new SparkMax(CAN.ELEVATOR_MOTOR_2, MotorType.kBrushless);
 
         elevatorMotor1Controller = elevatorMotor1.getClosedLoopController();
+
         elevatorMotor1Config = new SparkMaxConfig();
         elevatorMotor2Config = new SparkMaxConfig();
 
@@ -43,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor2Config.closedLoop.pid(0.1, 0.0, .9);
+        elevatorMotor1Config.closedLoop.pid(0.1, 0.0, .9);
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
@@ -77,9 +78,19 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
+    public boolean atSetpoint() {
+        double currentPosition = getEncoderValue(); // Elevator'un mevcut pozisyonu
+        double tolerance = 1.0; // Tolerans değeri
+        return Math.abs(currentPosition - targetSetpoint) <= tolerance;
+    }
+
     public void setEncoderValue(double value) {
         // In rotations
         elevatorMotor1.getEncoder().setPosition(value);
+    }
+
+    public double getEncoderValue() {
+        return elevatorMotor1.getEncoder().getPosition();
     }
 
     public void setMotorVoltage(double volts) {

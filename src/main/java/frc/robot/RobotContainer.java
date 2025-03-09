@@ -174,8 +174,8 @@ public class RobotContainer {
 
                 new POVButton(operatorJoystick, 180)
                                 .whileTrue(AutomatedScoring.wristThenElevator(
-                                                WristConstants.AngleSetpoints.Coral.L2, // Wrist hedef encoder değeri
-                                                ElevatorConstants.HeightSetpoints.Coral.L2, // Elevator hedef yüksekliği
+                                                WristConstants.AngleSetpoints.Coral.L3, // Wrist hedef encoder değeri
+                                                ElevatorConstants.HeightSetpoints.Coral.L3, // Elevator hedef yüksekliği
                                                 wristSubsystem,
                                                 elevatorSubsystem));
 

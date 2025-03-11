@@ -55,19 +55,18 @@ public final class RobotConstants {
         }
 
         public static final class ElevatorConstants { // TODO elevator settings
-                public static final double ELEVATOR_MAX_HEIGHT = -90;
+                public static final double ELEVATOR_MAX_HEIGHT = -120;
                 public static final double ELEVATOR_MIN_HEIGHT = 1;
 
                 public static final class HeightSetpoints {
 
-                        public static final double HOME = -0.1;
+                        public static final double HOME = 2;
                         public static final double HP = -50;
 
                         public static final class Coral {
-                                public static final double L1 = -10;
-                                public static final double L2 = -75;
-                                public static final double L3 = -80;
-                                public static final double HOME = 0;
+                                public static final double L1 = -25;
+                                public static final double L2 = -65;
+                                public static final double L3 = -117;
                         }
 
                         public static final class Algae {
@@ -126,17 +125,17 @@ public final class RobotConstants {
         }
 
         public static final class WristConstants { // TODO wrist constants for robot
-                public static final double WRIST_MIN_ANGLE = -1; // Alt limit
+                public static final double WRIST_MIN_ANGLE = -60; // Alt limit
                 public static final double WRIST_MAX_ANGLE = 70.0;  // Üst limit - Intake için gerekli maksimum değer
               
                 public static final class AngleSetpoints {
-                        public static final double HOME = 1;
+                        public static final double HOME = 1.7;
                         public static final double HP = 70;
 
                         public static final class Coral {
-                                public static final double L1 = 11;
-                                public static final double L2 = 9;
-                                public static final double L3 = 1;
+                                public static final double L1 =4.4;
+                                public static final double L2 = 4.4;
+                                public static final double L3 = 4.4;
                         }
 
                         public static final class Algae {

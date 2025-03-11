@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.1, 0.0, .9);
+        elevatorMotor1Config.closedLoop.pid(0.01, 0.0, 0.5);
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 

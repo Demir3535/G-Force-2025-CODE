@@ -11,15 +11,13 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.wpilibj.RobotBase;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotConstants.ElevatorConstants;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.RobotConstants.WristConstants;
-import frc.robot.subsystems.ElevatorWristSim;
-
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 @Logged
@@ -28,8 +26,9 @@ public class WristSubsystem extends SubsystemBase {
     SparkMaxConfig wristMotorConfig;
     static SparkClosedLoopController wristMotorController;
     private double targetSetpoint = 0;
-
+    
     public WristSubsystem() {
+
         wristMotor = new SparkMax(CAN.WRIST_MOTOR, MotorType.kBrushless);
 
         wristMotorController = wristMotor.getClosedLoopController();
@@ -42,23 +41,28 @@ public class WristSubsystem extends SubsystemBase {
 
         wristMotorConfig.closedLoop.maxMotion.allowedClosedLoopError(.5);
 
-        // PID değerlerini güncelledim (daha iyi hedefte kalma için)
-        wristMotorConfig.closedLoop.pid(0.2, 0.001, 0.1); // P, I, D değerleri
+        wristMotorConfig.closedLoop.pid(0.15, 0.0, 0.0);
 
         wristMotor.configure(wristMotorConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-        // Simülasyon kombinasyonu, RobotContainer'da yapılıyor
+        // The sim combination of wrist and elevator init is done in the RobotContainer
     }
 
     public void goToSetpoint(double setpoint) {
+        // Limitlere göre setpoint değerini sınırla
         double limitedSetpoint = limitSetpoint(setpoint);
         this.targetSetpoint = limitedSetpoint;
-    
+
+       
         if (RobotBase.isReal()) {
-            double gravityFeedforward = 0.1; // Yerçekimi feedforward'u
-            wristMotorController.setReference(limitedSetpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, gravityFeedforward);
+            wristMotorController.setReference(limitedSetpoint, ControlType.kMAXMotionPositionControl);
         }
+    }
+    public boolean atSetpoint() {
+        double currentPosition = getEncoderValue(); // Elevator'un mevcut pozisyonu
+        double tolerance = 1.0; // Tolerans değeri
+        return Math.abs(currentPosition - targetSetpoint) <= tolerance;
     }
     // Setpoint değerini WristConstants içindeki limitlere göre sınırla
     private double limitSetpoint(double setpoint) {
@@ -73,7 +77,7 @@ public class WristSubsystem extends SubsystemBase {
     public void moveAtSpeed(double speed) {
         // Encoder değeri limitlere ulaştıysa o yönde hareketi durdur
         double currentPosition = getEncoderValue();
-
+        
         if ((currentPosition >= WristConstants.WRIST_MAX_ANGLE && speed > 0) || 
             (currentPosition <= WristConstants.WRIST_MIN_ANGLE && speed < 0)) {
             wristMotor.set(0);
@@ -93,16 +97,15 @@ public class WristSubsystem extends SubsystemBase {
                 } else if (level == 3) {
                     setpoint = WristConstants.AngleSetpoints.Coral.L3;
                 } else {
-                    setpoint = WristConstants.AngleSetpoints.HOME;
+                    setpoint = WristConstants.AngleSetpoints.Coral.L1;
                 }
                 goToSetpoint(setpoint);
-            } else {
-                ElevatorWristSim.goToScoreSetpoint(level);
             }
+
         }, this);
     }
 
-    public void setEncoderValue(double value) {
+    public void setEncoderValue(double value){
         wristMotor.getEncoder().setPosition(value);
     }
 
@@ -119,6 +122,7 @@ public class WristSubsystem extends SubsystemBase {
                 }
                 goToSetpoint(setpoint);
             }
+
         }, this);
     }
 
@@ -127,18 +131,12 @@ public class WristSubsystem extends SubsystemBase {
             if (RobotBase.isReal()) {
                 goToSetpoint(WristConstants.AngleSetpoints.HP);
             }
+
         }, this);
     }
 
     public double getEncoderValue() {
         return wristMotor.getEncoder().getPosition();
-    }
-
-    // Wrist'in hedefte olup olmadığını kontrol eden metodu ekledim
-    public boolean atSetpoint() {
-        double currentPosition = getEncoderValue();
-        double tolerance = 1.0; // Tolerans değeri
-        return Math.abs(currentPosition - targetSetpoint) <= tolerance;
     }
 
     @Override
@@ -151,20 +149,15 @@ public class WristSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Wrist Motor Output", wristMotor.getAppliedOutput());
             SmartDashboard.putBoolean("Wrist At Upper Limit", getEncoderValue() >= WristConstants.WRIST_MAX_ANGLE);
             SmartDashboard.putBoolean("Wrist At Lower Limit", getEncoderValue() <= WristConstants.WRIST_MIN_ANGLE);
-
+            
             // Hedef değerini kontrol et ve gerekirse tekrar gönder
             double currentPos = getEncoderValue();
             if (Math.abs(currentPos - targetSetpoint) > 0.5) {
-                wristMotorController.setReference(targetSetpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, 0);
+                wristMotorController.setReference(targetSetpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0);
             }
-
+            
             // Eğer encoder değeri limitlerin ötesindeyse, motoru durdur
             if (currentPos > WristConstants.WRIST_MAX_ANGLE || currentPos < WristConstants.WRIST_MIN_ANGLE) {
-                wristMotor.set(0);
-            }
-
-            // Eğer wrist hedefteyse, motor çıkışını sıfırla (ekledim)
-            if (atSetpoint()) {
                 wristMotor.set(0);
             }
         }

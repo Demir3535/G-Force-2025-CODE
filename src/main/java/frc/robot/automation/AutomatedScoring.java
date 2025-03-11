@@ -106,14 +106,13 @@ public class AutomatedScoring {
 
     public static Command intakePosition(ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {
         return new SequentialCommandGroup(
-            // 1. Adım: Elevator'ı intake pozisyonuna indir
-            new InstantCommand(() -> elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.HOME)),
-            // Elevator hedefine ulaşana kadar bekle
-            new WaitUntilCommand(() -> elevatorSubsystem.atSetpoint()),
-            
-            // 2. Adım: Wrist'i düzelt
-            new InstantCommand(() -> wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.HOME))
-        );
+                // 1. Adım: Elevator'ı intake pozisyonuna indir
+                new InstantCommand(() -> elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.HOME)),
+                // Elevator hedefine ulaşana kadar bekle
+                new WaitUntilCommand(() -> elevatorSubsystem.atSetpoint()),
+
+                // 2. Adım: Wrist'i düzelt
+                new InstantCommand(() -> wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.HOME)));
     }
 
     public static Command scoreWristCoralPathing(int height, WristSubsystem wristSubsystem) {
@@ -126,7 +125,9 @@ public class AutomatedScoring {
             } else if (height == 2) {
                 wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.Coral.L2);
             } else if (height == 3) {
-                wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.Coral.L3);
+                wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.Coral.L2);
+            } else if (height == 0) {
+                wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.HOME);
             }
         }, wristSubsystem);
     }
@@ -143,6 +144,8 @@ public class AutomatedScoring {
                 elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.Coral.L2);
             } else if (height == 3) {
                 elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.Coral.L3);
+            } else if (height == 0) {
+                elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.HOME);
             }
         }, elevatorSubsystem);
     }

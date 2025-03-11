@@ -79,14 +79,13 @@ public class RobotContainer {
                 }
         }
 
-           private void updateMatchTime() {
-        // Maç süresini al
-        double matchTime = DriverStation.getMatchTime();
+        private void updateMatchTime() {
+                // Maç süresini al
+                double matchTime = DriverStation.getMatchTime();
 
-        // Shuffleboard'a yaz
-        SmartDashboard.putNumber("Match Time", matchTime);
-    }
-
+                // Shuffleboard'a yaz
+                SmartDashboard.putNumber("Match Time", matchTime);
+        }
 
         private void createNamedCommands() {
                 // Add commands here to be able to execute in auto through pathplanner
@@ -126,62 +125,59 @@ public class RobotContainer {
                                         shooterSubsystem.shooterButton();
                                 }));
 
-                 new JoystickButton(operatorJoystick, 3)
+                new JoystickButton(operatorJoystick, 1)
                                 .onTrue(new InstantCommand(() -> {
-                                        SmartDashboard.putBoolean("Circle Button Pressed", true);
+                                        SmartDashboard.putBoolean("KARE  Button Pressed", true);
                                         shooterSubsystem.reverseShooter();
 
                                 }));
 
-                new JoystickButton(operatorJoystick, 3).onFalse(new InstantCommand(() -> {
+                new JoystickButton(operatorJoystick, 1).onFalse(new InstantCommand(() -> {
                         shooterSubsystem.stopShooter();
                 }));
-                /*
-                 * new POVButton(operatorJoystick, 0)
-                 * .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem,
-                 * wristSubsystem));
-                 * new POVButton(operatorJoystick, 90)
-                 * .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,
-                 * wristSubsystem));
-                 * new POVButton(operatorJoystick, 180)
-                 * .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem,
-                 * wristSubsystem));
-                 *
-                 * new POVButton(operatorJoystick, 270)
-                 * .whileTrue(AutomatedScoring.scoreWristCoralPathing(3, wristSubsystem));
-                 */
-
-                new JoystickButton(operatorJoystick, 2)
-                                .whileTrue(AutomatedScoring.scoreWristCoralPathing(1, wristSubsystem));
-
-                new JoystickButton(operatorJoystick, 1)
-                                .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
-                                .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
 
                 new POVButton(operatorJoystick, 0)
-                                .whileTrue(AutomatedScoring.wristThenElevator(
-                                                WristConstants.AngleSetpoints.Coral.L1, // Wrist hedef encoder değeri
-                                                ElevatorConstants.HeightSetpoints.Coral.L1, // Elevator hedef yüksekliği
-                                                wristSubsystem,
-                                                elevatorSubsystem));
-
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(3, elevatorSubsystem,
+                                                wristSubsystem));
                 new POVButton(operatorJoystick, 90)
-                                .whileTrue(AutomatedScoring.wristThenElevator(
-                                                WristConstants.AngleSetpoints.Coral.L2, // Wrist hedef encoder değeri
-                                                ElevatorConstants.HeightSetpoints.Coral.L2, // Elevator hedef yüksekliği
-                                                wristSubsystem,
-                                                elevatorSubsystem));
-
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,
+                                                wristSubsystem));
                 new POVButton(operatorJoystick, 180)
-                                .whileTrue(AutomatedScoring.wristThenElevator(
-                                                WristConstants.AngleSetpoints.Coral.L3, // Wrist hedef encoder değeri
-                                                ElevatorConstants.HeightSetpoints.Coral.L3, // Elevator hedef yüksekliği
-                                                wristSubsystem,
-                                                elevatorSubsystem));
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem,
+                                                wristSubsystem));
+                new POVButton(operatorJoystick, 270)
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(0, elevatorSubsystem, wristSubsystem));
 
-                new POVButton(operatorJoystick, 270) // POV 90 derece (sağ yön)
-                                .whileTrue(AutomatedScoring.intakePosition(elevatorSubsystem, wristSubsystem));
+                new JoystickButton(operatorJoystick, 2)
+                                .whileTrue(AutomatedScoring.scoreWristCoralPathing(0, wristSubsystem));
 
+                new JoystickButton(operatorJoystick, 3)
+                                .whileTrue(AutomatedScoring.scoreWristCoralPathing(3, wristSubsystem));
+
+                new JoystickButton(operatorJoystick, 5)
+                                .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
+                                .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
+                // elevator binds
+
+                /*
+                 * new POVButton(operatorJoystick, 90)
+                 * .whileTrue(AutomatedScoring.wristThenElevator(
+                 * WristConstants.AngleSetpoints.Coral.L2, // Wrist hedef encoder değeri
+                 * ElevatorConstants.HeightSetpoints.Coral.L2, // Elevator hedef yüksekliği
+                 * wristSubsystem,
+                 * elevatorSubsystem));
+                 * 
+                 * new POVButton(operatorJoystick, 180)
+                 * .whileTrue(AutomatedScoring.wristThenElevator(
+                 * WristConstants.AngleSetpoints.Coral.L1, // Wrist hedef encoder değeri
+                 * ElevatorConstants.HeightSetpoints.Coral.L1, // Elevator hedef yüksekliği
+                 * wristSubsystem,
+                 * elevatorSubsystem));
+                 * 
+                 * new POVButton(operatorJoystick, 270) // POV 90 derece (sağ yön)
+                 * .whileTrue(AutomatedScoring.intakePosition(elevatorSubsystem,
+                 * wristSubsystem));
+                 */
         }
 
         public Command getAutonomousCommand() {

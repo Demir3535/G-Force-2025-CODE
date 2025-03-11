@@ -19,6 +19,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Wrist Level"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Score L3"
           }
         },
@@ -53,6 +59,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Wrist Home"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "sağ çap soruce"
@@ -62,6 +74,12 @@
           "type": "named",
           "data": {
             "name": "CoralIn"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wrist Shooter"
           }
         },
         {
@@ -86,6 +104,12 @@
           "type": "wait",
           "data": {
             "waitTime": 0.3
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wrist Home"
           }
         },
         {

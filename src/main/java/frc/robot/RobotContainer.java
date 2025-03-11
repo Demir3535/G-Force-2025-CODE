@@ -104,6 +104,8 @@ public class RobotContainer {
                 NamedCommands.registerCommand("ProcessorHome",
                                 AutomatedScoring.homeSubsystems(elevatorSubsystem, wristSubsystem));
                 NamedCommands.registerCommand("StopShooter", shooterSubsystem.PPstopshooter());
+                NamedCommands.registerCommand("Wrist Shooter", AutomatedScoring.scoreWristCoralPathing(2 , wristSubsystem));
+                NamedCommands.registerCommand("Wrist Home", AutomatedScoring.scoreWristCoralPathing(0 , wristSubsystem));
         }
 
         private void configureButtonBindings() {

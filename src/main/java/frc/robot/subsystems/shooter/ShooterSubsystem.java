@@ -3,7 +3,6 @@ package frc.robot.subsystems.shooter;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -18,9 +17,6 @@ public class ShooterSubsystem extends SubsystemBase {
     private DigitalInput limitSwitch;
     private boolean isShooterRunning = false;
     private boolean gameElementDetected = false;
-    private boolean lastLimitSwitchState = false;
-    private double limitSwitchChangeTime = 0;
-    private final double LIMIT_SWITCH_DELAY = 0.5; // 500 ms gecikme
     private PWM blinkinController;
     private static final double RED = -0.41;
     private static final double GREEN = -0.05;
@@ -35,39 +31,29 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // Limit switch'in güncel durumunu al
-        boolean currentLimitSwitchState = limitSwitch.get();
-        
-        // Eğer limit switch durumu değiştiyse zamanı kaydet
-        if (currentLimitSwitchState != lastLimitSwitchState) {
-            lastLimitSwitchState = currentLimitSwitchState;
-            limitSwitchChangeTime = Timer.getFPGATimestamp();
-        }
-        
-        // Limit switch durumu yeterince uzun süredir değişmediyse güncelleyelim
-        if (Timer.getFPGATimestamp() - limitSwitchChangeTime >= LIMIT_SWITCH_DELAY) {
-            gameElementDetected = currentLimitSwitchState;
-        }
+        // Check limit switch status
+        gameElementDetected = limitSwitch.get();
 
         // If game piece is detected and motor is in intake mode, stop the motor
         if (isShooting && !gameElementDetected) {
             stopShooter();
             isShooting = false;
+
         } else if (isShooting) {
-            // Do nothing
-        } else if (gameElementDetected && isShooterRunning && !readyToShoot) {
+
+        }
+
+        else if (gameElementDetected && isShooterRunning && !readyToShoot) {
+
             stopShooter();
             readyToShoot = true; // Ready to shoot
         }
-        
         updateLEDStatus();
         // Debug information
-        SmartDashboard.putBoolean("Raw Limit Switch", currentLimitSwitchState);
-        SmartDashboard.putBoolean("Debounced Limit Switch", gameElementDetected);
+        SmartDashboard.putBoolean("Limit Switch Status", limitSwitch.get());
         SmartDashboard.putBoolean("Is Shooter Running", isShooterRunning);
         SmartDashboard.putBoolean("Game Element Detected", gameElementDetected);
         SmartDashboard.putBoolean("Ready To Shoot", readyToShoot);
-        SmartDashboard.putNumber("Limit Switch Stable Time", Timer.getFPGATimestamp() - limitSwitchChangeTime);
     }
 
     private void updateLEDStatus() {
@@ -111,7 +97,6 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor.set(speed);
         isShooterRunning = true;
     }
-    
     public Command intakeCoral() {
         return new InstantCommand(() -> {
             moveAtSpeed(.5);
@@ -123,7 +108,6 @@ public class ShooterSubsystem extends SubsystemBase {
             moveAtSpeed(1);
         }, this);
     }
-    
     public void stopShooter() {
         shooterMotor.set(0);
         isShooterRunning = false;

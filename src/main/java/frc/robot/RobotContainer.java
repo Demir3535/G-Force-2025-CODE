@@ -122,11 +122,11 @@ public class RobotContainer {
                                 new AutoIntakeCommand(shooterSubsystem, 0.25, 3.0));
                 NamedCommands.registerCommand("test",
                                 new SequentialCommandGroup(
-                                                new IntakeShootCoral(shooterSubsystem , true),
+                                                new IntakeShootCoral(shooterSubsystem, true),
                                                 AutomatedScoring.scoreWristCoralPathing(2, wristSubsystem),
-                                                AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem),
-                                                new IntakeShootCoral(shooterSubsystem, true)
-                                        ));
+                                                AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem,
+                                                                wristSubsystem),
+                                                new IntakeShootCoral(shooterSubsystem, true)));
 
         }
 
@@ -156,12 +156,14 @@ public class RobotContainer {
 
                                 }));
 
+                new JoystickButton(operatorJoystick, 5)
+                                .onTrue(shooterSubsystem.emergencyShootCommand());
                 // new JoystickButton(operatorJoystick, 1)
-                //                 .whileTrue(new InstantCommand(() -> {
-                //                         SmartDashboard.putBoolean("Button 1 Button Pressed", true);
+                // .whileTrue(new InstantCommand(() -> {
+                // SmartDashboard.putBoolean("Button 1 Button Pressed", true);
 
-                //                         shooterSubsystem.shooterButtonNoLimit();
-                //                 }));
+                // shooterSubsystem.shooterButtonNoLimit();
+                // }));
 
                 new JoystickButton(operatorJoystick, 1).whileFalse(new InstantCommand(() -> {
                         shooterSubsystem.stopShooter();

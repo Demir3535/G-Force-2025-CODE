@@ -84,25 +84,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
-    public void shooterButtonNoLimit() {
-        // Debug info
-        SmartDashboard.putBoolean("Button Pressed", true);
-        SmartDashboard.putNumber("Motor Output", shooterMotor.get());
-
-        if (gameElementDetected && !isShooterRunning) {
-            SmartDashboard.putString("Shooter State", "Starting Intake");
-            moveAtSpeed(-0.50);
-            readyToShoot = false;
-        } else if (readyToShoot && gameElementDetected) {
-            isShooting = true;
-            SmartDashboard.putString("Shooter State", "Shooting");
-            moveAtSpeed(-0.50);
-            readyToShoot = false;
-        } else if (isShooterRunning) {
-            SmartDashboard.putString("Shooter State", "Stopping");
-            stopShooter();
-        }
-    }
+   
 
     public Command ShootAuto() {
         return new InstantCommand(() -> {
@@ -118,6 +100,20 @@ public class ShooterSubsystem extends SubsystemBase {
         moveAtSpeed(0.40);
 
         readyToShoot = false;
+    }
+
+    public void emergencyShoot() {
+        SmartDashboard.putString("Shooter State", "Emergency Shooting");
+        // Limit switch'in durumuna bakmaksızın doğrudan atış yapar
+        moveAtSpeed(-0.50); // veya istediğiniz başka bir değer
+        isShooting = true;
+        readyToShoot = false;
+    }
+
+    public Command emergencyShootCommand() {
+        return new InstantCommand(() -> {
+            emergencyShoot();
+        }, this);
     }
 
     public void moveAtSpeed(double speed) {

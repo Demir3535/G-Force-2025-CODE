@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotConstants.PortConstants.CAN;
 import frc.robot.RobotConstants.WristConstants;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 @Logged
@@ -26,6 +28,12 @@ public class WristSubsystem extends SubsystemBase {
     SparkMaxConfig wristMotorConfig;
     static SparkClosedLoopController wristMotorController;
     private double targetSetpoint = 0;
+    private boolean isAtSetpoint = false;
+private long timeAtSetpoint = 0;
+private static final double POSITION_TOLERANCE = 2.0; // Daha büyük tolerans
+private static final long SETPOINT_STABLE_TIME_MS = 100; // 100ms stabil kalma süresi
+private static WristSubsystem instance;
+
     
     public WristSubsystem() {
 
@@ -59,11 +67,15 @@ public class WristSubsystem extends SubsystemBase {
             wristMotorController.setReference(limitedSetpoint, ControlType.kMAXMotionPositionControl);
         }
     }
-    public boolean atSetpoint() {
-        double currentPosition = getEncoderValue(); // Elevator'un mevcut pozisyonu
-        double tolerance = 1.0; // Tolerans değeri
-        return Math.abs(currentPosition - targetSetpoint) <= tolerance;
-    }
+   
+        public boolean atSetpoint() {
+            double currentPosition = getEncoderValue(); // Elevator'un mevcut pozisyonu
+            double tolerance = 1.0; // Tolerans değeri
+            return Math.abs(currentPosition - targetSetpoint) <= tolerance;
+       }
+
+   
+
     // Setpoint değerini WristConstants içindeki limitlere göre sınırla
     private double limitSetpoint(double setpoint) {
         if (setpoint > WristConstants.WRIST_MAX_ANGLE) {
@@ -85,7 +97,8 @@ public class WristSubsystem extends SubsystemBase {
             wristMotor.set(speed * .5);
         }
     }
-
+   
+        
     public Command goToCoralScoreSetpoint(int level) {
         return new InstantCommand(() -> {
             double setpoint;
@@ -104,6 +117,7 @@ public class WristSubsystem extends SubsystemBase {
 
         }, this);
     }
+
 
     public void setEncoderValue(double value){
         wristMotor.getEncoder().setPosition(value);

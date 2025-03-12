@@ -5,8 +5,13 @@
 package frc.robot;
 
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+
+import org.json.simple.JSONArray;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.drive.AutoPositionToTagCommand;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,7 +25,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AutoIntakeCommand;
+import frc.robot.commands.AutoShootCommand;
+import frc.robot.commands.IntakeShootCoral;
 import frc.robot.commands.RobotSystemsCheckCommand;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.commands.elevator.MoveElevatorManual;
@@ -36,7 +45,6 @@ import frc.robot.RobotConstants.WristConstants;
 import frc.robot.automation.AutomatedScoring;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.commands.drive.LimelightDriveCommand;
-
 //Subsystem imports
 //Command imports
 
@@ -104,8 +112,22 @@ public class RobotContainer {
                 NamedCommands.registerCommand("ProcessorHome",
                                 AutomatedScoring.homeSubsystems(elevatorSubsystem, wristSubsystem));
                 NamedCommands.registerCommand("StopShooter", shooterSubsystem.PPstopshooter());
-                NamedCommands.registerCommand("Wrist Shooter", AutomatedScoring.scoreWristCoralPathing(2 , wristSubsystem));
-                NamedCommands.registerCommand("Wrist Home", AutomatedScoring.scoreWristCoralPathing(0 , wristSubsystem));
+                NamedCommands.registerCommand("Wrist Shooter",
+                                AutomatedScoring.scoreWristCoralPathing(2, wristSubsystem));
+                NamedCommands.registerCommand("Wrist Home", AutomatedScoring.scoreWristCoralPathing(0, wristSubsystem));
+
+                NamedCommands.registerCommand("AutoShoot",
+                                new AutoShootCommand(shooterSubsystem, 1.0, 2.0)); // 1.0 hızda, 2 saniye süreyle atış
+                NamedCommands.registerCommand("AutoIntake",
+                                new AutoIntakeCommand(shooterSubsystem, 0.25, 3.0));
+                NamedCommands.registerCommand("test",
+                                new SequentialCommandGroup(
+                                                new IntakeShootCoral(shooterSubsystem , true),
+                                                AutomatedScoring.scoreWristCoralPathing(2, wristSubsystem),
+                                                AutomatedScoring.scoreCoralNoPathing(2, elevatorSubsystem, wristSubsystem),
+                                                new IntakeShootCoral(shooterSubsystem, true)
+                                        ));
+
         }
 
         private void configureButtonBindings() {
@@ -128,13 +150,20 @@ public class RobotContainer {
                                 }));
 
                 new JoystickButton(operatorJoystick, 1)
-                                .onTrue(new InstantCommand(() -> {
+                                .whileTrue(new InstantCommand(() -> {
                                         SmartDashboard.putBoolean("KARE  Button Pressed", true);
                                         shooterSubsystem.reverseShooter();
 
                                 }));
 
-                new JoystickButton(operatorJoystick, 1).onFalse(new InstantCommand(() -> {
+                // new JoystickButton(operatorJoystick, 1)
+                //                 .whileTrue(new InstantCommand(() -> {
+                //                         SmartDashboard.putBoolean("Button 1 Button Pressed", true);
+
+                //                         shooterSubsystem.shooterButtonNoLimit();
+                //                 }));
+
+                new JoystickButton(operatorJoystick, 1).whileFalse(new InstantCommand(() -> {
                         shooterSubsystem.stopShooter();
                 }));
 
@@ -148,43 +177,34 @@ public class RobotContainer {
                                 .whileTrue(AutomatedScoring.scoreCoralNoPathing(1, elevatorSubsystem,
                                                 wristSubsystem));
                 new POVButton(operatorJoystick, 270)
-                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(0, elevatorSubsystem, wristSubsystem));
+                                .whileTrue(AutomatedScoring.scoreCoralNoPathing(0, elevatorSubsystem,
+                                                wristSubsystem));
 
+                new JoystickButton(operatorJoystick, 5)
+                                .whileTrue(AutomatedScoring.scoreElevatorAlgea(2, elevatorSubsystem));
+
+                new JoystickButton(operatorJoystick, 7)
+                                .whileTrue(AutomatedScoring.scoreElevatorAlgea(3, elevatorSubsystem));
+
+                new JoystickButton(operatorJoystick, 6)
+                                .whileTrue(AutomatedScoring.scoreWristAlgeaPathing(1, wristSubsystem));
                 new JoystickButton(operatorJoystick, 2)
                                 .whileTrue(AutomatedScoring.scoreWristCoralPathing(0, wristSubsystem));
 
                 new JoystickButton(operatorJoystick, 3)
                                 .whileTrue(AutomatedScoring.scoreWristCoralPathing(3, wristSubsystem));
 
-                new JoystickButton(operatorJoystick, 5)
-                                .whileTrue(new RunCommand(() -> climbSubsystem.moveAtSpeed(1.0), climbSubsystem))
-                                .onFalse(new InstantCommand(() -> climbSubsystem.stopClimb(), climbSubsystem));
                 // elevator binds
 
-                /*
-                 * new POVButton(operatorJoystick, 90)
-                 * .whileTrue(AutomatedScoring.wristThenElevator(
-                 * WristConstants.AngleSetpoints.Coral.L2, // Wrist hedef encoder değeri
-                 * ElevatorConstants.HeightSetpoints.Coral.L2, // Elevator hedef yüksekliği
-                 * wristSubsystem,
-                 * elevatorSubsystem));
-                 * 
-                 * new POVButton(operatorJoystick, 180)
-                 * .whileTrue(AutomatedScoring.wristThenElevator(
-                 * WristConstants.AngleSetpoints.Coral.L1, // Wrist hedef encoder değeri
-                 * ElevatorConstants.HeightSetpoints.Coral.L1, // Elevator hedef yüksekliği
-                 * wristSubsystem,
-                 * elevatorSubsystem));
-                 * 
-                 * new POVButton(operatorJoystick, 270) // POV 90 derece (sağ yön)
-                 * .whileTrue(AutomatedScoring.intakePosition(elevatorSubsystem,
-                 * wristSubsystem));
-                 */
+                // new POVButton(operatorJoystick, 270) // POV 90 derece (sağ yön)
+                // .whileTrue(AutomatedScoring.intakePosition(elevatorSubsystem,
+                // wristSubsystem));
+
         }
 
         public Command getAutonomousCommand() {
                 if (m_autoPositionChooser.getSelected() != null) {
-                        return m_autoPositionChooser.getSelected();
+                        return new PathPlannerAuto("test2");
                 } else {
                         return m_drive.gyroReset();
                 }

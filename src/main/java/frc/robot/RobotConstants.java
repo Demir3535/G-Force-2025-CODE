@@ -60,18 +60,18 @@ public final class RobotConstants {
 
                 public static final class HeightSetpoints {
 
-                        public static final double HOME = 2;
+                        public static final double HOME = -1;
                         public static final double HP = -50;
 
                         public static final class Coral {
-                                public static final double L1 = -25;
-                                public static final double L2 = -65;
+                                public static final double L1 = -35;
+                                public static final double L2 = -74;
                                 public static final double L3 = -117;
                         }
 
                         public static final class Algae {
-                                public static final double L2 = -42;
-                                public static final double L3 = -70;
+                                public static final double L2 = -43;
+                                public static final double L3 = -83;
                         }
 
                 }
@@ -129,18 +129,18 @@ public final class RobotConstants {
                 public static final double WRIST_MAX_ANGLE = 70.0;  // Üst limit - Intake için gerekli maksimum değer
               
                 public static final class AngleSetpoints {
-                        public static final double HOME = 1.7;
+                        public static final double HOME = 0.8;
                         public static final double HP = 70;
 
                         public static final class Coral {
-                                public static final double L1 =4.4;
-                                public static final double L2 = 4.4;
-                                public static final double L3 = 4.4;
+                                public static final double L1 =4.3;
+                                public static final double L2 = 4.3;
+                                public static final double L3 = 4.3;
                         }
 
                         public static final class Algae {
-                                public static final double L2 = 12;
-                                public static final double L3 = 13.5;
+                                public static final double L2 = 21;
+                                public static final double L3 = 21;
                         }
                 }
 
@@ -365,8 +365,8 @@ public final class RobotConstants {
 
                 public static final double MAX_VELOCITY = 1.0; // Meters per second
                 public static final double MAX_ACCELERATION = 1.0; // Meters per second squared
-                public static final double MAX_ANGULAR_SPEED = 180.0; // Degrees per second
-                public static final double MAX_ANGULAR_ACCELERATION = 270.0; // Degrees per second squared
+                public static final double MAX_ANGULAR_SPEED = 46.0; // Degrees per second
+                public static final double MAX_ANGULAR_ACCELERATION = 90.0; // Degrees per second squared
         }
 
         public static final class SubsystemEnabledConstants {

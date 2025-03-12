@@ -99,7 +99,6 @@ public class AutomatedScoring {
                 // Önce wrist'i hedef encoder değerine getir
                 new InstantCommand(() -> wristSubsystem.goToSetpoint(wristSetpoint)),
                 // Wrist hedefine ulaşana kadar bekle
-                new WaitUntilCommand(() -> wristSubsystem.atSetpoint()),
                 // Sonra elevator'ı hedef yüksekliğe getir
                 new InstantCommand(() -> elevatorSubsystem.goToSetpoint(elevatorSetpoint)));
     }
@@ -109,10 +108,39 @@ public class AutomatedScoring {
                 // 1. Adım: Elevator'ı intake pozisyonuna indir
                 new InstantCommand(() -> elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.HOME)),
                 // Elevator hedefine ulaşana kadar bekle
-                new WaitUntilCommand(() -> elevatorSubsystem.atSetpoint()),
 
                 // 2. Adım: Wrist'i düzelt
                 new InstantCommand(() -> wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.HOME)));
+    }
+
+    public static Command scoreWristAlgeaPathing(int height, WristSubsystem wristSubsystem) {
+        RobotState.isAlgaeMode = false;
+
+        return new RunCommand(() -> {
+            // Sürekli olarak komut gönder
+            if (height == 1) {
+                wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.Algae.L2);
+            } else if (height == 2) {
+                wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.Algae.L2);
+            } else if (height == 3) {
+                wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.Algae.L2);
+            } else if (height == 0) {
+                wristSubsystem.goToSetpoint(WristConstants.AngleSetpoints.Algae.L2);
+            }
+        }, wristSubsystem);
+    }
+
+    public static Command scoreElevatorAlgea(int height, ElevatorSubsystem elevatorSubsystem) {
+        RobotState.isAlgaeMode = false;
+
+        return new RunCommand(() -> {
+            // Sürekli olarak komut gönder
+            if (height == 2) {
+                elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.Algae.L2);
+            } else if (height == 3) {
+                elevatorSubsystem.goToSetpoint(ElevatorConstants.HeightSetpoints.Algae.L3);
+            }
+        }, elevatorSubsystem);
     }
 
     public static Command scoreWristCoralPathing(int height, WristSubsystem wristSubsystem) {

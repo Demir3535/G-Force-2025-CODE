@@ -109,7 +109,7 @@ public class DriveSubsystem extends SubsystemBase {
                 swerveModules[0] = new SwerveModule(// Front Left
                         RobotConstants.PortConstants.CAN.FRONT_LEFT_DRIVING,
                         RobotConstants.PortConstants.CAN.FRONT_LEFT_TURNING,
-                        RobotConstants.PortConstants.CAN.FRONT_LEFT_CANCODERID, false);
+                        RobotConstants.PortConstants.CAN.FRONT_LEFT_CANCODERID, true); //swerve error çıkarsa burası TODO
 
                 swerveModules[1] = new SwerveModule( // Front Right
                         RobotConstants.PortConstants.CAN.FRONT_RIGHT_DRIVING,
@@ -174,8 +174,8 @@ public class DriveSubsystem extends SubsystemBase {
                                                      // feedforwards
                 new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for
                                                 // holonomic drive trains
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants  //TODO PID IMPORTANT VALUES FOR PATHPLANNER
-                        new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                        new PIDConstants(5.0, 0.0, 0), // Translation PID constants  //TODO PID IMPORTANT VALUES FOR PATHPLANNER
+                        new PIDConstants(0.05, 0.0, 0) // Rotation PID constants
                 ),
                 config, // The robot configuration
                 () -> {
@@ -257,6 +257,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Gyro", getGyroAngle());
     }
 
     private void updateOdometry() {

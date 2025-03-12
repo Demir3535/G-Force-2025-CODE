@@ -20,8 +20,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private PWM blinkinController;
     private static final double RED = -0.41;
     private static final double GREEN = -0.05;
-    private boolean isShooting = false;
-    private boolean readyToShoot = false; // Is game piece ready?
+    public boolean isShooting = false;
+    public boolean readyToShoot = false; // Is game piece ready?
 
     public ShooterSubsystem() {
         limitSwitch = new DigitalInput(DIO.SHOOTER_DISTANCE_SENSOR);
@@ -71,12 +71,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if (!gameElementDetected && !isShooterRunning) {
             SmartDashboard.putString("Shooter State", "Starting Intake");
-            moveAtSpeed(-0.25);
+            moveAtSpeed(-0.50);
             readyToShoot = false;
         } else if (readyToShoot && gameElementDetected) {
             isShooting = true;
             SmartDashboard.putString("Shooter State", "Shooting");
-            moveAtSpeed(-0.25);
+            moveAtSpeed(-0.50);
             readyToShoot = false;
         } else if (isShooterRunning) {
             SmartDashboard.putString("Shooter State", "Stopping");
@@ -84,11 +84,38 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
+    public void shooterButtonNoLimit() {
+        // Debug info
+        SmartDashboard.putBoolean("Button Pressed", true);
+        SmartDashboard.putNumber("Motor Output", shooterMotor.get());
+
+        if (gameElementDetected && !isShooterRunning) {
+            SmartDashboard.putString("Shooter State", "Starting Intake");
+            moveAtSpeed(-0.50);
+            readyToShoot = false;
+        } else if (readyToShoot && gameElementDetected) {
+            isShooting = true;
+            SmartDashboard.putString("Shooter State", "Shooting");
+            moveAtSpeed(-0.50);
+            readyToShoot = false;
+        } else if (isShooterRunning) {
+            SmartDashboard.putString("Shooter State", "Stopping");
+            stopShooter();
+        }
+    }
+
+    public Command ShootAuto() {
+        return new InstantCommand(() -> {
+            moveAtSpeed(1);
+        }, this);
+    }
+
+
     public void reverseShooter() {
         SmartDashboard.putBoolean("Reverse Button Pressed", true);
         SmartDashboard.putString("Shooter State", "Reversing");
 
-        moveAtSpeed(0.25);
+        moveAtSpeed(0.40);
 
         readyToShoot = false;
     }

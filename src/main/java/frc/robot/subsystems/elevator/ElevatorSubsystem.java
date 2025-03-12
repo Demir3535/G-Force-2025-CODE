@@ -29,7 +29,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig elevatorMotor2Config;
     static SparkClosedLoopController elevatorMotor1Controller;
     private double targetSetpoint = 0; // Sınıf seviyesinde değişken
-
+    private static ElevatorSubsystem instance;
     public ElevatorSubsystem() {
         elevatorMotor1 = new SparkMax(CAN.ELEVATOR_MOTOR_1, MotorType.kBrushless);
         elevatorMotor2 = new SparkMax(CAN.ELEVATOR_MOTOR_2, MotorType.kBrushless);
@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor1Config.closedLoop.maxMotion.maxVelocity(ElevatorConstants.MAX_MOTOR_RPM);
         elevatorMotor1Config.closedLoop.maxMotion.maxAcceleration(ElevatorConstants.MAX_MOTOR_ACCELERATION);
 
-        elevatorMotor1Config.closedLoop.pid(0.01, 0.0, 0.5);
+        elevatorMotor1Config.closedLoop.pid(0.05, 0.0, 0.0);
 
         elevatorMotor2Config.follow(CAN.ELEVATOR_MOTOR_1, true);
 
@@ -67,6 +67,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         return setpoint;
     }
 
+
+
+
     public void goToSetpoint(double setpoint) {
         // Setpoint değerini limitlere göre sınırla
         double limitedSetpoint = limitSetpoint(setpoint);
@@ -74,7 +77,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Add code here to move the elevator to the scoring height
         if (RobotBase.isReal()) {
-            elevatorMotor1Controller.setReference(limitedSetpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0);
+            elevatorMotor1Controller.setReference(limitedSetpoint, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0.2);
         }
     }
 
